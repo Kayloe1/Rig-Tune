@@ -18,6 +18,10 @@
             <conv:BytesToStringConverter x:Key="Bytes" />
             <conv:NullToCollapsedConverter x:Key="NullToCollapsed" />
             <conv:ZeroToVisibleConverter x:Key="ZeroToVisible" />
+            <conv:FilterLabelConverter x:Key="FilterLabel" />
+            <conv:NonZeroToVisibleConverter x:Key="NonZeroToVisible" />
+            <conv:RecommendedCountConverter x:Key="RecommendedCount" />
+            <conv:ActionStatusLabelConverter x:Key="ActionStatusLabel" />
 
             <!-- Section heading used on every page. -->
             <Style x:Key="PageTitle" TargetType="TextBlock">

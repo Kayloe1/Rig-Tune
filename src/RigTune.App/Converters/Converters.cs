@@ -72,3 +72,58 @@ public sealed class ZeroToVisibleConverter : IValueConverter
     public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) =>
         throw new NotSupportedException();
 }
+
+/// <summary>Display text for the Tweaks filter pills.</summary>
+public sealed class FilterLabelConverter : IValueConverter
+{
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture) => value switch
+    {
+        RigTune.App.ViewModels.TweakFilter.NeedsRestart => "Needs Restart",
+        RigTune.App.ViewModels.TweakFilter.DangerZone => "Danger Zone",
+        _ => value?.ToString() ?? string.Empty,
+    };
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) =>
+        throw new NotSupportedException();
+}
+
+/// <summary>Number of Recommended tweaks in a CollectionViewGroup's items.</summary>
+public sealed class RecommendedCountConverter : IValueConverter
+{
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        int count = value is System.Collections.IEnumerable items
+            ? items.OfType<RigTune.App.ViewModels.TweakItemViewModel>().Count(i => i.IsRecommended)
+            : 0;
+        return targetType == typeof(Visibility) ? (count > 0 ? Visibility.Visible : Visibility.Collapsed) : count;
+    }
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) =>
+        throw new NotSupportedException();
+}
+
+public sealed class ActionStatusLabelConverter : IValueConverter
+{
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture) => value switch
+    {
+        RigTune.Core.Models.ActionStatus.Applied => "✓",
+        RigTune.Core.Models.ActionStatus.NotApplied => "○",
+        RigTune.Core.Models.ActionStatus.NotApplicable => "—",
+        RigTune.Core.Models.ActionStatus.Informational => "i",
+        RigTune.Core.Models.ActionStatus.Unsupported => "·",
+        _ => "?",
+    };
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) =>
+        throw new NotSupportedException();
+}
+
+/// <summary>Visible when the bound count is greater than zero.</summary>
+public sealed class NonZeroToVisibleConverter : IValueConverter
+{
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture) =>
+        value is int n && n > 0 ? Visibility.Visible : Visibility.Collapsed;
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) =>
+        throw new NotSupportedException();
+}

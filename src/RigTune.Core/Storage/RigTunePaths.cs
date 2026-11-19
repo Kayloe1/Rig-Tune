@@ -20,6 +20,10 @@ public sealed class RigTunePaths
     public string HistoryFile => Path.Combine(Root, "history.json");
     public string GameModeFile => Path.Combine(Root, "gamemode.json");
     public string DiskLocksFile => Path.Combine(Root, "disk_locks.json");
+    public string CustomTweaksFile => Path.Combine(Root, "custom_tweaks.json");
+
+    /// <summary>Bundled catalogs copied next to the executable.</summary>
+    public static string BundledTweaksFile => Path.Combine(AppContext.BaseDirectory, "Catalogs", "tweaks.json");
 
     public void EnsureCreated() => Directory.CreateDirectory(Root);
 }

@@ -26,16 +26,25 @@ public sealed class SnapshotService
     private readonly AuditLogService _audit;
     private readonly TimeProvider _time;
     private readonly SemaphoreSlim _opLock = new(1, 1);
+    private readonly Dictionary<string, IStateRunner> _stateRunners = new(StringComparer.OrdinalIgnoreCase);
 
     public SnapshotService(RigTunePaths paths, IRegistryAccess registry, IServiceAccess services, IPowerAccess power,
-        INvApiDrsAccess nvapi, AuditLogService audit, TimeProvider? time = null)
-        : this(new JsonDocumentStore<SnapshotDocument>(paths.SnapshotsFile), registry, services, power, nvapi, audit, time)
+        INvApiDrsAccess nvapi, AuditLogService audit, TimeProvider? time = null,
+        IEnumerable<IStateRunner>? stateRunners = null)
+        : this(new JsonDocumentStore<SnapshotDocument>(paths.SnapshotsFile), registry, services, power, nvapi, audit,
+            time, stateRunners)
     {
     }
 
     public SnapshotService(JsonDocumentStore<SnapshotDocument> store, IRegistryAccess registry, IServiceAccess services,
-        IPowerAccess power, INvApiDrsAccess nvapi, AuditLogService audit, TimeProvider? time = null)
+        IPowerAccess power, INvApiDrsAccess nvapi, AuditLogService audit, TimeProvider? time = null,
+        IEnumerable<IStateRunner>? stateRunners = null)
     {
+        foreach (IStateRunner runner in stateRunners ?? Enumerable.Empty<IStateRunner>())
+        {
+            _stateRunners[runner.Kind] = runner;
+        }
+
         _store = store;
         _registry = registry;
         _services = services;
@@ -64,7 +73,40 @@ public sealed class SnapshotService
         return doc.Entries.FirstOrDefault(e => e.Status == SnapshotStatus.Active && e.TargetKey == targetKey);
     }
 
+    /// <summary>Active snapshots created by one tweak, newest first.</summary>
+    public async Task<IReadOnlyList<SnapshotEntry>> GetActiveForTweakAsync(string tweakId,
+        CancellationToken cancellationToken = default) =>
+        (await GetActiveAsync(cancellationToken).ConfigureAwait(false))
+        .Where(e => string.Equals(e.TweakId, tweakId, StringComparison.OrdinalIgnoreCase))
+        .ToList();
+
+    public IStateRunner? GetStateRunner(string kind) => _stateRunners.GetValueOrDefault(kind);
+
     // ------------------------------------------------------------------ Apply
+
+    /// <summary>Snapshots the current state of a generic target and then writes <paramref name="desiredState"/>.</summary>
+    public Task<StateSnapshotEntry> ApplyStateAsync(string tweakId, string kind, string target, string desiredState,
+        string? description = null, bool requiresRestart = false, CancellationToken cancellationToken = default)
+    {
+        IStateRunner runner = _stateRunners.GetValueOrDefault(kind)
+                              ?? throw new InvalidOperationException($"No state runner registered for '{kind}'.");
+        return ApplyCoreAsync(
+            tweakId,
+            description,
+            requiresRestart,
+            $"state|{kind}|{target.ToUpperInvariant()}",
+            capture: () => new StateSnapshotEntry
+            {
+                Kind = kind,
+                Target = target,
+                Label = runner.Describe(target),
+                OriginalState = runner.ReadState(target)
+                                ?? throw new InvalidOperationException($"{runner.Describe(target)} was not found on this PC."),
+            },
+            setApplied: e => e.AppliedState = desiredState,
+            write: _ => runner.WriteState(target, desiredState),
+            cancellationToken);
+    }
 
     /// <summary>
     /// Snapshots and then writes a registry value. Pass <paramref name="value"/> = null to delete the value.
@@ -190,8 +232,11 @@ public sealed class SnapshotService
             cancellationToken);
     }
 
-    /// <summary>Snapshots then writes a DWORD setting on the NVIDIA global (base) DRS profile.</summary>
-    public Task<NvApiDrsSnapshotEntry> ApplyNvApiDrsAsync(string tweakId, uint settingId, uint value,
+    /// <summary>
+    /// Snapshots then writes a DWORD setting on the NVIDIA global (base) DRS profile.
+    /// <paramref name="value"/> = null removes the override (driver default).
+    /// </summary>
+    public Task<NvApiDrsSnapshotEntry> ApplyNvApiDrsAsync(string tweakId, uint settingId, uint? value,
         string? description = null, bool requiresRestart = false, CancellationToken cancellationToken = default) =>
         ApplyCoreAsync(
             tweakId,
@@ -214,7 +259,17 @@ public sealed class SnapshotService
                 };
             },
             setApplied: e => e.AppliedDwordValue = value,
-            write: _ => _nvapi.WriteGlobal(settingId, value),
+            write: _ =>
+            {
+                if (value is { } v)
+                {
+                    _nvapi.WriteGlobal(settingId, v);
+                }
+                else
+                {
+                    _nvapi.DeleteGlobal(settingId);
+                }
+            },
             cancellationToken);
 
     private async Task<TEntry> ApplyCoreAsync<TEntry>(string tweakId, string? description, bool requiresRestart,
@@ -362,6 +417,37 @@ public sealed class SnapshotService
         }
     }
 
+    /// <summary>Reverts every active snapshot belonging to one tweak (newest first).</summary>
+    public async Task<RevertAllResult> RevertTweakAsync(string tweakId, CancellationToken cancellationToken = default)
+    {
+        await _opLock.WaitAsync(cancellationToken).ConfigureAwait(false);
+        try
+        {
+            SnapshotDocument doc = await _store.ReadAsync(cancellationToken).ConfigureAwait(false);
+            List<Guid> ids = doc.Entries
+                .Select((entry, index) => (entry, index))
+                .Where(x => x.entry.Status == SnapshotStatus.Active &&
+                            string.Equals(x.entry.TweakId, tweakId, StringComparison.OrdinalIgnoreCase))
+                .OrderByDescending(x => x.entry.CapturedAtUtc)
+                .ThenByDescending(x => x.index)
+                .Select(x => x.entry.Id)
+                .ToList();
+
+            var results = new List<RevertResult>(ids.Count);
+            foreach (Guid id in ids)
+            {
+                results.Add(await RevertCoreAsync(id, cancellationToken).ConfigureAwait(false));
+            }
+
+            SnapshotsChanged?.Invoke(this, EventArgs.Empty);
+            return new RevertAllResult(results);
+        }
+        finally
+        {
+            _opLock.Release();
+        }
+    }
+
     private async Task<RevertResult> RevertCoreAsync(Guid snapshotId, CancellationToken cancellationToken)
     {
         SnapshotDocument doc = await _store.ReadAsync(cancellationToken).ConfigureAwait(false);
@@ -436,6 +522,12 @@ public sealed class SnapshotService
 
                 break;
 
+            case StateSnapshotEntry st:
+                (_stateRunners.GetValueOrDefault(st.Kind)
+                 ?? throw new InvalidOperationException($"No state runner registered for '{st.Kind}'."))
+                    .WriteState(st.Target, st.OriginalState);
+                break;
+
             default:
                 throw new NotSupportedException($"Unknown snapshot type {entry.GetType().Name}.");
         }
@@ -462,6 +554,10 @@ public sealed class SnapshotService
                 NvDrsValue value = _nvapi.ReadGlobal(nv.SettingId);
                 return value.ExistsInBaseProfile == nv.ExistedInBaseProfile &&
                        (!nv.ExistedInBaseProfile || value.Value == nv.OriginalDwordValue);
+
+            case StateSnapshotEntry st:
+                return string.Equals(_stateRunners.GetValueOrDefault(st.Kind)?.ReadState(st.Target), st.OriginalState,
+                    StringComparison.OrdinalIgnoreCase);
 
             default:
                 return false;

@@ -69,7 +69,16 @@ public sealed class ServiceRunner : IServiceAccess
                 if (!AdvApi32.ChangeServiceConfig(service, AdvApi32.SERVICE_NO_CHANGE, nativeStart,
                         AdvApi32.SERVICE_NO_CHANGE, null, null, IntPtr.Zero, null, null, null, null))
                 {
-                    throw new Win32Exception();
+                    var error = new Win32Exception();
+                    if (error.NativeErrorCode != ErrorAccessDenied)
+                    {
+                        throw error;
+                    }
+
+                    // Protected services (e.g. WaaSMedicSvc) reject SCM changes even for admins;
+                    // their configuration lives in the service key, which administrators can edit.
+                    WriteStartTypeToRegistry(serviceName, nativeStart, startType == ServiceStartType.AutomaticDelayed);
+                    return;
                 }
 
                 if (startType is ServiceStartType.Automatic or ServiceStartType.AutomaticDelayed)
@@ -119,6 +128,19 @@ public sealed class ServiceRunner : IServiceAccess
         {
             controller.Stop();
             controller.WaitForStatus(ServiceControllerStatus.Stopped, timeout);
+        }
+    }
+
+    private const int ErrorAccessDenied = 5;
+
+    private static void WriteStartTypeToRegistry(string serviceName, uint nativeStart, bool delayed)
+    {
+        using RegistryKey key = Registry.LocalMachine.OpenSubKey($@"SYSTEM\CurrentControlSet\Services\{serviceName}", writable: true)
+                                ?? throw new InvalidOperationException($"Service key for {serviceName} not found.");
+        key.SetValue("Start", unchecked((int)nativeStart), RegistryValueKind.DWord);
+        if (nativeStart == AdvApi32.SERVICE_AUTO_START)
+        {
+            key.SetValue("DelayedAutostart", delayed ? 1 : 0, RegistryValueKind.DWord);
         }
     }
 

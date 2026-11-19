@@ -21,6 +21,7 @@ public enum SnapshotStatus
 [JsonDerivedType(typeof(ServiceSnapshotEntry), "service")]
 [JsonDerivedType(typeof(PowerSnapshotEntry), "power")]
 [JsonDerivedType(typeof(NvApiDrsSnapshotEntry), "nvapi_drs")]
+[JsonDerivedType(typeof(StateSnapshotEntry), "state")]
 public abstract class SnapshotEntry
 {
     public Guid Id { get; set; } = Guid.NewGuid();
@@ -114,12 +115,29 @@ public sealed class NvApiDrsSnapshotEntry : SnapshotEntry
     public bool ExistedInBaseProfile { get; set; }
 
     public uint? OriginalDwordValue { get; set; }
-    public uint AppliedDwordValue { get; set; }
+
+    /// <summary>Applied value; null means the override was removed (driver default).</summary>
+    public uint? AppliedDwordValue { get; set; }
 
     public override string TargetKey => $"nvdrs|base|{SettingId:X8}";
     public override string TargetDisplay => $"NVIDIA DRS global setting 0x{SettingId:X8}";
     public override string OriginalDisplay => ExistedInBaseProfile ? $"0x{OriginalDwordValue:X8}" : "(driver default)";
-    public override string AppliedDisplay => $"0x{AppliedDwordValue:X8}";
+    public override string AppliedDisplay => AppliedDwordValue is { } v ? $"0x{v:X8}" : "(driver default)";
+}
+
+/// <summary>Generic string-state snapshot handled by an <see cref="Platform.IStateRunner"/>.</summary>
+public sealed class StateSnapshotEntry : SnapshotEntry
+{
+    public string Kind { get; set; } = string.Empty;
+    public string Target { get; set; } = string.Empty;
+    public string OriginalState { get; set; } = string.Empty;
+    public string AppliedState { get; set; } = string.Empty;
+    public string? Label { get; set; }
+
+    public override string TargetKey => $"state|{Kind}|{Target.ToUpperInvariant()}";
+    public override string TargetDisplay => Label ?? $"{Kind}: {Target}";
+    public override string OriginalDisplay => OriginalState;
+    public override string AppliedDisplay => AppliedState;
 }
 
 public sealed class SnapshotDocument
