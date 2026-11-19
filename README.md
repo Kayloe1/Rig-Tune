@@ -11,6 +11,8 @@ dotnet test
 dotnet publish src/RigTune.App -c Release -r win-x64 --self-contained false
 ```
 
+The executable lands in `src/RigTune.App/bin/Release/net8.0-windows10.0.22621.0/win-x64/publish/RigTune.exe`.
+
 The app requires administrator rights (`app.manifest` → `requireAdministrator`). All state is stored in
 `%LOCALAPPDATA%\RigTune\` (`settings.json`, `snapshots.json`, `history.json`) using atomic temp-file + replace writes.
 
@@ -60,7 +62,10 @@ Registry round-trip tests that touch the real registry run only on Windows and o
   `..` traversal) plus "Important" locks in `disk_locks.json` that cover descendants and ancestors; every deletion is
   confirmed and goes to the Recycle Bin; offline Space Advisor (Steam `localconfig.vdf` LastPlayed, caches, temp,
   Windows.old, old Downloads, dormant games) grouped Safe to Remove / Check First / Keep.
-- Later phases: drift detector.
+- **Phase 7 (done):** Windows Update Drift Detector (all snapshot types, re-apply keeps the true original), Backups,
+  Drift & History (drift diff, per-tweak revert + Revert All, searchable/filterable audit log, profile export/import),
+  Dashboard drift card + optional on-launch check, shutdown/session-end cleanup, warnings-as-errors everywhere.
+  See [`docs/ACCEPTANCE.md`](docs/ACCEPTANCE.md) for the SPEC §8 checklist.
 
 The app catalog is generated too — edit `tools/generate_apps.py`, then run `python3 tools/generate_apps.py`.
 

@@ -46,13 +46,21 @@ public sealed partial class DashboardViewModel : ObservableObject
     private readonly SnapshotService _snapshots;
     private readonly DispatcherTimer _liveTimer;
     private readonly RefreshRateWatchdogService _watchdog;
+    private readonly DriftDetectorService _drift;
     private readonly GameModeService _gameMode;
     private bool _sampling;
     private bool _loaded;
 
     public DashboardViewModel(HostProfileDetector detector, RestorePointService restorePoints, AuditLogService audit,
-        SnapshotService snapshots, RefreshRateWatchdogService watchdog, GameModeService gameMode)
+        SnapshotService snapshots, RefreshRateWatchdogService watchdog, GameModeService gameMode, DriftDetectorService drift)
     {
+        _drift = drift;
+        _drift.ScanCompleted += (_, r) => App.Current?.Dispatcher.InvokeAsync(() => UpdateDrift(r));
+        if (_drift.LastResult is { } last)
+        {
+            UpdateDrift(last);
+        }
+
         _watchdog = watchdog;
         _gameMode = gameMode;
         _watchdog.StatusChanged += (_, status) => App.Current?.Dispatcher.InvokeAsync(() => UpdateWatchdog(status));
@@ -201,6 +209,64 @@ public sealed partial class DashboardViewModel : ObservableObject
 
     [RelayCommand]
     private Task RestoreRefreshAsync() => _watchdog.RestoreAllAsync();
+
+    // ---- Drift card ----------------------------------------------------------
+
+    [ObservableProperty]
+    private string _driftText = "Not checked yet";
+
+    [ObservableProperty]
+    private string _driftDetail = "Compares every active tweak with the live system.";
+
+    [ObservableProperty]
+    private bool _hasDrift;
+
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(CheckDriftCommand))]
+    [NotifyCanExecuteChangedFor(nameof(ReapplyDriftCommand))]
+    private bool _isCheckingDrift;
+
+    private void UpdateDrift(DriftScanResult r)
+    {
+        HasDrift = r.Drifted.Count > 0;
+        DriftText = r.ActiveCount == 0 ? "No active tweaks" : HasDrift ? $"{r.Drifted.Count} drifted" : "No drift";
+        DriftDetail = $"{r.ActiveCount} active change(s) · checked {r.ScannedAt.LocalDateTime:HH:mm}" +
+                      (HasDrift ? " · " + string.Join(", ", r.Drifted.Take(3).Select(d => d.TweakName)) + (r.Drifted.Count > 3 ? "…" : string.Empty) : string.Empty);
+    }
+
+    private bool CanDrift() => !IsCheckingDrift;
+
+    [RelayCommand(CanExecute = nameof(CanDrift))]
+    private async Task CheckDriftAsync()
+    {
+        IsCheckingDrift = true;
+        try
+        {
+            UpdateDrift(await _drift.ScanAsync());
+        }
+        finally
+        {
+            IsCheckingDrift = false;
+        }
+    }
+
+    [RelayCommand(CanExecute = nameof(CanDrift))]
+    private async Task ReapplyDriftAsync()
+    {
+        IsCheckingDrift = true;
+        try
+        {
+            await _drift.ReapplyAllDriftedAsync();
+            if (_drift.LastResult is { } r)
+            {
+                UpdateDrift(r);
+            }
+        }
+        finally
+        {
+            IsCheckingDrift = false;
+        }
+    }
 
     public ObservableCollection<AuditEntry> RecentHistory { get; } = new();
 

@@ -65,6 +65,17 @@ public partial class App : Application
             RefreshRateWatchdogService watchdog = _services.GetRequiredService<RefreshRateWatchdogService>();
             watchdog.Start();
             await watchdog.CheckAsync("app startup");
+
+            if ((await _services.GetRequiredService<SettingsService>().GetAsync()).CheckDriftOnLaunch)
+            {
+                DriftScanResult drift = await _services.GetRequiredService<DriftDetectorService>().ScanAsync();
+                if (drift.Drifted.Count > 0)
+                {
+                    _services.GetRequiredService<SystemTrayManager>().Notify("Tweaks were reverted",
+                        $"{drift.Drifted.Count} active change(s) were undone outside RigTune (likely a Windows or driver update). Click to open RigTune.",
+                        () => _services.GetRequiredService<SystemTrayManager>().ShowWindow(), warning: true);
+                }
+            }
         }
         catch (Exception ex) when (ex is System.IO.IOException or UnauthorizedAccessException)
         {
@@ -74,14 +85,54 @@ public partial class App : Application
 
     protected override void OnExit(ExitEventArgs e)
     {
-        if (_services?.GetService<GameModeService>() is { ActiveSession: not null } gameMode)
-        {
-            // Restore every priority / EcoQoS flag / power plan before the process goes away.
-            Task.Run(() => gameMode.StopAsync("RigTune exited")).Wait(TimeSpan.FromSeconds(10));
-        }
-
+        RestoreTransientState("RigTune exited");
         _services?.Dispose();
         base.OnExit(e);
+    }
+
+    protected override void OnSessionEnding(SessionEndingCancelEventArgs e)
+    {
+        // Windows sign-out / shutdown: never let minimize-to-tray cancel it, and restore everything now.
+        _services?.GetService<SystemTrayManager>()?.MarkExiting();
+        RestoreTransientState("Windows session ending");
+        base.OnSessionEnding(e);
+    }
+
+    /// <summary>
+    /// Restores process-scoped state that must not outlive RigTune: an active Game Mode session (priorities,
+    /// EcoQoS, I/O priority, power plan) and the app-scoped timer resolution request. Safe to call repeatedly.
+    /// </summary>
+    private void RestoreTransientState(string reason)
+    {
+        if (_services is null)
+        {
+            return;
+        }
+
+        try
+        {
+            if (_services.GetService<GameModeService>() is { ActiveSession: not null } gameMode)
+            {
+                Task.Run(() => gameMode.StopAsync(reason)).Wait(TimeSpan.FromSeconds(10));
+            }
+        }
+        catch (AggregateException)
+        {
+            // Anything left is recovered from gamemode.json on the next start.
+        }
+
+        _services.GetService<TimerResolutionService>()?.Reset();
+    }
+
+    private static string? AppToggleName(AppOptimizerService apps, string tweakId)
+    {
+        string[] parts = tweakId.Split('.');
+        if (parts.Length < 3 || parts[0] != "app" || apps.Find(parts[1]) is not { } app)
+        {
+            return null;
+        }
+
+        return $"{app.Name}: {app.Toggles.FirstOrDefault(t => t.Id == parts[2])?.Name ?? parts[2]}";
     }
 
     private static ServiceProvider ConfigureServices()
@@ -182,6 +233,13 @@ public partial class App : Application
             sp.GetRequiredService<SettingsService>(), sp.GetRequiredService<AuditLogService>(),
             sp.GetRequiredService<AppOptimizerService>(), sp.GetRequiredService<RefreshRateWatchdogService>()));
         services.AddSingleton<SystemTrayManager>();
+
+        // Core: Drift Detector & profiles (Phase 7)
+        services.AddSingleton<DriftDetectorService>(sp => new DriftDetectorService(
+            sp.GetRequiredService<SnapshotService>(), sp.GetRequiredService<IRegistryAccess>(), sp.GetRequiredService<IServiceAccess>(),
+            sp.GetRequiredService<IPowerAccess>(), sp.GetRequiredService<INvApiDrsAccess>(), sp.GetRequiredService<AuditLogService>(),
+            id => sp.GetRequiredService<TweakEngine>().Find(id)?.Name ?? AppToggleName(sp.GetRequiredService<AppOptimizerService>(), id)));
+        services.AddSingleton<ProfileService>();
 
         // Core: Disk Analyzer & Space Advisor (Phase 6)
         services.AddSingleton(_ => PathGuard.ForThisMachine());
