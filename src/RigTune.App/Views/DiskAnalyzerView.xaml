@@ -3,17 +3,189 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="clr-namespace:RigTune.App.Controls"
-    xmlns:sys="clr-namespace:System;assembly=System.Runtime"
-    Title="Disk Analyzer">
-    <controls:ComingSoonPanel
-        Title="Disk Analyzer"
-        Phase="Coming in a later build phase"
-        Subtitle="Multi-threaded NVMe scanner with a size-sorted tree, category breakdown and an offline Space Advisor.">
-        <controls:ComingSoonPanel.Features>
-                <sys:String>Parallel scan with cancellation and per-drive caching</sys:String>
-                <sys:String>Hard-protected system paths and user “Mark as Important” locks</sys:String>
-                <sys:String>Recycle-Bin-only deletion with confirmation</sys:String>
-                <sys:String>Space Advisor: Safe to Remove / Check First / Keep</sys:String>
-        </controls:ComingSoonPanel.Features>
-    </controls:ComingSoonPanel>
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    xmlns:vm="clr-namespace:RigTune.App.ViewModels"
+    x:Name="Root"
+    Title="Disk Analyzer"
+    d:DataContext="{d:DesignInstance Type=vm:DiskAnalyzerViewModel}"
+    mc:Ignorable="d">
+    <Page.Resources>
+        <DataTemplate x:Key="FindingTemplate" DataType="{x:Type vm:FindingViewModel}">
+            <Border Margin="0,3" Padding="12,8" Background="{DynamicResource ControlFillColorDefaultBrush}" BorderBrush="{DynamicResource ControlStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="4">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="100" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel>
+                        <TextBlock FontWeight="SemiBold" Text="{Binding Title}" TextWrapping="Wrap" />
+                        <TextBlock FontFamily="Consolas" FontSize="11" Foreground="{DynamicResource TextFillColorTertiaryBrush}" Text="{Binding Path}" TextTrimming="CharacterEllipsis" ToolTip="{Binding Path}" />
+                        <TextBlock FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Text="{Binding Reason}" TextWrapping="Wrap" />
+                        <TextBlock FontSize="12" Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}" Text="{Binding Result}" TextWrapping="Wrap" Visibility="{Binding Result, Converter={StaticResource NullToCollapsed}}" />
+                    </StackPanel>
+                    <TextBlock Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" FontWeight="SemiBold" Text="{Binding SizeText}" />
+                    <ui:Button Grid.Column="2" Margin="12,0,0,0" VerticalAlignment="Center" Command="{Binding DataContext.ActOnFindingCommand, ElementName=Root}" CommandParameter="{Binding}" Content="{Binding ActionLabel}" Visibility="{Binding CanAct, Converter={StaticResource BoolToVisibility}}" />
+                </Grid>
+            </Border>
+        </DataTemplate>
+    </Page.Resources>
+
+    <Grid Margin="28,20,20,16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <StackPanel>
+            <TextBlock Style="{StaticResource PageTitle}" Text="Disk Analyzer" />
+            <TextBlock Style="{StaticResource PageSubtitle}" Text="Multi-threaded NVMe scanner. Deletions always go to the Recycle Bin; Windows, WindowsApps, page/hibernation files, System Volume Information, $Recycle.Bin, profile roots and anything you mark Important are protected." />
+        </StackPanel>
+        <ui:InfoBar Grid.Row="1" Margin="0,10,0,0" Title="{Binding StatusTitle}" IsClosable="True" IsOpen="{Binding IsStatusOpen, Mode=TwoWay}" Message="{Binding StatusMessage}" Severity="{Binding StatusSeverity}" />
+
+        <TabControl Grid.Row="2" Margin="0,10,0,0">
+            <!--  ======================== EXPLORER  -->
+            <TabItem Header="Folder Explorer">
+                <Grid Margin="0,12,0,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="380" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <ComboBox ItemsSource="{Binding Drives}" SelectedItem="{Binding SelectedDrive, Mode=TwoWay}" />
+                        <StackPanel Grid.Column="1" Margin="8,0,0,0" Orientation="Horizontal">
+                            <ui:Button Appearance="Primary" Command="{Binding ScanCommand}" Content="Scan" Icon="{ui:SymbolIcon Search24}" />
+                            <ui:Button Margin="6,0,0,0" Command="{Binding CancelScanCommand}" Content="Cancel" Visibility="{Binding IsScanning, Converter={StaticResource BoolToVisibility}}" />
+                        </StackPanel>
+                        <StackPanel Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center" Orientation="Horizontal">
+                            <ui:ToggleSwitch Content="Hide small items" IsChecked="{Binding HideSmall, Mode=TwoWay}" />
+                            <ComboBox Width="110" Margin="8,0,0,0" IsEnabled="{Binding HideSmall}" ItemStringFormat="{}&lt; {0} MB" ItemsSource="{Binding SmallThresholds}" SelectedItem="{Binding SmallThresholdMb, Mode=TwoWay}" />
+                        </StackPanel>
+                    </Grid>
+
+                    <StackPanel Grid.Row="1" Margin="0,10,0,0">
+                        <ProgressBar Height="4" Maximum="100" Value="{Binding ProgressValue, Mode=OneWay}" Visibility="{Binding IsScanning, Converter={StaticResource BoolToVisibility}}" />
+                        <TextBlock Margin="0,4,0,0" FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Text="{Binding ProgressText}" TextTrimming="CharacterEllipsis" Visibility="{Binding IsScanning, Converter={StaticResource BoolToVisibility}}" />
+                        <TextBlock FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Text="{Binding ScanInfo}" />
+                    </StackPanel>
+
+                    <!--  Category breakdown bar  -->
+                    <StackPanel Grid.Row="2" Margin="0,10,0,0">
+                        <Border Height="14" CornerRadius="7" ClipToBounds="True" Background="{DynamicResource ControlFillColorDefaultBrush}">
+                            <ItemsControl ItemsSource="{Binding Segments}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <controls:ProportionalPanel />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemContainerStyle>
+                                    <Style TargetType="ContentPresenter">
+                                        <Setter Property="controls:ProportionalPanel.Weight" Value="{Binding Weight}" />
+                                    </Style>
+                                </ItemsControl.ItemContainerStyle>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate DataType="{x:Type vm:CategorySegment}">
+                                        <Border Background="{Binding Brush}" ToolTip="{Binding Text}" />
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </Border>
+                        <ItemsControl Margin="0,6,0,0" ItemsSource="{Binding Segments}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate DataType="{x:Type vm:CategorySegment}">
+                                    <StackPanel Margin="0,0,16,0" Orientation="Horizontal">
+                                        <Ellipse Width="10" Height="10" Margin="0,0,6,0" Fill="{Binding Brush}" />
+                                        <TextBlock FontSize="12" Text="{Binding Text}" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+
+                    <!--  Lazy, size-sorted folder tree  -->
+                    <TreeView Grid.Row="3" Margin="0,10,0,0" ItemsSource="{Binding RootItems}" VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.VirtualizationMode="Recycling">
+                        <TreeView.ItemContainerStyle>
+                            <Style BasedOn="{StaticResource {x:Type TreeViewItem}}" TargetType="TreeViewItem">
+                                <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
+                                <Setter Property="ContextMenu">
+                                    <Setter.Value>
+                                        <ContextMenu>
+                                            <MenuItem Command="{Binding LockCommand}" Header="Mark as Important (lock)" IsEnabled="{Binding CanModify}" />
+                                            <MenuItem Command="{Binding UnlockCommand}" Header="Unmark Important" IsEnabled="{Binding IsLocked}" />
+                                            <MenuItem Command="{Binding OpenInExplorerCommand}" Header="Open in Explorer" IsEnabled="{Binding CanModify}" />
+                                            <Separator />
+                                            <MenuItem Command="{Binding DeleteCommand}" Header="Delete to Recycle Bin…" IsEnabled="{Binding CanModify}" />
+                                        </ContextMenu>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </TreeView.ItemContainerStyle>
+                        <TreeView.ItemTemplate>
+                            <HierarchicalDataTemplate DataType="{x:Type vm:DiskNodeViewModel}" ItemsSource="{Binding Children}">
+                                <Grid MinWidth="640">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="140" />
+                                        <ColumnDefinition Width="90" />
+                                        <ColumnDefinition Width="60" />
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Margin="0,0,6,0" Text="{Binding Icon}" />
+                                        <TextBlock Text="{Binding Name}" />
+                                        <ui:SymbolIcon Margin="6,0,0,0" FontSize="13" Foreground="{DynamicResource SystemFillColorCautionBrush}" Symbol="LockClosed24" ToolTip="Marked as Important" Visibility="{Binding IsLocked, Converter={StaticResource BoolToVisibility}}" />
+                                        <ui:SymbolIcon Margin="6,0,0,0" FontSize="13" Foreground="{DynamicResource TextFillColorTertiaryBrush}" Symbol="ShieldCheckmark24" ToolTip="Protected system location" Visibility="{Binding IsProtected, Converter={StaticResource BoolToVisibility}}" />
+                                        <TextBlock Margin="6,0,0,0" FontSize="11" Foreground="{DynamicResource TextFillColorTertiaryBrush}" Text="(no access)" Visibility="{Binding IsInaccessible, Converter={StaticResource BoolToVisibility}}" />
+                                    </StackPanel>
+                                    <ProgressBar Grid.Column="1" Height="6" Margin="8,0" Maximum="100" Value="{Binding Percent, Mode=OneWay}" />
+                                    <TextBlock Grid.Column="2" HorizontalAlignment="Right" FontWeight="SemiBold" Text="{Binding SizeText}" />
+                                    <TextBlock Grid.Column="3" HorizontalAlignment="Right" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Text="{Binding PercentText}" />
+                                </Grid>
+                            </HierarchicalDataTemplate>
+                        </TreeView.ItemTemplate>
+                    </TreeView>
+                </Grid>
+            </TabItem>
+
+            <!--  ======================== SPACE ADVISOR  -->
+            <TabItem Header="Space Advisor">
+                <Grid Margin="0,12,0,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Grid>
+                        <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="{Binding AdvisorSummary}" TextWrapping="Wrap" />
+                        <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+                            <ui:ProgressRing Width="18" Height="18" Margin="0,0,10,0" IsIndeterminate="True" Visibility="{Binding IsAnalyzing, Converter={StaticResource BoolToVisibility}}" />
+                            <ui:Button Appearance="Primary" Command="{Binding AnalyzeCommand}" Content="Analyze" Icon="{ui:SymbolIcon DataUsage24}" />
+                        </StackPanel>
+                    </Grid>
+                    <ScrollViewer Grid.Row="1" Margin="0,10,0,0" VerticalScrollBarVisibility="Auto">
+                        <StackPanel>
+                            <TextBlock Margin="0,4,0,6" Foreground="{DynamicResource SystemFillColorSuccessBrush}" Style="{StaticResource CardTitle}" Text="{Binding SafeHeader}" />
+                            <ItemsControl ItemTemplate="{StaticResource FindingTemplate}" ItemsSource="{Binding SafeFindings}" />
+                            <TextBlock Margin="0,16,0,6" Foreground="{DynamicResource SystemFillColorCautionBrush}" Style="{StaticResource CardTitle}" Text="{Binding CheckHeader}" />
+                            <ItemsControl ItemTemplate="{StaticResource FindingTemplate}" ItemsSource="{Binding CheckFindings}" />
+                            <TextBlock Margin="0,16,0,6" Style="{StaticResource CardTitle}" Text="{Binding KeepHeader}" />
+                            <ItemsControl ItemTemplate="{StaticResource FindingTemplate}" ItemsSource="{Binding KeepFindings}" />
+                        </StackPanel>
+                    </ScrollViewer>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
 </Page>

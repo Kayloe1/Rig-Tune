@@ -54,7 +54,13 @@ Registry round-trip tests that touch the real registry run only on Windows and o
   `GameModeService` (WMI process-start trace with 2 s polling fallback; High priority for the game; Below Normal + EcoQoS
   + low I/O for While-You-Play apps; RAM trim only under memory pressure; optional power plan; crash-safe session state
   in `gamemode.json` restored on exit, Stop or next start).
-- Later phases: drift detector, Disk Analyzer.
+- **Phase 6 (done):** Disk Analyzer — parallel cancellable scanner with live progress, access-denied folders skipped,
+  junctions never followed, Games/Media/Apps/System/Other breakdown and per-drive cache; `PathGuard` hard protection
+  (Windows, WindowsApps, page/swap/hiberfil, System Volume Information, $Recycle.Bin, profile roots, drive roots,
+  `..` traversal) plus "Important" locks in `disk_locks.json` that cover descendants and ancestors; every deletion is
+  confirmed and goes to the Recycle Bin; offline Space Advisor (Steam `localconfig.vdf` LastPlayed, caches, temp,
+  Windows.old, old Downloads, dormant games) grouped Safe to Remove / Check First / Keep.
+- Later phases: drift detector.
 
 The app catalog is generated too — edit `tools/generate_apps.py`, then run `python3 tools/generate_apps.py`.
 
