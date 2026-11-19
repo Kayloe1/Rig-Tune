@@ -10,7 +10,7 @@ public partial class HistoryView : Page
         ViewModel = viewModel;
         DataContext = viewModel;
         InitializeComponent();
-        Loaded += async (_, _) => await ViewModel.RefreshAsync();
+        Loaded += async (_, _) => await ViewModel.OnNavigatedToAsync();
     }
 
     public HistoryViewModel ViewModel { get; }

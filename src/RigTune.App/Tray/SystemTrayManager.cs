@@ -105,6 +105,9 @@ public sealed class SystemTrayManager : IDisposable
         _window.Activate();
     }
 
+    /// <summary>Lets the window close for real (used when Windows is shutting down).</summary>
+    public void MarkExiting() => IsExiting = true;
+
     public void Exit()
     {
         IsExiting = true;
