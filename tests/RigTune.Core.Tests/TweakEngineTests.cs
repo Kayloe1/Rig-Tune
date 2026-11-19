@@ -54,7 +54,7 @@ public sealed class TweakEngineTests : IDisposable
                 new NetworkActionHandler(new NetworkAdapterRunner(devices, registry), new TcpGlobalStateRunner(), registry),
                 new NtfsActionHandler(registry),
                 new InspectionActionHandler(new WasapiInspectService(), new TimerResolutionService()),
-                new CleanupActionHandler(),
+                new CleanupActionHandler(new RigTune.Core.Services.SystemCare.CleanupEngine(audit, new FakeMaintenanceNative())),
             });
     }
 

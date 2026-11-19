@@ -80,3 +80,67 @@ public sealed class ManualTimeProvider : TimeProvider
 
     public void Advance(TimeSpan by) => _now += by;
 }
+
+public sealed class FakeMaintenanceNative : RigTune.Core.Services.SystemCare.ISystemMaintenanceNative
+{
+    public long Standby { get; set; } = 8L * 1024 * 1024 * 1024;
+    public int Flushes { get; private set; }
+    public int Purges { get; private set; }
+
+    public long? GetStandbyBytes() => Standby;
+
+    public int EmptyWorkingSets() => 42;
+
+    public bool PurgeStandbyList()
+    {
+        Purges++;
+        Standby = 512L * 1024 * 1024;
+        return true;
+    }
+
+    public bool FlushDnsCache()
+    {
+        Flushes++;
+        return true;
+    }
+}
+
+public sealed class FakeAppxSource : RigTune.Core.Services.AppxWinget.IAppxPackageSource
+{
+    public List<AppxPackageInfo> Packages { get; } = new();
+    public List<string> Removed { get; } = new();
+    public List<string> Deprovisioned { get; } = new();
+
+    public Task<IReadOnlyList<AppxPackageInfo>> ListAsync(CancellationToken cancellationToken = default) =>
+        Task.FromResult<IReadOnlyList<AppxPackageInfo>>(Packages);
+
+    public Task RemoveAsync(AppxPackageInfo package, CancellationToken cancellationToken = default)
+    {
+        Removed.Add(package.Name);
+        return Task.CompletedTask;
+    }
+
+    public Task DeprovisionAsync(AppxPackageInfo package, CancellationToken cancellationToken = default)
+    {
+        Deprovisioned.Add(package.FamilyName);
+        return Task.CompletedTask;
+    }
+}
+
+public sealed class FakeWinget : RigTune.Core.Services.AppxWinget.IWingetCli
+{
+    public string ListOutput { get; set; } = string.Empty;
+    public int ExitCode { get; set; }
+    public List<string> Upgraded { get; } = new();
+
+    public bool IsAvailable => true;
+
+    public Task<string> ListUpgradesRawAsync(CancellationToken cancellationToken = default) => Task.FromResult(ListOutput);
+
+    public Task<int> UpgradeAsync(string id, Action<string> onOutput, CancellationToken cancellationToken = default)
+    {
+        Upgraded.Add(id);
+        onOutput("Successfully installed");
+        return Task.FromResult(ExitCode);
+    }
+}

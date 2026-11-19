@@ -29,7 +29,9 @@ public sealed class ServiceRunner : IServiceAccess
                 ServiceStartMode.Disabled => ServiceStartType.Disabled,
                 _ => ServiceStartType.Manual,
             };
-            return new ServiceState(controller.ServiceName, startType, running);
+            bool pending = controller.Status is ServiceControllerStatus.StartPending or ServiceControllerStatus.StopPending
+                or ServiceControllerStatus.ContinuePending or ServiceControllerStatus.PausePending;
+            return new ServiceState(controller.ServiceName, startType, running, pending);
         }
         catch (InvalidOperationException)
         {

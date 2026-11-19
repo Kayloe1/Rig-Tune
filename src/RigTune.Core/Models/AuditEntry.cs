@@ -13,6 +13,9 @@ public enum AuditAction
     Repaired,
     RestorePointCreated,
     RestorePointFailed,
+    StartupChanged,
+    Uninstalled,
+    Updated,
     Info,
 }
 

@@ -145,7 +145,8 @@ public sealed class TweakEngine
             }
         }
 
-        if (tweak.IsReadOnly || tweak.IsPermanent || tweak.Actions.All(a => a.Type == Models.TweakActionTypes.TimerResolution))
+        if ((tweak.IsReadOnly || tweak.IsPermanent || tweak.Actions.All(a => a.Type == Models.TweakActionTypes.TimerResolution)) &&
+            !tweak.Actions.All(a => a.Type == Models.TweakActionTypes.Cleanup)) // CleanupEngine logs its own "Cleaned" entry
         {
             await _audit.LogAsync(tweak.IsReadOnly ? AuditAction.Info : AuditAction.Applied,
                 $"{(tweak.IsReadOnly ? "Inspected" : "Ran")} \"{tweak.Name}\"", tweak.Id, tweak.TargetSummary,

@@ -16,6 +16,9 @@ public interface IRegistryAccess
     /// <summary>Deletes the value. Returns false if it was already absent.</summary>
     bool DeleteValue(RegistryTarget target);
 
+    /// <summary>Value names under a key (empty if the key does not exist).</summary>
+    IReadOnlyList<string> GetValueNames(RegistryHiveName hive, RegistryViewName view, string keyPath);
+
     /// <summary>Deletes the key only if it has no values and no subkeys. Returns true if deleted.</summary>
     bool DeleteKeyIfEmpty(RegistryHiveName hive, RegistryViewName view, string keyPath);
 }
