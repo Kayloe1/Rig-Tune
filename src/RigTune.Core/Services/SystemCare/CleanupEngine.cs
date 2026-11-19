@@ -49,7 +49,7 @@ public sealed class CleanupEngine
         return new[]
         {
             new CleanupDefinition(TempSystemFiles, "Clean Up Temporary System Files",
-                "Old Windows Update downloads, Delivery Optimization cache and archived error reports.", CleanupKind.Files,
+                "Old Windows Update downloads, Delivery Optimization cache, archived error reports and minidumps.", CleanupKind.Files,
                 new[]
                 {
                     new CleanupLocation(Path.Combine(windows, "SoftwareDistribution", "Download"), MinAge: TimeSpan.FromDays(2)),
@@ -57,6 +57,7 @@ public sealed class CleanupEngine
                     new CleanupLocation(Path.Combine(windows, "ServiceProfiles", "NetworkService", "AppData", "Local", "Microsoft", "Windows", "DeliveryOptimization", "Cache"), MinAge: day),
                     new CleanupLocation(Path.Combine(programData, "Microsoft", "Windows", "WER", "ReportArchive")),
                     new CleanupLocation(Path.Combine(programData, "Microsoft", "Windows", "WER", "ReportQueue")),
+                    new CleanupLocation(Path.Combine(windows, "Minidump"), "*.dmp", Recursive: false),
                 }, IsPermanent: true),
             new CleanupDefinition(TempFiles, "Delete Windows & User Temp Files",
                 "Files older than 24 hours in your %TEMP% folder and C:\\Windows\\Temp (files in use are skipped).", CleanupKind.Files,

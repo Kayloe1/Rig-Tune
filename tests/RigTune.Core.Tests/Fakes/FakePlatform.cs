@@ -144,3 +144,24 @@ public sealed class FakeWinget : RigTune.Core.Services.AppxWinget.IWingetCli
         return Task.FromResult(ExitCode);
     }
 }
+
+public sealed class FakeRecycleBin : RigTune.Core.Services.DiskAnalyzer.IRecycleBin
+{
+    public List<string> Files { get; } = new();
+    public List<string> Directories { get; } = new();
+    public long Size { get; set; }
+    public int Empties { get; private set; }
+
+    public void SendFileToRecycleBin(string path) => Files.Add(path);
+
+    public void SendDirectoryToRecycleBin(string path) => Directories.Add(path);
+
+    public (long Bytes, long Items) QuerySize() => (Size, Size > 0 ? 3 : 0);
+
+    public bool Empty()
+    {
+        Empties++;
+        Size = 0;
+        return true;
+    }
+}

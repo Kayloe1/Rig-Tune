@@ -13,6 +13,7 @@ using RigTune.Core.Runners.Handlers;
 using RigTune.Core.Services;
 using RigTune.Core.Services.AppOptimizer;
 using RigTune.Core.Services.AppxWinget;
+using RigTune.Core.Services.DiskAnalyzer;
 using RigTune.Core.Services.GameMode;
 using RigTune.Core.Services.SystemCare;
 using RigTune.Core.Storage;
@@ -182,6 +183,26 @@ public partial class App : Application
             sp.GetRequiredService<AppOptimizerService>(), sp.GetRequiredService<RefreshRateWatchdogService>()));
         services.AddSingleton<SystemTrayManager>();
 
+        // Core: Disk Analyzer & Space Advisor (Phase 6)
+        services.AddSingleton(_ => PathGuard.ForThisMachine());
+        services.AddSingleton(sp => new JsonDocumentStore<DiskLocksDocument>(sp.GetRequiredService<RigTunePaths>().DiskLocksFile));
+        services.AddSingleton<DiskLockService>();
+        services.AddSingleton<IRecycleBin, WindowsRecycleBin>();
+        services.AddSingleton<DiskAnalyzerService>(sp =>
+        {
+            JsonDocumentStore<GameModeDocument> gameStore = sp.GetRequiredService<JsonDocumentStore<GameModeDocument>>();
+            return new DiskAnalyzerService(sp.GetRequiredService<JsonDocumentStore<DiskLocksDocument>>(), async ct =>
+                DiskCategoryClassifier.ForThisMachine((await gameStore.ReadAsync(ct)).DiscoveredGames.Select(g => g.InstallDir)));
+        });
+        services.AddSingleton<DiskDeletionService>(sp => new DiskDeletionService(sp.GetRequiredService<PathGuard>(),
+            sp.GetRequiredService<DiskLockService>(), sp.GetRequiredService<IRecycleBin>(), sp.GetRequiredService<AuditLogService>(),
+            sp.GetRequiredService<DiskAnalyzerService>()));
+        services.AddSingleton<SpaceAdvisorService>(sp => new SpaceAdvisorService(
+            AdvisorEnvironment.ForThisMachine(sp.GetRequiredService<GameLibraryScanner>().FindSteamRoot()),
+            sp.GetRequiredService<DiskLockService>(), sp.GetRequiredService<DiskDeletionService>(), sp.GetRequiredService<IRecycleBin>(),
+            sp.GetRequiredService<AuditLogService>(), sp.GetRequiredService<AppOptimizerService>(), sp.GetRequiredService<CleanupEngine>(),
+            sp.GetRequiredService<DiskAnalyzerService>()));
+
         // UI
         services.AddSingleton<MainWindow>();
         services.AddSingleton<DashboardViewModel>();
@@ -195,6 +216,7 @@ public partial class App : Application
         services.AddSingleton<SystemCareViewModel>();
         services.AddSingleton<AppOptimizerViewModel>();
         services.AddSingleton<GameModeViewModel>();
+        services.AddSingleton<DiskAnalyzerViewModel>();
         services.AddSingleton<DialogService>();
         services.AddSingleton<DashboardView>();
         services.AddSingleton<TweaksView>();
