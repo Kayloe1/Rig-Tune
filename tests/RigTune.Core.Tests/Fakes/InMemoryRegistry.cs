@@ -45,6 +45,15 @@ public sealed class InMemoryRegistry : IRegistryAccess
     public bool DeleteValue(RegistryTarget target) =>
         _keys.TryGetValue(Key(target.Hive, target.View, target.KeyPath), out var values) && values.Remove(target.ValueName);
 
+    public IReadOnlyList<string> GetSubKeyNames(RegistryHiveName hive, RegistryViewName view, string keyPath)
+    {
+        string prefix = Key(hive, view, keyPath) + "\\";
+        return _keys.Keys.Where(k => k.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
+            .Select(k => k[prefix.Length..].Split('\\')[0])
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .ToList();
+    }
+
     public IReadOnlyList<string> GetValueNames(RegistryHiveName hive, RegistryViewName view, string keyPath) =>
         _keys.TryGetValue(Key(hive, view, keyPath), out var values) ? values.Keys.ToList() : Array.Empty<string>();
 

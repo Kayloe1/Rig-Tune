@@ -1,0 +1,1917 @@
+{
+  "schemaVersion": 1,
+  "apps": [
+    {
+      "id": "chrome",
+      "name": "Google Chrome",
+      "category": "Browsers",
+      "detectPaths": [
+        "%LOCALAPPDATA%\\Google\\Chrome\\User Data",
+        "%PROGRAMFILES%\\Google\\Chrome\\Application\\chrome.exe"
+      ],
+      "processes": [
+        "chrome.exe"
+      ],
+      "caches": [
+        {
+          "id": "web_cache",
+          "name": "Cached images, code & GPU/shader caches",
+          "paths": [
+            "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\*\\Cache",
+            "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\*\\Code Cache",
+            "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\*\\GPUCache",
+            "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\*\\DawnCache",
+            "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\*\\DawnGraphiteCache"
+          ],
+          "defaultChecked": true
+        },
+        {
+          "id": "cookies",
+          "name": "Cookies & site data (signs you out)",
+          "paths": [
+            "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\*\\Network\\Cookies*"
+          ],
+          "defaultChecked": false
+        },
+        {
+          "id": "history",
+          "name": "Browsing history (signs you out)",
+          "paths": [
+            "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\*\\History*"
+          ],
+          "defaultChecked": false
+        }
+      ],
+      "toggles": [
+        {
+          "id": "bg_apps",
+          "name": "Turn off background apps",
+          "action": {
+            "type": "registry",
+            "hive": "HKLM",
+            "view": "Registry64",
+            "path": "SOFTWARE\\Policies\\Google\\Chrome",
+            "valueName": "BackgroundModeEnabled",
+            "valueKind": "DWord",
+            "applyValue": 0
+          },
+          "description": "Chrome no longer keeps running in the tray after you close it."
+        },
+        {
+          "id": "preload",
+          "name": "Turn off page preloading",
+          "action": {
+            "type": "registry",
+            "hive": "HKLM",
+            "view": "Registry64",
+            "path": "SOFTWARE\\Policies\\Google\\Chrome",
+            "valueName": "NetworkPredictionOptions",
+            "valueKind": "DWord",
+            "applyValue": 2
+          },
+          "description": "Stops Chrome prefetching pages you might open."
+        },
+        {
+          "id": "hw_accel",
+          "name": "Turn off hardware acceleration",
+          "action": {
+            "type": "registry",
+            "hive": "HKLM",
+            "view": "Registry64",
+            "path": "SOFTWARE\\Policies\\Google\\Chrome",
+            "valueName": "HardwareAccelerationModeEnabled",
+            "valueKind": "DWord",
+            "applyValue": 0
+          },
+          "warning": "Lowers GPU contention while a game runs, but video playback and scrolling then use the CPU."
+        },
+        {
+          "id": "parallel_dl",
+          "name": "Enable parallel downloading",
+          "description": "Turns on the chrome://flags parallel-downloading experiment (splits large downloads into several connections). Close the browser first.",
+          "action": {
+            "type": "chromium_flag",
+            "localStatePath": "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\Local State",
+            "flag": "enable-parallel-downloading",
+            "applyState": "Enabled",
+            "processName": "chrome.exe"
+          }
+        }
+      ],
+      "whilePlaying": {
+        "enabled": true,
+        "mode": "EcoQoS",
+        "cpuPriority": "BelowNormal",
+        "ioPriority": "Low"
+      }
+    },
+    {
+      "id": "edge",
+      "name": "Microsoft Edge",
+      "category": "Browsers",
+      "detectPaths": [
+        "%LOCALAPPDATA%\\Microsoft\\Edge\\User Data",
+        "%PROGRAMFILES(X86)%\\Microsoft\\Edge\\Application\\msedge.exe"
+      ],
+      "processes": [
+        "msedge.exe"
+      ],
+      "caches": [
+        {
+          "id": "web_cache",
+          "name": "Cached images, code & GPU/shader caches",
+          "paths": [
+            "%LOCALAPPDATA%\\Microsoft\\Edge\\User Data\\*\\Cache",
+            "%LOCALAPPDATA%\\Microsoft\\Edge\\User Data\\*\\Code Cache",
+            "%LOCALAPPDATA%\\Microsoft\\Edge\\User Data\\*\\GPUCache",
+            "%LOCALAPPDATA%\\Microsoft\\Edge\\User Data\\*\\DawnCache",
+            "%LOCALAPPDATA%\\Microsoft\\Edge\\User Data\\*\\DawnGraphiteCache"
+          ],
+          "defaultChecked": true
+        },
+        {
+          "id": "cookies",
+          "name": "Cookies & site data (signs you out)",
+          "paths": [
+            "%LOCALAPPDATA%\\Microsoft\\Edge\\User Data\\*\\Network\\Cookies*"
+          ],
+          "defaultChecked": false
+        },
+        {
+          "id": "history",
+          "name": "Browsing history (signs you out)",
+          "paths": [
+            "%LOCALAPPDATA%\\Microsoft\\Edge\\User Data\\*\\History*"
+          ],
+          "defaultChecked": false
+        }
+      ],
+      "toggles": [
+        {
+          "id": "bg_apps",
+          "name": "Turn off background apps",
+          "action": {
+            "type": "registry",
+            "hive": "HKLM",
+            "view": "Registry64",
+            "path": "SOFTWARE\\Policies\\Microsoft\\Edge",
+            "valueName": "BackgroundModeEnabled",
+            "valueKind": "DWord",
+            "applyValue": 0
+          },
+          "description": "Edge no longer keeps running after you close it."
+        },
+        {
+          "id": "startup_boost",
+          "name": "Turn off Startup Boost",
+          "action": {
+            "type": "registry",
+            "hive": "HKLM",
+            "view": "Registry64",
+            "path": "SOFTWARE\\Policies\\Microsoft\\Edge",
+            "valueName": "StartupBoostEnabled",
+            "valueKind": "DWord",
+            "applyValue": 0
+          },
+          "description": "Stops Edge pre-launching processes at sign-in."
+        },
+        {
+          "id": "preload",
+          "name": "Turn off page preloading",
+          "action": {
+            "type": "registry",
+            "hive": "HKLM",
+            "view": "Registry64",
+            "path": "SOFTWARE\\Policies\\Microsoft\\Edge",
+            "valueName": "NetworkPredictionOptions",
+            "valueKind": "DWord",
+            "applyValue": 2
+          }
+        },
+        {
+          "id": "hw_accel",
+          "name": "Turn off hardware acceleration",
+          "action": {
+            "type": "registry",
+            "hive": "HKLM",
+            "view": "Registry64",
+            "path": "SOFTWARE\\Policies\\Microsoft\\Edge",
+            "valueName": "HardwareAccelerationModeEnabled",
+            "valueKind": "DWord",
+            "applyValue": 0
+          },
+          "warning": "Lowers GPU contention while a game runs, but video playback and scrolling then use the CPU."
+        },
+        {
+          "id": "parallel_dl",
+          "name": "Enable parallel downloading",
+          "description": "Turns on the chrome://flags parallel-downloading experiment (splits large downloads into several connections). Close the browser first.",
+          "action": {
+            "type": "chromium_flag",
+            "localStatePath": "%LOCALAPPDATA%\\Microsoft\\Edge\\User Data\\Local State",
+            "flag": "enable-parallel-downloading",
+            "applyState": "Enabled",
+            "processName": "msedge.exe"
+          }
+        },
+        {
+          "id": "auto_start",
+          "name": "Turn off auto-start",
+          "description": "Disables the app's Windows startup entry the same way Task Manager does (the entry stays visible and can be re-enabled).",
+          "action": {
+            "type": "startup",
+            "match": [
+              "MicrosoftEdgeAutoLaunch*"
+            ]
+          }
+        }
+      ],
+      "whilePlaying": {
+        "enabled": true,
+        "mode": "EcoQoS",
+        "cpuPriority": "BelowNormal",
+        "ioPriority": "Low"
+      }
+    },
+    {
+      "id": "firefox",
+      "name": "Mozilla Firefox",
+      "category": "Browsers",
+      "detectPaths": [
+        "%PROGRAMFILES%\\Mozilla Firefox\\firefox.exe",
+        "%APPDATA%\\Mozilla\\Firefox\\Profiles"
+      ],
+      "processes": [
+        "firefox.exe"
+      ],
+      "caches": [
+        {
+          "id": "web_cache",
+          "name": "Cached images, scripts & startup cache",
+          "paths": [
+            "%LOCALAPPDATA%\\Mozilla\\Firefox\\Profiles\\*\\cache2",
+            "%LOCALAPPDATA%\\Mozilla\\Firefox\\Profiles\\*\\startupCache",
+            "%LOCALAPPDATA%\\Mozilla\\Firefox\\Profiles\\*\\thumbnails"
+          ],
+          "defaultChecked": true
+        },
+        {
+          "id": "cookies",
+          "name": "Cookies & site data (signs you out)",
+          "paths": [
+            "%APPDATA%\\Mozilla\\Firefox\\Profiles\\*\\cookies.sqlite*"
+          ],
+          "defaultChecked": false
+        }
+      ],
+      "toggles": [
+        {
+          "id": "bg_updates",
+          "name": "Turn off background updates",
+          "action": {
+            "type": "registry",
+            "hive": "HKLM",
+            "view": "Registry64",
+            "path": "SOFTWARE\\Policies\\Mozilla\\Firefox",
+            "valueName": "BackgroundAppUpdate",
+            "valueKind": "DWord",
+            "applyValue": 0
+          },
+          "description": "Firefox only updates while it is open."
+        },
+        {
+          "id": "telemetry",
+          "name": "Turn off telemetry",
+          "action": {
+            "type": "registry",
+            "hive": "HKLM",
+            "view": "Registry64",
+            "path": "SOFTWARE\\Policies\\Mozilla\\Firefox",
+            "valueName": "DisableTelemetry",
+            "valueKind": "DWord",
+            "applyValue": 1
+          }
+        },
+        {
+          "id": "hw_accel",
+          "name": "Turn off hardware acceleration",
+          "action": {
+            "type": "registry",
+            "hive": "HKLM",
+            "view": "Registry64",
+            "path": "SOFTWARE\\Policies\\Mozilla\\Firefox",
+            "valueName": "HardwareAcceleration",
+            "valueKind": "DWord",
+            "applyValue": 0
+          },
+          "warning": "Lowers GPU contention while a game runs, but video playback and scrolling then use the CPU."
+        }
+      ],
+      "whilePlaying": {
+        "enabled": true,
+        "mode": "EcoQoS",
+        "cpuPriority": "BelowNormal",
+        "ioPriority": "Low"
+      }
+    },
+    {
+      "id": "brave",
+      "name": "Brave",
+      "category": "Browsers",
+      "detectPaths": [
+        "%LOCALAPPDATA%\\BraveSoftware\\Brave-Browser\\User Data"
+      ],
+      "processes": [
+        "brave.exe"
+      ],
+      "caches": [
+        {
+          "id": "web_cache",
+          "name": "Cached images, code & GPU/shader caches",
+          "paths": [
+            "%LOCALAPPDATA%\\BraveSoftware\\Brave-Browser\\User Data\\*\\Cache",
+            "%LOCALAPPDATA%\\BraveSoftware\\Brave-Browser\\User Data\\*\\Code Cache",
+            "%LOCALAPPDATA%\\BraveSoftware\\Brave-Browser\\User Data\\*\\GPUCache",
+            "%LOCALAPPDATA%\\BraveSoftware\\Brave-Browser\\User Data\\*\\DawnCache",
+            "%LOCALAPPDATA%\\BraveSoftware\\Brave-Browser\\User Data\\*\\DawnGraphiteCache"
+          ],
+          "defaultChecked": true
+        },
+        {
+          "id": "cookies",
+          "name": "Cookies & site data (signs you out)",
+          "paths": [
+            "%LOCALAPPDATA%\\BraveSoftware\\Brave-Browser\\User Data\\*\\Network\\Cookies*"
+          ],
+          "defaultChecked": false
+        },
+        {
+          "id": "history",
+          "name": "Browsing history (signs you out)",
+          "paths": [
+            "%LOCALAPPDATA%\\BraveSoftware\\Brave-Browser\\User Data\\*\\History*"
+          ],
+          "defaultChecked": false
+        }
+      ],
+      "toggles": [
+        {
+          "id": "bg_apps",
+          "name": "Turn off background apps",
+          "action": {
+            "type": "registry",
+            "hive": "HKLM",
+            "view": "Registry64",
+            "path": "SOFTWARE\\Policies\\BraveSoftware\\Brave",
+            "valueName": "BackgroundModeEnabled",
+            "valueKind": "DWord",
+            "applyValue": 0
+          }
+        },
+        {
+          "id": "preload",
+          "name": "Turn off page preloading",
+          "action": {
+            "type": "registry",
+            "hive": "HKLM",
+            "view": "Registry64",
+            "path": "SOFTWARE\\Policies\\BraveSoftware\\Brave",
+            "valueName": "NetworkPredictionOptions",
+            "valueKind": "DWord",
+            "applyValue": 2
+          }
+        },
+        {
+          "id": "hw_accel",
+          "name": "Turn off hardware acceleration",
+          "action": {
+            "type": "registry",
+            "hive": "HKLM",
+            "view": "Registry64",
+            "path": "SOFTWARE\\Policies\\BraveSoftware\\Brave",
+            "valueName": "HardwareAccelerationModeEnabled",
+            "valueKind": "DWord",
+            "applyValue": 0
+          },
+          "warning": "Lowers GPU contention while a game runs, but video playback and scrolling then use the CPU."
+        },
+        {
+          "id": "parallel_dl",
+          "name": "Enable parallel downloading",
+          "description": "Turns on the chrome://flags parallel-downloading experiment (splits large downloads into several connections). Close the browser first.",
+          "action": {
+            "type": "chromium_flag",
+            "localStatePath": "%LOCALAPPDATA%\\BraveSoftware\\Brave-Browser\\User Data\\Local State",
+            "flag": "enable-parallel-downloading",
+            "applyState": "Enabled",
+            "processName": "brave.exe"
+          }
+        }
+      ],
+      "whilePlaying": {
+        "enabled": true,
+        "mode": "EcoQoS",
+        "cpuPriority": "BelowNormal",
+        "ioPriority": "Low"
+      }
+    },
+    {
+      "id": "opera",
+      "name": "Opera",
+      "category": "Browsers",
+      "detectPaths": [
+        "%APPDATA%\\Opera Software\\Opera Stable",
+        "%LOCALAPPDATA%\\Programs\\Opera\\opera.exe"
+      ],
+      "processes": [
+        "opera.exe"
+      ],
+      "caches": [
+        {
+          "id": "web_cache",
+          "name": "Cached images, code & GPU/shader caches",
+          "paths": [
+            "%LOCALAPPDATA%\\Opera Software\\Opera Stable\\Cache",
+            "%APPDATA%\\Opera Software\\Opera Stable\\Code Cache",
+            "%APPDATA%\\Opera Software\\Opera Stable\\GPUCache"
+          ],
+          "defaultChecked": true
+        },
+        {
+          "id": "cookies",
+          "name": "Cookies & site data (signs you out)",
+          "paths": [
+            "%APPDATA%\\Opera Software\\Opera Stable\\Network\\Cookies*"
+          ],
+          "defaultChecked": false
+        },
+        {
+          "id": "history",
+          "name": "Browsing history (signs you out)",
+          "paths": [
+            "%APPDATA%\\Opera Software\\Opera Stable\\History*"
+          ],
+          "defaultChecked": false
+        }
+      ],
+      "toggles": [
+        {
+          "id": "parallel_dl",
+          "name": "Enable parallel downloading",
+          "description": "Turns on the chrome://flags parallel-downloading experiment (splits large downloads into several connections). Close the browser first.",
+          "action": {
+            "type": "chromium_flag",
+            "localStatePath": "%APPDATA%\\Opera Software\\Opera Stable\\Local State",
+            "flag": "enable-parallel-downloading",
+            "applyState": "Enabled",
+            "processName": "opera.exe"
+          }
+        },
+        {
+          "id": "auto_start",
+          "name": "Turn off auto-start",
+          "description": "Disables the app's Windows startup entry the same way Task Manager does (the entry stays visible and can be re-enabled).",
+          "action": {
+            "type": "startup",
+            "match": [
+              "Opera Browser Assistant*",
+              "Opera Stable*",
+              "Opera Browser*"
+            ]
+          }
+        }
+      ],
+      "whilePlaying": {
+        "enabled": true,
+        "mode": "EcoQoS",
+        "cpuPriority": "BelowNormal",
+        "ioPriority": "Low"
+      }
+    },
+    {
+      "id": "opera_gx",
+      "name": "Opera GX",
+      "category": "Browsers",
+      "detectPaths": [
+        "%APPDATA%\\Opera Software\\Opera GX Stable",
+        "%LOCALAPPDATA%\\Programs\\Opera GX\\opera.exe"
+      ],
+      "processes": [
+        "opera.exe"
+      ],
+      "caches": [
+        {
+          "id": "web_cache",
+          "name": "Cached images, code & GPU/shader caches",
+          "paths": [
+            "%LOCALAPPDATA%\\Opera Software\\Opera GX Stable\\Cache",
+            "%APPDATA%\\Opera Software\\Opera GX Stable\\Code Cache",
+            "%APPDATA%\\Opera Software\\Opera GX Stable\\GPUCache"
+          ],
+          "defaultChecked": true
+        },
+        {
+          "id": "cookies",
+          "name": "Cookies & site data (signs you out)",
+          "paths": [
+            "%APPDATA%\\Opera Software\\Opera GX Stable\\Network\\Cookies*"
+          ],
+          "defaultChecked": false
+        },
+        {
+          "id": "history",
+          "name": "Browsing history (signs you out)",
+          "paths": [
+            "%APPDATA%\\Opera Software\\Opera GX Stable\\History*"
+          ],
+          "defaultChecked": false
+        }
+      ],
+      "toggles": [
+        {
+          "id": "parallel_dl",
+          "name": "Enable parallel downloading",
+          "description": "Turns on the chrome://flags parallel-downloading experiment (splits large downloads into several connections). Close the browser first.",
+          "action": {
+            "type": "chromium_flag",
+            "localStatePath": "%APPDATA%\\Opera Software\\Opera GX Stable\\Local State",
+            "flag": "enable-parallel-downloading",
+            "applyState": "Enabled",
+            "processName": "opera.exe"
+          }
+        },
+        {
+          "id": "auto_start",
+          "name": "Turn off auto-start",
+          "description": "Disables the app's Windows startup entry the same way Task Manager does (the entry stays visible and can be re-enabled).",
+          "action": {
+            "type": "startup",
+            "match": [
+              "Opera GX*"
+            ]
+          }
+        }
+      ],
+      "whilePlaying": {
+        "enabled": true,
+        "mode": "EcoQoS",
+        "cpuPriority": "BelowNormal",
+        "ioPriority": "Low"
+      }
+    },
+    {
+      "id": "vivaldi",
+      "name": "Vivaldi",
+      "category": "Browsers",
+      "detectPaths": [
+        "%LOCALAPPDATA%\\Vivaldi\\User Data",
+        "%LOCALAPPDATA%\\Vivaldi\\Application\\vivaldi.exe"
+      ],
+      "processes": [
+        "vivaldi.exe"
+      ],
+      "caches": [
+        {
+          "id": "web_cache",
+          "name": "Cached images, code & GPU/shader caches",
+          "paths": [
+            "%LOCALAPPDATA%\\Vivaldi\\User Data\\*\\Cache",
+            "%LOCALAPPDATA%\\Vivaldi\\User Data\\*\\Code Cache",
+            "%LOCALAPPDATA%\\Vivaldi\\User Data\\*\\GPUCache",
+            "%LOCALAPPDATA%\\Vivaldi\\User Data\\*\\DawnCache",
+            "%LOCALAPPDATA%\\Vivaldi\\User Data\\*\\DawnGraphiteCache"
+          ],
+          "defaultChecked": true
+        },
+        {
+          "id": "cookies",
+          "name": "Cookies & site data (signs you out)",
+          "paths": [
+            "%LOCALAPPDATA%\\Vivaldi\\User Data\\*\\Network\\Cookies*"
+          ],
+          "defaultChecked": false
+        },
+        {
+          "id": "history",
+          "name": "Browsing history (signs you out)",
+          "paths": [
+            "%LOCALAPPDATA%\\Vivaldi\\User Data\\*\\History*"
+          ],
+          "defaultChecked": false
+        }
+      ],
+      "toggles": [
+        {
+          "id": "parallel_dl",
+          "name": "Enable parallel downloading",
+          "description": "Turns on the chrome://flags parallel-downloading experiment (splits large downloads into several connections). Close the browser first.",
+          "action": {
+            "type": "chromium_flag",
+            "localStatePath": "%LOCALAPPDATA%\\Vivaldi\\User Data\\Local State",
+            "flag": "enable-parallel-downloading",
+            "applyState": "Enabled",
+            "processName": "vivaldi.exe"
+          }
+        }
+      ],
+      "whilePlaying": {
+        "enabled": true,
+        "mode": "EcoQoS",
+        "cpuPriority": "BelowNormal",
+        "ioPriority": "Low"
+      }
+    },
+    {
+      "id": "discord",
+      "name": "Discord",
+      "category": "Chat & Conferencing",
+      "detectPaths": [
+        "%LOCALAPPDATA%\\Discord\\Update.exe",
+        "%APPDATA%\\discord"
+      ],
+      "processes": [
+        "Discord.exe"
+      ],
+      "caches": [
+        {
+          "id": "cache",
+          "name": "App cache (images, code & GPU caches)",
+          "paths": [
+            "%APPDATA%\\discord\\Cache",
+            "%APPDATA%\\discord\\Code Cache",
+            "%APPDATA%\\discord\\GPUCache"
+          ],
+          "defaultChecked": true
+        }
+      ],
+      "toggles": [
+        {
+          "id": "auto_start",
+          "name": "Turn off auto-start",
+          "description": "Disables the app's Windows startup entry the same way Task Manager does (the entry stays visible and can be re-enabled).",
+          "action": {
+            "type": "startup",
+            "match": [
+              "Discord"
+            ]
+          }
+        }
+      ],
+      "whilePlaying": {
+        "enabled": true,
+        "mode": "LowerPriority",
+        "cpuPriority": "BelowNormal",
+        "ioPriority": "Normal"
+      }
+    },
+    {
+      "id": "telegram",
+      "name": "Telegram",
+      "category": "Chat & Conferencing",
+      "detectPaths": [
+        "%APPDATA%\\Telegram Desktop\\Telegram.exe",
+        "%LOCALAPPDATA%\\Packages\\TelegramMessengerLLP.TelegramDesktop_*"
+      ],
+      "processes": [
+        "Telegram.exe"
+      ],
+      "caches": [
+        {
+          "id": "cache",
+          "name": "Media & file cache",
+          "paths": [
+            "%APPDATA%\\Telegram Desktop\\tdata\\user_data\\cache",
+            "%APPDATA%\\Telegram Desktop\\tdata\\user_data\\media_cache"
+          ],
+          "defaultChecked": true
+        }
+      ],
+      "toggles": [
+        {
+          "id": "auto_start",
+          "name": "Turn off auto-start",
+          "description": "Disables the app's Windows startup entry the same way Task Manager does (the entry stays visible and can be re-enabled).",
+          "action": {
+            "type": "startup",
+            "match": [
+              "Telegram Desktop*"
+            ],
+            "packageFamily": "TelegramMessengerLLP.TelegramDesktop_t4vj0pshhgkwm"
+          }
+        }
+      ],
+      "whilePlaying": {
+        "enabled": true,
+        "mode": "LowerPriority",
+        "cpuPriority": "BelowNormal",
+        "ioPriority": "Normal"
+      }
+    },
+    {
+      "id": "whatsapp",
+      "name": "WhatsApp",
+      "category": "Chat & Conferencing",
+      "detectPaths": [
+        "%LOCALAPPDATA%\\Packages\\5319275A.WhatsAppDesktop_cv1g1gvanyjgm"
+      ],
+      "processes": [
+        "WhatsApp.exe",
+        "WhatsApp.Root.exe"
+      ],
+      "caches": [
+        {
+          "id": "cache",
+          "name": "App web cache",
+          "paths": [
+            "%LOCALAPPDATA%\\Packages\\5319275A.WhatsAppDesktop_cv1g1gvanyjgm\\LocalState\\EBWebView\\Default\\Cache",
+            "%LOCALAPPDATA%\\Packages\\5319275A.WhatsAppDesktop_cv1g1gvanyjgm\\LocalState\\EBWebView\\Default\\Code Cache",
+            "%LOCALAPPDATA%\\Packages\\5319275A.WhatsAppDesktop_cv1g1gvanyjgm\\LocalCache\\Roaming\\WhatsApp\\Cache"
+          ],
+          "defaultChecked": true
+        }
+      ],
+      "toggles": [
+        {
+          "id": "auto_start",
+          "name": "Turn off auto-start",
+          "description": "Disables the app's Windows startup entry the same way Task Manager does (the entry stays visible and can be re-enabled).",
+          "action": {
+            "type": "startup",
+            "packageFamily": "5319275A.WhatsAppDesktop_cv1g1gvanyjgm"
+          }
+        }
+      ],
+      "whilePlaying": {
+        "enabled": true,
+        "mode": "LowerPriority",
+        "cpuPriority": "BelowNormal",
+        "ioPriority": "Normal"
+      }
+    },
+    {
+      "id": "slack",
+      "name": "Slack",
+      "category": "Chat & Conferencing",
+      "detectPaths": [
+        "%LOCALAPPDATA%\\slack\\slack.exe",
+        "%APPDATA%\\Slack"
+      ],
+      "processes": [
+        "slack.exe"
+      ],
+      "caches": [
+        {
+          "id": "cache",
+          "name": "App cache (images, code & GPU caches)",
+          "paths": [
+            "%APPDATA%\\Slack\\Cache",
+            "%APPDATA%\\Slack\\Code Cache",
+            "%APPDATA%\\Slack\\GPUCache",
+            "%APPDATA%\\Slack\\Service Worker\\CacheStorage"
+          ],
+          "defaultChecked": true
+        }
+      ],
+      "toggles": [
+        {
+          "id": "auto_start",
+          "name": "Turn off auto-start",
+          "description": "Disables the app's Windows startup entry the same way Task Manager does (the entry stays visible and can be re-enabled).",
+          "action": {
+            "type": "startup",
+            "match": [
+              "com.squirrel.slack.slack",
+              "Slack*"
+            ]
+          }
+        }
+      ],
+      "whilePlaying": {
+        "enabled": true,
+        "mode": "LowerPriority",
+        "cpuPriority": "BelowNormal",
+        "ioPriority": "Normal"
+      }
+    },
+    {
+      "id": "teams",
+      "name": "Microsoft Teams",
+      "category": "Chat & Conferencing",
+      "detectPaths": [
+        "%LOCALAPPDATA%\\Packages\\MSTeams_8wekyb3d8bbwe",
+        "%LOCALAPPDATA%\\Microsoft\\Teams\\Update.exe"
+      ],
+      "processes": [
+        "ms-teams.exe",
+        "Teams.exe"
+      ],
+      "caches": [
+        {
+          "id": "cache",
+          "name": "App web cache",
+          "paths": [
+            "%LOCALAPPDATA%\\Packages\\MSTeams_8wekyb3d8bbwe\\LocalCache\\Microsoft\\MSTeams\\EBWebView\\Default\\Cache",
+            "%LOCALAPPDATA%\\Packages\\MSTeams_8wekyb3d8bbwe\\LocalCache\\Microsoft\\MSTeams\\EBWebView\\Default\\Code Cache",
+            "%APPDATA%\\Microsoft\\Teams\\Cache"
+          ],
+          "defaultChecked": true
+        }
+      ],
+      "toggles": [
+        {
+          "id": "auto_start",
+          "name": "Turn off auto-start",
+          "description": "Disables the app's Windows startup entry the same way Task Manager does (the entry stays visible and can be re-enabled).",
+          "action": {
+            "type": "startup",
+            "match": [
+              "com.squirrel.Teams.Teams"
+            ],
+            "packageFamily": "MSTeams_8wekyb3d8bbwe"
+          }
+        }
+      ],
+      "whilePlaying": {
+        "enabled": true,
+        "mode": "LowerPriority",
+        "cpuPriority": "BelowNormal",
+        "ioPriority": "Normal"
+      }
+    },
+    {
+      "id": "zoom",
+      "name": "Zoom",
+      "category": "Chat & Conferencing",
+      "detectPaths": [
+        "%APPDATA%\\Zoom\\bin\\Zoom.exe",
+        "%PROGRAMFILES%\\Zoom\\bin\\Zoom.exe"
+      ],
+      "processes": [
+        "Zoom.exe"
+      ],
+      "caches": [
+        {
+          "id": "logs",
+          "name": "Logs",
+          "paths": [
+            "%APPDATA%\\Zoom\\logs"
+          ],
+          "defaultChecked": true
+        }
+      ],
+      "toggles": [
+        {
+          "id": "auto_start",
+          "name": "Turn off auto-start",
+          "description": "Disables the app's Windows startup entry the same way Task Manager does (the entry stays visible and can be re-enabled).",
+          "action": {
+            "type": "startup",
+            "match": [
+              "Zoom",
+              "ZoomWorkplace*"
+            ]
+          }
+        }
+      ],
+      "whilePlaying": {
+        "enabled": true,
+        "mode": "LowerPriority",
+        "cpuPriority": "BelowNormal",
+        "ioPriority": "Normal"
+      }
+    },
+    {
+      "id": "onedrive",
+      "name": "OneDrive",
+      "category": "Cloud Sync",
+      "detectPaths": [
+        "%LOCALAPPDATA%\\Microsoft\\OneDrive\\OneDrive.exe",
+        "%PROGRAMFILES%\\Microsoft OneDrive\\OneDrive.exe"
+      ],
+      "processes": [
+        "OneDrive.exe"
+      ],
+      "caches": [
+        {
+          "id": "logs",
+          "name": "Logs",
+          "paths": [
+            "%LOCALAPPDATA%\\Microsoft\\OneDrive\\logs"
+          ],
+          "defaultChecked": true
+        }
+      ],
+      "toggles": [
+        {
+          "id": "auto_start",
+          "name": "Turn off auto-start",
+          "description": "Disables the app's Windows startup entry the same way Task Manager does (the entry stays visible and can be re-enabled).",
+          "action": {
+            "type": "startup",
+            "match": [
+              "OneDrive"
+            ]
+          },
+          "warning": "Files stop syncing until you open the app yourself."
+        }
+      ],
+      "whilePlaying": {
+        "enabled": true,
+        "mode": "EcoQoS",
+        "cpuPriority": "BelowNormal",
+        "ioPriority": "Low"
+      }
+    },
+    {
+      "id": "google_drive",
+      "name": "Google Drive",
+      "category": "Cloud Sync",
+      "detectPaths": [
+        "%PROGRAMFILES%\\Google\\Drive File Stream",
+        "%LOCALAPPDATA%\\Google\\DriveFS"
+      ],
+      "processes": [
+        "GoogleDriveFS.exe"
+      ],
+      "caches": [
+        {
+          "id": "logs",
+          "name": "Logs",
+          "paths": [
+            "%LOCALAPPDATA%\\Google\\DriveFS\\Logs"
+          ],
+          "defaultChecked": true
+        }
+      ],
+      "toggles": [
+        {
+          "id": "auto_start",
+          "name": "Turn off auto-start",
+          "description": "Disables the app's Windows startup entry the same way Task Manager does (the entry stays visible and can be re-enabled).",
+          "action": {
+            "type": "startup",
+            "match": [
+              "GoogleDriveFS*"
+            ]
+          },
+          "warning": "Files stop syncing until you open the app yourself."
+        }
+      ],
+      "whilePlaying": {
+        "enabled": true,
+        "mode": "EcoQoS",
+        "cpuPriority": "BelowNormal",
+        "ioPriority": "Low"
+      }
+    },
+    {
+      "id": "dropbox",
+      "name": "Dropbox",
+      "category": "Cloud Sync",
+      "detectPaths": [
+        "%PROGRAMFILES(X86)%\\Dropbox\\Client\\Dropbox.exe",
+        "%PROGRAMFILES%\\Dropbox\\Client\\Dropbox.exe",
+        "%APPDATA%\\Dropbox"
+      ],
+      "processes": [
+        "Dropbox.exe"
+      ],
+      "caches": [
+        {
+          "id": "logs",
+          "name": "Logs",
+          "paths": [
+            "%APPDATA%\\Dropbox\\logs"
+          ],
+          "defaultChecked": true
+        }
+      ],
+      "toggles": [
+        {
+          "id": "auto_start",
+          "name": "Turn off auto-start",
+          "description": "Disables the app's Windows startup entry the same way Task Manager does (the entry stays visible and can be re-enabled).",
+          "action": {
+            "type": "startup",
+            "match": [
+              "Dropbox"
+            ]
+          },
+          "warning": "Files stop syncing until you open the app yourself."
+        }
+      ],
+      "whilePlaying": {
+        "enabled": true,
+        "mode": "EcoQoS",
+        "cpuPriority": "BelowNormal",
+        "ioPriority": "Low"
+      }
+    },
+    {
+      "id": "icloud",
+      "name": "iCloud",
+      "category": "Cloud Sync",
+      "detectPaths": [
+        "%LOCALAPPDATA%\\Packages\\AppleInc.iCloud_nzyj5cx40ttqa",
+        "%PROGRAMFILES%\\Common Files\\Apple\\Internet Services"
+      ],
+      "processes": [
+        "iCloudDrive.exe",
+        "iCloudServices.exe"
+      ],
+      "caches": [],
+      "toggles": [
+        {
+          "id": "auto_start",
+          "name": "Turn off auto-start",
+          "description": "Disables the app's Windows startup entry the same way Task Manager does (the entry stays visible and can be re-enabled).",
+          "action": {
+            "type": "startup",
+            "match": [
+              "iCloud*"
+            ],
+            "packageFamily": "AppleInc.iCloud_nzyj5cx40ttqa"
+          },
+          "warning": "Files stop syncing until you open the app yourself."
+        }
+      ],
+      "whilePlaying": {
+        "enabled": true,
+        "mode": "EcoQoS",
+        "cpuPriority": "BelowNormal",
+        "ioPriority": "Low"
+      }
+    },
+    {
+      "id": "steam",
+      "name": "Steam",
+      "category": "Game Launchers",
+      "detectPaths": [
+        "%PROGRAMFILES(X86)%\\Steam\\steam.exe"
+      ],
+      "processes": [
+        "steam.exe",
+        "steamwebhelper.exe"
+      ],
+      "caches": [
+        {
+          "id": "cache",
+          "name": "Web & HTTP cache (not games)",
+          "paths": [
+            "%LOCALAPPDATA%\\Steam\\htmlcache",
+            "%PROGRAMFILES(X86)%\\Steam\\appcache\\httpcache"
+          ],
+          "defaultChecked": true
+        }
+      ],
+      "toggles": [
+        {
+          "id": "auto_start",
+          "name": "Turn off auto-start",
+          "description": "Disables the app's Windows startup entry the same way Task Manager does (the entry stays visible and can be re-enabled).",
+          "action": {
+            "type": "startup",
+            "match": [
+              "Steam"
+            ]
+          },
+          "warning": "Games that need the launcher running will start it when you launch them."
+        }
+      ],
+      "whilePlaying": {
+        "enabled": true,
+        "mode": "LowerPriority",
+        "cpuPriority": "BelowNormal",
+        "ioPriority": "Normal"
+      }
+    },
+    {
+      "id": "xbox",
+      "name": "Xbox app",
+      "category": "Game Launchers",
+      "detectPaths": [
+        "%LOCALAPPDATA%\\Packages\\Microsoft.GamingApp_8wekyb3d8bbwe"
+      ],
+      "processes": [
+        "XboxPcApp.exe",
+        "XboxPcAppFT.exe"
+      ],
+      "caches": [
+        {
+          "id": "cache",
+          "name": "Web cache",
+          "paths": [
+            "%LOCALAPPDATA%\\Packages\\Microsoft.GamingApp_8wekyb3d8bbwe\\AC\\INetCache"
+          ],
+          "defaultChecked": true
+        }
+      ],
+      "toggles": [
+        {
+          "id": "auto_start",
+          "name": "Turn off auto-start",
+          "description": "Disables the app's Windows startup entry the same way Task Manager does (the entry stays visible and can be re-enabled).",
+          "action": {
+            "type": "startup",
+            "packageFamily": "Microsoft.GamingApp_8wekyb3d8bbwe"
+          },
+          "warning": "Games that need the launcher running will start it when you launch them."
+        }
+      ],
+      "whilePlaying": {
+        "enabled": true,
+        "mode": "LowerPriority",
+        "cpuPriority": "BelowNormal",
+        "ioPriority": "Normal"
+      }
+    },
+    {
+      "id": "ea_app",
+      "name": "EA app",
+      "category": "Game Launchers",
+      "detectPaths": [
+        "%PROGRAMFILES%\\Electronic Arts\\EA Desktop"
+      ],
+      "processes": [
+        "EADesktop.exe"
+      ],
+      "caches": [
+        {
+          "id": "cache",
+          "name": "Launcher & browser cache",
+          "paths": [
+            "%LOCALAPPDATA%\\Electronic Arts\\EA Desktop\\cache",
+            "%LOCALAPPDATA%\\Electronic Arts\\EA Desktop\\CEF\\BrowserCache"
+          ],
+          "defaultChecked": true
+        }
+      ],
+      "toggles": [
+        {
+          "id": "auto_start",
+          "name": "Turn off auto-start",
+          "description": "Disables the app's Windows startup entry the same way Task Manager does (the entry stays visible and can be re-enabled).",
+          "action": {
+            "type": "startup",
+            "match": [
+              "EADM",
+              "EA Desktop*",
+              "EADesktop*"
+            ]
+          },
+          "warning": "Games that need the launcher running will start it when you launch them."
+        }
+      ],
+      "whilePlaying": {
+        "enabled": true,
+        "mode": "LowerPriority",
+        "cpuPriority": "BelowNormal",
+        "ioPriority": "Normal"
+      }
+    },
+    {
+      "id": "battlenet",
+      "name": "Battle.net",
+      "category": "Game Launchers",
+      "detectPaths": [
+        "%PROGRAMFILES(X86)%\\Battle.net\\Battle.net.exe",
+        "%PROGRAMDATA%\\Battle.net"
+      ],
+      "processes": [
+        "Battle.net.exe"
+      ],
+      "caches": [
+        {
+          "id": "cache",
+          "name": "Launcher & browser cache",
+          "paths": [
+            "%LOCALAPPDATA%\\Battle.net\\Cache",
+            "%LOCALAPPDATA%\\Battle.net\\BrowserCache",
+            "%PROGRAMDATA%\\Battle.net\\Agent\\data\\cache"
+          ],
+          "defaultChecked": true
+        }
+      ],
+      "toggles": [
+        {
+          "id": "auto_start",
+          "name": "Turn off auto-start",
+          "description": "Disables the app's Windows startup entry the same way Task Manager does (the entry stays visible and can be re-enabled).",
+          "action": {
+            "type": "startup",
+            "match": [
+              "Battle.net*"
+            ]
+          },
+          "warning": "Games that need the launcher running will start it when you launch them."
+        }
+      ],
+      "whilePlaying": {
+        "enabled": true,
+        "mode": "LowerPriority",
+        "cpuPriority": "BelowNormal",
+        "ioPriority": "Normal"
+      }
+    },
+    {
+      "id": "epic",
+      "name": "Epic Games Launcher",
+      "category": "Game Launchers",
+      "detectPaths": [
+        "%PROGRAMFILES(X86)%\\Epic Games\\Launcher",
+        "%PROGRAMFILES%\\Epic Games\\Launcher"
+      ],
+      "processes": [
+        "EpicGamesLauncher.exe"
+      ],
+      "caches": [
+        {
+          "id": "cache",
+          "name": "Launcher web cache",
+          "paths": [
+            "%LOCALAPPDATA%\\EpicGamesLauncher\\Saved\\webcache*"
+          ],
+          "defaultChecked": true
+        }
+      ],
+      "toggles": [
+        {
+          "id": "auto_start",
+          "name": "Turn off auto-start",
+          "description": "Disables the app's Windows startup entry the same way Task Manager does (the entry stays visible and can be re-enabled).",
+          "action": {
+            "type": "startup",
+            "match": [
+              "EpicGamesLauncher*"
+            ]
+          },
+          "warning": "Games that need the launcher running will start it when you launch them."
+        }
+      ],
+      "whilePlaying": {
+        "enabled": true,
+        "mode": "LowerPriority",
+        "cpuPriority": "BelowNormal",
+        "ioPriority": "Normal"
+      }
+    },
+    {
+      "id": "ubisoft",
+      "name": "Ubisoft Connect",
+      "category": "Game Launchers",
+      "detectPaths": [
+        "%PROGRAMFILES(X86)%\\Ubisoft\\Ubisoft Game Launcher"
+      ],
+      "processes": [
+        "UbisoftConnect.exe",
+        "upc.exe"
+      ],
+      "caches": [
+        {
+          "id": "cache",
+          "name": "Launcher HTTP & asset cache",
+          "paths": [
+            "%PROGRAMFILES(X86)%\\Ubisoft\\Ubisoft Game Launcher\\cache\\http",
+            "%PROGRAMFILES(X86)%\\Ubisoft\\Ubisoft Game Launcher\\cache\\assets"
+          ],
+          "defaultChecked": true
+        }
+      ],
+      "toggles": [
+        {
+          "id": "auto_start",
+          "name": "Turn off auto-start",
+          "description": "Disables the app's Windows startup entry the same way Task Manager does (the entry stays visible and can be re-enabled).",
+          "action": {
+            "type": "startup",
+            "match": [
+              "Ubisoft*",
+              "UbisoftConnect*"
+            ]
+          },
+          "warning": "Games that need the launcher running will start it when you launch them."
+        }
+      ],
+      "whilePlaying": {
+        "enabled": true,
+        "mode": "LowerPriority",
+        "cpuPriority": "BelowNormal",
+        "ioPriority": "Normal"
+      }
+    },
+    {
+      "id": "riot",
+      "name": "Riot Client",
+      "category": "Game Launchers",
+      "detectPaths": [
+        "%LOCALAPPDATA%\\Riot Games\\Riot Client"
+      ],
+      "uninstallNames": [
+        "Riot Client*"
+      ],
+      "processes": [
+        "RiotClientServices.exe",
+        "Riot Client.exe"
+      ],
+      "caches": [
+        {
+          "id": "cache",
+          "name": "Client web cache",
+          "paths": [
+            "%LOCALAPPDATA%\\Riot Games\\Riot Client\\Data\\Cache",
+            "%LOCALAPPDATA%\\Riot Games\\Riot Client\\Logs"
+          ],
+          "defaultChecked": true
+        }
+      ],
+      "toggles": [
+        {
+          "id": "auto_start",
+          "name": "Turn off auto-start",
+          "description": "Disables the app's Windows startup entry the same way Task Manager does (the entry stays visible and can be re-enabled).",
+          "action": {
+            "type": "startup",
+            "match": [
+              "RiotClient*",
+              "Riot Client*"
+            ]
+          },
+          "warning": "Games that need the launcher running will start it when you launch them."
+        }
+      ],
+      "whilePlaying": {
+        "enabled": true,
+        "mode": "LowerPriority",
+        "cpuPriority": "BelowNormal",
+        "ioPriority": "Normal"
+      }
+    },
+    {
+      "id": "gog",
+      "name": "GOG Galaxy",
+      "category": "Game Launchers",
+      "detectPaths": [
+        "%PROGRAMFILES(X86)%\\GOG Galaxy\\GalaxyClient.exe"
+      ],
+      "processes": [
+        "GalaxyClient.exe"
+      ],
+      "caches": [
+        {
+          "id": "cache",
+          "name": "Galaxy web cache",
+          "paths": [
+            "%PROGRAMDATA%\\GOG.com\\Galaxy\\webcache"
+          ],
+          "defaultChecked": true
+        }
+      ],
+      "toggles": [
+        {
+          "id": "auto_start",
+          "name": "Turn off auto-start",
+          "description": "Disables the app's Windows startup entry the same way Task Manager does (the entry stays visible and can be re-enabled).",
+          "action": {
+            "type": "startup",
+            "match": [
+              "GogGalaxy*",
+              "GOG Galaxy*"
+            ]
+          },
+          "warning": "Games that need the launcher running will start it when you launch them."
+        }
+      ],
+      "whilePlaying": {
+        "enabled": true,
+        "mode": "LowerPriority",
+        "cpuPriority": "BelowNormal",
+        "ioPriority": "Normal"
+      }
+    },
+    {
+      "id": "rockstar",
+      "name": "Rockstar Games Launcher",
+      "category": "Game Launchers",
+      "detectPaths": [
+        "%PROGRAMFILES%\\Rockstar Games\\Launcher"
+      ],
+      "processes": [
+        "Launcher.exe",
+        "RockstarService.exe"
+      ],
+      "caches": [
+        {
+          "id": "cache",
+          "name": "Launcher web cache",
+          "paths": [
+            "%LOCALAPPDATA%\\Rockstar Games\\Launcher\\Cache",
+            "%LOCALAPPDATA%\\Rockstar Games\\Launcher\\webcache"
+          ],
+          "defaultChecked": true
+        }
+      ],
+      "toggles": [
+        {
+          "id": "auto_start",
+          "name": "Turn off auto-start",
+          "description": "Disables the app's Windows startup entry the same way Task Manager does (the entry stays visible and can be re-enabled).",
+          "action": {
+            "type": "startup",
+            "match": [
+              "Rockstar*"
+            ]
+          },
+          "warning": "Games that need the launcher running will start it when you launch them."
+        }
+      ]
+    },
+    {
+      "id": "twok",
+      "name": "2K Launcher",
+      "category": "Game Launchers",
+      "detectPaths": [
+        "%LOCALAPPDATA%\\2K Launcher",
+        "%PROGRAMFILES(X86)%\\2K Launcher"
+      ],
+      "uninstallNames": [
+        "2K Launcher*"
+      ],
+      "processes": [
+        "2KLauncher.exe"
+      ],
+      "caches": [
+        {
+          "id": "cache",
+          "name": "Launcher web cache",
+          "paths": [
+            "%LOCALAPPDATA%\\2K Launcher\\Cache",
+            "%LOCALAPPDATA%\\2KLauncher\\Cache"
+          ],
+          "defaultChecked": true
+        }
+      ],
+      "toggles": [
+        {
+          "id": "auto_start",
+          "name": "Turn off auto-start",
+          "description": "Disables the app's Windows startup entry the same way Task Manager does (the entry stays visible and can be re-enabled).",
+          "action": {
+            "type": "startup",
+            "match": [
+              "2K Launcher*",
+              "2KLauncher*"
+            ]
+          },
+          "warning": "Games that need the launcher running will start it when you launch them."
+        }
+      ]
+    },
+    {
+      "id": "paradox",
+      "name": "Paradox Launcher",
+      "category": "Game Launchers",
+      "detectPaths": [
+        "%LOCALAPPDATA%\\Programs\\Paradox Interactive\\launcher-v2",
+        "%APPDATA%\\Paradox Interactive\\launcher-v2"
+      ],
+      "processes": [
+        "Paradox Launcher.exe"
+      ],
+      "caches": [
+        {
+          "id": "cache",
+          "name": "Launcher cache",
+          "paths": [
+            "%APPDATA%\\Paradox Interactive\\launcher-v2\\Cache",
+            "%APPDATA%\\Paradox Interactive\\launcher-v2\\Code Cache",
+            "%APPDATA%\\Paradox Interactive\\launcher-v2\\GPUCache"
+          ],
+          "defaultChecked": true
+        }
+      ],
+      "toggles": [
+        {
+          "id": "auto_start",
+          "name": "Turn off auto-start",
+          "description": "Disables the app's Windows startup entry the same way Task Manager does (the entry stays visible and can be re-enabled).",
+          "action": {
+            "type": "startup",
+            "match": [
+              "Paradox*"
+            ]
+          },
+          "warning": "Games that need the launcher running will start it when you launch them."
+        }
+      ]
+    },
+    {
+      "id": "minecraft",
+      "name": "Minecraft Launcher",
+      "category": "Game Launchers",
+      "detectPaths": [
+        "%PROGRAMFILES(X86)%\\Minecraft Launcher",
+        "%LOCALAPPDATA%\\Packages\\Microsoft.4297127D64EC6_8wekyb3d8bbwe"
+      ],
+      "processes": [
+        "MinecraftLauncher.exe"
+      ],
+      "caches": [
+        {
+          "id": "cache",
+          "name": "Launcher web cache (worlds are never touched)",
+          "paths": [
+            "%APPDATA%\\.minecraft\\webcache2"
+          ],
+          "defaultChecked": true
+        }
+      ],
+      "toggles": [
+        {
+          "id": "auto_start",
+          "name": "Turn off auto-start",
+          "description": "Disables the app's Windows startup entry the same way Task Manager does (the entry stays visible and can be re-enabled).",
+          "action": {
+            "type": "startup",
+            "match": [
+              "Minecraft*"
+            ],
+            "packageFamily": "Microsoft.4297127D64EC6_8wekyb3d8bbwe"
+          },
+          "warning": "Games that need the launcher running will start it when you launch them."
+        }
+      ]
+    },
+    {
+      "id": "nvidia_app",
+      "name": "NVIDIA App",
+      "category": "GPU & Capture",
+      "detectPaths": [
+        "%PROGRAMFILES%\\NVIDIA Corporation\\NVIDIA App"
+      ],
+      "uninstallNames": [
+        "NVIDIA App*"
+      ],
+      "processes": [
+        "NVIDIA App.exe",
+        "NVIDIA Overlay.exe"
+      ],
+      "caches": [
+        {
+          "id": "shader_cache",
+          "name": "Driver shader cache (DXCache / GLCache — rebuilt by games)",
+          "paths": [
+            "%LOCALAPPDATA%\\NVIDIA\\DXCache",
+            "%LOCALAPPDATA%\\NVIDIA\\GLCache"
+          ],
+          "defaultChecked": true
+        }
+      ],
+      "toggles": [
+        {
+          "id": "telemetry",
+          "name": "Disable NVIDIA telemetry container",
+          "description": "Skipped automatically if this driver no longer ships it.",
+          "action": {
+            "type": "service",
+            "serviceName": "NvTelemetryContainer",
+            "startType": "Disabled",
+            "stopService": true
+          }
+        },
+        {
+          "id": "network_service",
+          "name": "Disable NVIDIA network service",
+          "description": "Skipped automatically if not present.",
+          "action": {
+            "type": "service",
+            "serviceName": "NvNetworkService",
+            "startType": "Disabled",
+            "stopService": true
+          }
+        },
+        {
+          "id": "hdcp",
+          "name": "Disable HDCP overhead",
+          "description": "Sets RMHdcpKeyglobZero on the NVIDIA display adapter.",
+          "warning": "Protected content (Netflix 4K, Blu-ray) will refuse to play until reverted.",
+          "requiresRestart": true,
+          "action": {
+            "type": "registry",
+            "hive": "HKLM",
+            "view": "Registry64",
+            "path": "{NVIDIA_DISPLAY_KEY}",
+            "valueName": "RMHdcpKeyglobZero",
+            "valueKind": "DWord",
+            "applyValue": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "overwolf",
+      "name": "Overwolf",
+      "category": "GPU & Capture",
+      "detectPaths": [
+        "%LOCALAPPDATA%\\Overwolf",
+        "%PROGRAMFILES(X86)%\\Overwolf"
+      ],
+      "processes": [
+        "Overwolf.exe",
+        "OverwolfBrowser.exe"
+      ],
+      "caches": [
+        {
+          "id": "capture_cache",
+          "name": "Capture & browser caches",
+          "paths": [
+            "%LOCALAPPDATA%\\Overwolf\\BrowserCache",
+            "%LOCALAPPDATA%\\Overwolf\\Log"
+          ],
+          "defaultChecked": true
+        }
+      ],
+      "toggles": [
+        {
+          "id": "auto_start",
+          "name": "Turn off auto-start",
+          "description": "Disables the app's Windows startup entry the same way Task Manager does (the entry stays visible and can be re-enabled).",
+          "action": {
+            "type": "startup",
+            "match": [
+              "Overwolf*"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "razer_synapse",
+      "name": "Razer Synapse",
+      "category": "Peripherals",
+      "detectPaths": [
+        "%PROGRAMFILES(X86)%\\Razer\\Synapse3",
+        "%LOCALAPPDATA%\\Razer\\RazerAppEngine",
+        "%PROGRAMFILES%\\Razer"
+      ],
+      "processes": [
+        "Razer Synapse 3.exe",
+        "RazerAppEngine.exe"
+      ],
+      "caches": [
+        {
+          "id": "logs",
+          "name": "Logs",
+          "paths": [
+            "%LOCALAPPDATA%\\Razer\\Synapse3\\Log",
+            "%PROGRAMDATA%\\Razer\\Synapse3\\Logs",
+            "%LOCALAPPDATA%\\Razer\\RazerAppEngine\\User Data\\Logs"
+          ],
+          "defaultChecked": true
+        }
+      ],
+      "toggles": [
+        {
+          "id": "auto_start",
+          "name": "Turn off auto-start",
+          "description": "Disables the app's Windows startup entry the same way Task Manager does (the entry stays visible and can be re-enabled).",
+          "action": {
+            "type": "startup",
+            "match": [
+              "Razer Synapse*",
+              "RazerAppEngine*",
+              "Razer Central*"
+            ]
+          },
+          "warning": "Lighting, macros and DPI profiles stored only in the software won't load until you open it (on-board profiles still work)."
+        }
+      ]
+    },
+    {
+      "id": "ghub",
+      "name": "Logitech G HUB",
+      "category": "Peripherals",
+      "detectPaths": [
+        "%PROGRAMFILES%\\LGHUB"
+      ],
+      "processes": [
+        "lghub.exe",
+        "lghub_agent.exe"
+      ],
+      "caches": [
+        {
+          "id": "logs",
+          "name": "Logs",
+          "paths": [
+            "%LOCALAPPDATA%\\LGHUB\\logs"
+          ],
+          "defaultChecked": true
+        }
+      ],
+      "toggles": [
+        {
+          "id": "auto_start",
+          "name": "Turn off auto-start",
+          "description": "Disables the app's Windows startup entry the same way Task Manager does (the entry stays visible and can be re-enabled).",
+          "action": {
+            "type": "startup",
+            "match": [
+              "LGHUB*"
+            ]
+          },
+          "warning": "Lighting, macros and DPI profiles stored only in the software won't load until you open it (on-board profiles still work)."
+        }
+      ]
+    },
+    {
+      "id": "icue",
+      "name": "Corsair iCUE",
+      "category": "Peripherals",
+      "detectPaths": [
+        "%PROGRAMFILES%\\Corsair\\Corsair iCUE5 Software",
+        "%PROGRAMFILES%\\Corsair\\CORSAIR iCUE 4 Software"
+      ],
+      "processes": [
+        "iCUE.exe"
+      ],
+      "caches": [
+        {
+          "id": "logs",
+          "name": "Logs",
+          "paths": [
+            "%LOCALAPPDATA%\\Corsair\\CUE5\\logs",
+            "%LOCALAPPDATA%\\Corsair\\CUE4\\logs"
+          ],
+          "defaultChecked": true
+        }
+      ],
+      "toggles": [
+        {
+          "id": "auto_start",
+          "name": "Turn off auto-start",
+          "description": "Disables the app's Windows startup entry the same way Task Manager does (the entry stays visible and can be re-enabled).",
+          "action": {
+            "type": "startup",
+            "match": [
+              "Corsair iCUE*",
+              "iCUE*"
+            ]
+          },
+          "warning": "Lighting, macros and DPI profiles stored only in the software won't load until you open it (on-board profiles still work)."
+        }
+      ]
+    },
+    {
+      "id": "steelseries_gg",
+      "name": "SteelSeries GG",
+      "category": "Peripherals",
+      "detectPaths": [
+        "%PROGRAMFILES%\\SteelSeries\\GG"
+      ],
+      "processes": [
+        "SteelSeriesGG.exe",
+        "SteelSeriesEngine.exe"
+      ],
+      "caches": [
+        {
+          "id": "logs",
+          "name": "Logs",
+          "paths": [
+            "%PROGRAMDATA%\\SteelSeries\\GG\\logs"
+          ],
+          "defaultChecked": true
+        }
+      ],
+      "toggles": [
+        {
+          "id": "auto_start",
+          "name": "Turn off auto-start",
+          "description": "Disables the app's Windows startup entry the same way Task Manager does (the entry stays visible and can be re-enabled).",
+          "action": {
+            "type": "startup",
+            "match": [
+              "SteelSeriesGG*",
+              "SteelSeries GG*"
+            ]
+          },
+          "warning": "Lighting, macros and DPI profiles stored only in the software won't load until you open it (on-board profiles still work)."
+        }
+      ]
+    },
+    {
+      "id": "spotify",
+      "name": "Spotify",
+      "category": "Media & Utilities",
+      "detectPaths": [
+        "%APPDATA%\\Spotify\\Spotify.exe",
+        "%LOCALAPPDATA%\\Packages\\SpotifyAB.SpotifyMusic_zpdnekdrzrea0"
+      ],
+      "processes": [
+        "Spotify.exe"
+      ],
+      "caches": [
+        {
+          "id": "cache",
+          "name": "Streaming cache",
+          "paths": [
+            "%LOCALAPPDATA%\\Spotify\\Data",
+            "%LOCALAPPDATA%\\Packages\\SpotifyAB.SpotifyMusic_zpdnekdrzrea0\\LocalCache\\Spotify\\Data"
+          ],
+          "defaultChecked": true
+        }
+      ],
+      "toggles": [
+        {
+          "id": "auto_start",
+          "name": "Turn off auto-start",
+          "description": "Disables the app's Windows startup entry the same way Task Manager does (the entry stays visible and can be re-enabled).",
+          "action": {
+            "type": "startup",
+            "match": [
+              "Spotify*"
+            ],
+            "packageFamily": "SpotifyAB.SpotifyMusic_zpdnekdrzrea0"
+          }
+        }
+      ],
+      "whilePlaying": {
+        "enabled": true,
+        "mode": "LowerPriority",
+        "cpuPriority": "BelowNormal",
+        "ioPriority": "Normal"
+      }
+    },
+    {
+      "id": "adobe_cc",
+      "name": "Adobe Creative Cloud",
+      "category": "Media & Utilities",
+      "detectPaths": [
+        "%PROGRAMFILES%\\Adobe\\Adobe Creative Cloud",
+        "%PROGRAMFILES(X86)%\\Adobe\\Adobe Creative Cloud"
+      ],
+      "processes": [
+        "Creative Cloud.exe",
+        "CCXProcess.exe"
+      ],
+      "caches": [
+        {
+          "id": "media_cache",
+          "name": "Media cache (Premiere / After Effects; rebuilt on demand)",
+          "paths": [
+            "%APPDATA%\\Adobe\\Common\\Media Cache Files",
+            "%APPDATA%\\Adobe\\Common\\Media Cache"
+          ],
+          "defaultChecked": true
+        }
+      ],
+      "toggles": [
+        {
+          "id": "auto_start",
+          "name": "Turn off auto-start",
+          "description": "Disables the app's Windows startup entry the same way Task Manager does (the entry stays visible and can be re-enabled).",
+          "action": {
+            "type": "startup",
+            "match": [
+              "Adobe Creative Cloud*",
+              "AdobeGCInvoker*",
+              "CCXProcess*",
+              "Adobe CCXProcess*"
+            ]
+          }
+        }
+      ],
+      "whilePlaying": {
+        "enabled": true,
+        "mode": "LowerPriority",
+        "cpuPriority": "BelowNormal",
+        "ioPriority": "Normal"
+      }
+    },
+    {
+      "id": "wallpaper_engine",
+      "name": "Wallpaper Engine",
+      "category": "Media & Utilities",
+      "detectPaths": [
+        "%PROGRAMFILES(X86)%\\Steam\\steamapps\\common\\wallpaper_engine"
+      ],
+      "processes": [
+        "wallpaper32.exe",
+        "wallpaper64.exe"
+      ],
+      "caches": [],
+      "toggles": [
+        {
+          "id": "auto_start",
+          "name": "Turn off auto-start",
+          "description": "Disables the app's Windows startup entry the same way Task Manager does (the entry stays visible and can be re-enabled).",
+          "action": {
+            "type": "startup",
+            "match": [
+              "Wallpaper Engine*",
+              "WallpaperEngine*"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

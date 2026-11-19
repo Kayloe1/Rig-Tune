@@ -187,6 +187,22 @@ public sealed class TweakAction
 
     // ---- timer_resolution
     public double? TargetMs { get; set; }
+
+    // ---- app optimizer: startup / chromium_flag
+    /// <summary>Startup entry name/command patterns ('*' wildcards).</summary>
+    public List<string>? Match { get; set; }
+
+    /// <summary>Packaged (MSIX) app family whose StartupTask should be disabled.</summary>
+    public string? PackageFamily { get; set; }
+
+    /// <summary>Chromium "Local State" file (env vars allowed).</summary>
+    public string? LocalStatePath { get; set; }
+
+    /// <summary>chrome://flags internal name (e.g. enable-parallel-downloading).</summary>
+    public string? Flag { get; set; }
+
+    /// <summary>Process that must be closed before the change (e.g. chrome.exe).</summary>
+    public string? ProcessName { get; set; }
 }
 
 // ------------------------------------------------------------------ runtime status

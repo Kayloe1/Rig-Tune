@@ -10,6 +10,7 @@ using RigTune.Core.Platform;
 using RigTune.Core.Runners;
 using RigTune.Core.Runners.Handlers;
 using RigTune.Core.Services;
+using RigTune.Core.Services.AppOptimizer;
 using RigTune.Core.Services.AppxWinget;
 using RigTune.Core.Services.SystemCare;
 using RigTune.Core.Storage;
@@ -101,6 +102,8 @@ public partial class App : Application
         services.AddSingleton<IStateRunner>(sp => sp.GetRequiredService<TaskSchedulerRunner>());
         services.AddSingleton<IStateRunner>(sp => sp.GetRequiredService<DeviceManagerRunner>());
         services.AddSingleton<IStateRunner>(sp => sp.GetRequiredService<TcpGlobalStateRunner>());
+        services.AddSingleton<ChromiumFlagStateRunner>();
+        services.AddSingleton<IStateRunner>(sp => sp.GetRequiredService<ChromiumFlagStateRunner>());
 
         // Core: services
         services.AddSingleton<SnapshotService>(sp => new SnapshotService(
@@ -143,7 +146,12 @@ public partial class App : Application
         services.AddSingleton<ITweakActionHandler, NtfsActionHandler>();
         services.AddSingleton<ITweakActionHandler, InspectionActionHandler>();
         services.AddSingleton<ITweakActionHandler, CleanupActionHandler>();
+        services.AddSingleton<ITweakActionHandler, AppStartupActionHandler>();
+        services.AddSingleton<ITweakActionHandler>(sp => new ChromiumFlagActionHandler(sp.GetRequiredService<ChromiumFlagStateRunner>()));
         services.AddSingleton<TweakEngine>();
+        services.AddSingleton<AppOptimizerService>(sp => new AppOptimizerService(
+            sp.GetRequiredService<TweakEngine>(), sp.GetRequiredService<IRegistryAccess>(),
+            sp.GetRequiredService<AuditLogService>(), sp.GetRequiredService<RigTunePaths>()));
 
         // UI
         services.AddSingleton<MainWindow>();
@@ -156,6 +164,7 @@ public partial class App : Application
         services.AddSingleton<AppxWingetTabViewModel>();
         services.AddSingleton<RepairTabViewModel>();
         services.AddSingleton<SystemCareViewModel>();
+        services.AddSingleton<AppOptimizerViewModel>();
         services.AddSingleton<DialogService>();
         services.AddSingleton<DashboardView>();
         services.AddSingleton<TweaksView>();
