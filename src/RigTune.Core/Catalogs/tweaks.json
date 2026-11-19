@@ -1,0 +1,5030 @@
+{
+  "schemaVersion": 1,
+  "tweaks": [
+    {
+      "id": "privacy.apply_recommended",
+      "name": "Apply Recommended Privacy Tweaks",
+      "category": "Privacy",
+      "subcategory": "Windows Privacy",
+      "description": "Applies every Privacy tweak marked Recommended in one batch (never Danger Zone or permanent items). A restore point is offered first.",
+      "impact": "Medium",
+      "riskTier": "Standard",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "RunOnce",
+      "targetSummary": "Applies the recommended Privacy tweaks",
+      "presetScope": {
+        "category": "Privacy"
+      },
+      "actions": []
+    },
+    {
+      "id": "privacy.widgets",
+      "name": "Turn Off Windows Widgets",
+      "category": "Privacy",
+      "subcategory": "Windows Privacy",
+      "description": "Removes the Widgets board and its news feed (and the background process that keeps it updated) via policy.",
+      "impact": "Medium",
+      "riskTier": "Standard",
+      "inRecommendedPreset": true,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Dsh\\AllowNewsAndInterests",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKLM",
+          "view": "Registry64",
+          "path": "SOFTWARE\\Policies\\Microsoft\\Dsh",
+          "valueName": "AllowNewsAndInterests",
+          "valueKind": "DWord",
+          "applyValue": 0
+        }
+      ]
+    },
+    {
+      "id": "privacy.activity_history",
+      "name": "Disable Activity History Tracking",
+      "category": "Privacy",
+      "subcategory": "Windows Privacy",
+      "description": "Stops Windows from collecting and uploading the history of apps, files and sites you open (Timeline / activity feed).",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": true,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\System\\EnableActivityFeed; HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\System\\PublishUserActivities; HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\System\\UploadUserActivities",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKLM",
+          "view": "Registry64",
+          "path": "SOFTWARE\\Policies\\Microsoft\\Windows\\System",
+          "valueName": "EnableActivityFeed",
+          "valueKind": "DWord",
+          "applyValue": 0
+        },
+        {
+          "type": "registry",
+          "hive": "HKLM",
+          "view": "Registry64",
+          "path": "SOFTWARE\\Policies\\Microsoft\\Windows\\System",
+          "valueName": "PublishUserActivities",
+          "valueKind": "DWord",
+          "applyValue": 0
+        },
+        {
+          "type": "registry",
+          "hive": "HKLM",
+          "view": "Registry64",
+          "path": "SOFTWARE\\Policies\\Microsoft\\Windows\\System",
+          "valueName": "UploadUserActivities",
+          "valueKind": "DWord",
+          "applyValue": 0
+        }
+      ]
+    },
+    {
+      "id": "privacy.location",
+      "name": "Disable Location Tracking",
+      "category": "Privacy",
+      "subcategory": "Windows Privacy",
+      "description": "Denies location access for all apps (system-wide consent switch). Weather and Maps will no longer auto-detect your location.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\location\\Value",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKLM",
+          "view": "Registry64",
+          "path": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\location",
+          "valueName": "Value",
+          "valueKind": "String",
+          "applyValue": "Deny"
+        }
+      ]
+    },
+    {
+      "id": "privacy.storage_sense",
+      "name": "Configure Storage Sense / Cleanup Rules",
+      "category": "Privacy",
+      "subcategory": "Windows Privacy",
+      "description": "Turns on Storage Sense weekly: deletes temporary app files and Recycle Bin items older than 30 days; never touches Downloads.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "Permanent",
+      "targetSummary": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\StorageSense\\Parameters\\StoragePolicy\\01; HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\StorageSense\\Parameters\\StoragePolicy\\2048; HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\StorageSense\\Parameters\\StoragePolicy\\04; HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\StorageSense\\Parameters\\StoragePolicy\\08; HKCU\\Software\\Microsoft\\Windows\\Current…",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKCU",
+          "view": "Registry64",
+          "path": "Software\\Microsoft\\Windows\\CurrentVersion\\StorageSense\\Parameters\\StoragePolicy",
+          "valueName": "01",
+          "valueKind": "DWord",
+          "applyValue": 1
+        },
+        {
+          "type": "registry",
+          "hive": "HKCU",
+          "view": "Registry64",
+          "path": "Software\\Microsoft\\Windows\\CurrentVersion\\StorageSense\\Parameters\\StoragePolicy",
+          "valueName": "2048",
+          "valueKind": "DWord",
+          "applyValue": 7
+        },
+        {
+          "type": "registry",
+          "hive": "HKCU",
+          "view": "Registry64",
+          "path": "Software\\Microsoft\\Windows\\CurrentVersion\\StorageSense\\Parameters\\StoragePolicy",
+          "valueName": "04",
+          "valueKind": "DWord",
+          "applyValue": 1
+        },
+        {
+          "type": "registry",
+          "hive": "HKCU",
+          "view": "Registry64",
+          "path": "Software\\Microsoft\\Windows\\CurrentVersion\\StorageSense\\Parameters\\StoragePolicy",
+          "valueName": "08",
+          "valueKind": "DWord",
+          "applyValue": 1
+        },
+        {
+          "type": "registry",
+          "hive": "HKCU",
+          "view": "Registry64",
+          "path": "Software\\Microsoft\\Windows\\CurrentVersion\\StorageSense\\Parameters\\StoragePolicy",
+          "valueName": "256",
+          "valueKind": "DWord",
+          "applyValue": 30
+        },
+        {
+          "type": "registry",
+          "hive": "HKCU",
+          "view": "Registry64",
+          "path": "Software\\Microsoft\\Windows\\CurrentVersion\\StorageSense\\Parameters\\StoragePolicy",
+          "valueName": "32",
+          "valueKind": "DWord",
+          "applyValue": 0
+        }
+      ]
+    },
+    {
+      "id": "privacy.background_apps",
+      "name": "Block Apps Running in Background",
+      "category": "Privacy",
+      "subcategory": "Windows Privacy",
+      "description": "Prevents Store/UWP apps from running in the background. Desktop (Win32) apps are unaffected.",
+      "impact": "Medium",
+      "riskTier": "Standard",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\AppPrivacy\\LetAppsRunInBackground",
+      "warning": "Store apps such as Phone Link or Xbox may stop delivering background notifications.",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKLM",
+          "view": "Registry64",
+          "path": "SOFTWARE\\Policies\\Microsoft\\Windows\\AppPrivacy",
+          "valueName": "LetAppsRunInBackground",
+          "valueKind": "DWord",
+          "applyValue": 2
+        }
+      ]
+    },
+    {
+      "id": "privacy.store_in_search",
+      "name": "Remove Microsoft Store from Search Results",
+      "category": "Privacy",
+      "subcategory": "Windows Privacy",
+      "description": "Stops Windows offering \"Look for an app in the Microsoft Store\" for unknown file types and Store results.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "Permanent",
+      "targetSummary": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Explorer\\NoUseStoreOpenWith",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKLM",
+          "view": "Registry64",
+          "path": "SOFTWARE\\Policies\\Microsoft\\Windows\\Explorer",
+          "valueName": "NoUseStoreOpenWith",
+          "valueKind": "DWord",
+          "applyValue": 1
+        }
+      ]
+    },
+    {
+      "id": "privacy.telemetry",
+      "name": "Block Microsoft Telemetry Data Collection",
+      "category": "Privacy",
+      "subcategory": "Windows Privacy",
+      "description": "Sets diagnostic data to the lowest level Windows 11 Pro honours (Required/Security) via both policy locations.",
+      "impact": "Medium",
+      "riskTier": "Standard",
+      "inRecommendedPreset": true,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\DataCollection\\AllowTelemetry; HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\DataCollection\\AllowTelemetry",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKLM",
+          "view": "Registry64",
+          "path": "SOFTWARE\\Policies\\Microsoft\\Windows\\DataCollection",
+          "valueName": "AllowTelemetry",
+          "valueKind": "DWord",
+          "applyValue": 0
+        },
+        {
+          "type": "registry",
+          "hive": "HKLM",
+          "view": "Registry64",
+          "path": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\DataCollection",
+          "valueName": "AllowTelemetry",
+          "valueKind": "DWord",
+          "applyValue": 0
+        }
+      ]
+    },
+    {
+      "id": "privacy.error_reporting",
+      "name": "Disable Windows Error Reporting",
+      "category": "Privacy",
+      "subcategory": "Windows Privacy",
+      "description": "Stops crash reports being collected and sent to Microsoft.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": true,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "HKLM\\SOFTWARE\\Microsoft\\Windows\\Windows Error Reporting\\Disabled; HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Error Reporting\\Disabled",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKLM",
+          "view": "Registry64",
+          "path": "SOFTWARE\\Microsoft\\Windows\\Windows Error Reporting",
+          "valueName": "Disabled",
+          "valueKind": "DWord",
+          "applyValue": 1
+        },
+        {
+          "type": "registry",
+          "hive": "HKLM",
+          "view": "Registry64",
+          "path": "SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Error Reporting",
+          "valueName": "Disabled",
+          "valueKind": "DWord",
+          "applyValue": 1
+        }
+      ]
+    },
+    {
+      "id": "privacy.copilot",
+      "name": "Turn Off Microsoft Copilot AI",
+      "category": "Privacy",
+      "subcategory": "Windows Privacy",
+      "description": "Disables the Windows Copilot integration for this user and machine-wide.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": true,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "HKCU\\Software\\Policies\\Microsoft\\Windows\\WindowsCopilot\\TurnOffWindowsCopilot; HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsCopilot\\TurnOffWindowsCopilot",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKCU",
+          "view": "Registry64",
+          "path": "Software\\Policies\\Microsoft\\Windows\\WindowsCopilot",
+          "valueName": "TurnOffWindowsCopilot",
+          "valueKind": "DWord",
+          "applyValue": 1
+        },
+        {
+          "type": "registry",
+          "hive": "HKLM",
+          "view": "Registry64",
+          "path": "SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsCopilot",
+          "valueName": "TurnOffWindowsCopilot",
+          "valueKind": "DWord",
+          "applyValue": 1
+        }
+      ]
+    },
+    {
+      "id": "privacy.xbox_services",
+      "name": "Disable Xbox Background Services",
+      "category": "Privacy",
+      "subcategory": "Windows Privacy",
+      "description": "Disables the Xbox authentication, cloud save, networking and accessory services (XblAuthManager, XblGameSave, XboxNetApiSvc, XboxGipSvc).",
+      "impact": "Medium",
+      "riskTier": "Standard",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "Service XblAuthManager → Disabled; Service XblGameSave → Disabled; Service XboxNetApiSvc → Disabled; Service XboxGipSvc → Disabled",
+      "warning": "Breaks Xbox app / Game Pass sign-in, cloud saves and Xbox controller accessory updates. The Xbox app is installed on this PC.",
+      "actions": [
+        {
+          "type": "service",
+          "serviceName": "XblAuthManager",
+          "startType": "Disabled",
+          "stopService": true
+        },
+        {
+          "type": "service",
+          "serviceName": "XblGameSave",
+          "startType": "Disabled",
+          "stopService": true
+        },
+        {
+          "type": "service",
+          "serviceName": "XboxNetApiSvc",
+          "startType": "Disabled",
+          "stopService": true
+        },
+        {
+          "type": "service",
+          "serviceName": "XboxGipSvc",
+          "startType": "Disabled",
+          "stopService": true
+        }
+      ]
+    },
+    {
+      "id": "privacy.game_dvr",
+      "name": "Turn Off Game DVR and Xbox Bar",
+      "category": "Privacy",
+      "subcategory": "Windows Privacy",
+      "description": "Disables background game recording (Game DVR) and capture, which can cost frame time while gaming.",
+      "impact": "Medium",
+      "riskTier": "Standard",
+      "inRecommendedPreset": true,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "HKCU\\System\\GameConfigStore\\GameDVR_Enabled; HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\GameDVR\\AppCaptureEnabled; HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\GameDVR\\AllowGameDVR",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKCU",
+          "view": "Registry64",
+          "path": "System\\GameConfigStore",
+          "valueName": "GameDVR_Enabled",
+          "valueKind": "DWord",
+          "applyValue": 0
+        },
+        {
+          "type": "registry",
+          "hive": "HKCU",
+          "view": "Registry64",
+          "path": "Software\\Microsoft\\Windows\\CurrentVersion\\GameDVR",
+          "valueName": "AppCaptureEnabled",
+          "valueKind": "DWord",
+          "applyValue": 0
+        },
+        {
+          "type": "registry",
+          "hive": "HKLM",
+          "view": "Registry64",
+          "path": "SOFTWARE\\Policies\\Microsoft\\Windows\\GameDVR",
+          "valueName": "AllowGameDVR",
+          "valueKind": "DWord",
+          "applyValue": 0
+        }
+      ]
+    },
+    {
+      "id": "privacy.handwriting_typing",
+      "name": "Disable Handwriting & Typing Data Collection",
+      "category": "Privacy",
+      "subcategory": "Windows Privacy",
+      "description": "Stops Windows learning from your inking and typing to build a personal dictionary in the cloud.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": true,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "HKCU\\Software\\Microsoft\\InputPersonalization\\RestrictImplicitInkCollection; HKCU\\Software\\Microsoft\\InputPersonalization\\RestrictImplicitTextCollection; HKCU\\Software\\Microsoft\\InputPersonalization\\TrainedDataStore\\HarvestContacts",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKCU",
+          "view": "Registry64",
+          "path": "Software\\Microsoft\\InputPersonalization",
+          "valueName": "RestrictImplicitInkCollection",
+          "valueKind": "DWord",
+          "applyValue": 1
+        },
+        {
+          "type": "registry",
+          "hive": "HKCU",
+          "view": "Registry64",
+          "path": "Software\\Microsoft\\InputPersonalization",
+          "valueName": "RestrictImplicitTextCollection",
+          "valueKind": "DWord",
+          "applyValue": 1
+        },
+        {
+          "type": "registry",
+          "hive": "HKCU",
+          "view": "Registry64",
+          "path": "Software\\Microsoft\\InputPersonalization\\TrainedDataStore",
+          "valueName": "HarvestContacts",
+          "valueKind": "DWord",
+          "applyValue": 0
+        }
+      ]
+    },
+    {
+      "id": "privacy.input_personalization",
+      "name": "Disable Input Personalization",
+      "category": "Privacy",
+      "subcategory": "Windows Privacy",
+      "description": "Turns off online speech/ink/typing personalization via policy.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": true,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "HKLM\\SOFTWARE\\Policies\\Microsoft\\InputPersonalization\\AllowInputPersonalization",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKLM",
+          "view": "Registry64",
+          "path": "SOFTWARE\\Policies\\Microsoft\\InputPersonalization",
+          "valueName": "AllowInputPersonalization",
+          "valueKind": "DWord",
+          "applyValue": 0
+        }
+      ]
+    },
+    {
+      "id": "privacy.tailored_experiences",
+      "name": "Disable Tailored Experiences",
+      "category": "Privacy",
+      "subcategory": "Windows Privacy",
+      "description": "Stops Microsoft using diagnostic data to personalise tips, ads and recommendations.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": true,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Privacy\\TailoredExperiencesWithDiagnosticDataEnabled; HKCU\\Software\\Policies\\Microsoft\\Windows\\CloudContent\\DisableTailoredExperiencesWithDiagnosticData",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKCU",
+          "view": "Registry64",
+          "path": "Software\\Microsoft\\Windows\\CurrentVersion\\Privacy",
+          "valueName": "TailoredExperiencesWithDiagnosticDataEnabled",
+          "valueKind": "DWord",
+          "applyValue": 0
+        },
+        {
+          "type": "registry",
+          "hive": "HKCU",
+          "view": "Registry64",
+          "path": "Software\\Policies\\Microsoft\\Windows\\CloudContent",
+          "valueName": "DisableTailoredExperiencesWithDiagnosticData",
+          "valueKind": "DWord",
+          "applyValue": 1
+        }
+      ]
+    },
+    {
+      "id": "privacy.app_launch_tracking",
+      "name": "Disable App Launch Tracking",
+      "category": "Privacy",
+      "subcategory": "Windows Privacy",
+      "description": "Stops Windows tracking which apps you launch to personalise Start and search.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": true,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced\\Start_TrackProgs",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKCU",
+          "view": "Registry64",
+          "path": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
+          "valueName": "Start_TrackProgs",
+          "valueKind": "DWord",
+          "applyValue": 0
+        }
+      ]
+    },
+    {
+      "id": "privacy.feedback_prompts",
+      "name": "Stop Windows Feedback Prompts",
+      "category": "Privacy",
+      "subcategory": "Windows Privacy",
+      "description": "Never ask for feedback (SIUF) and hide feedback notifications.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": true,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "HKCU\\Software\\Microsoft\\Siuf\\Rules\\NumberOfSIUFInPeriod; HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\DataCollection\\DoNotShowFeedbackNotifications",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKCU",
+          "view": "Registry64",
+          "path": "Software\\Microsoft\\Siuf\\Rules",
+          "valueName": "NumberOfSIUFInPeriod",
+          "valueKind": "DWord",
+          "applyValue": 0
+        },
+        {
+          "type": "registry",
+          "hive": "HKLM",
+          "view": "Registry64",
+          "path": "SOFTWARE\\Policies\\Microsoft\\Windows\\DataCollection",
+          "valueName": "DoNotShowFeedbackNotifications",
+          "valueKind": "DWord",
+          "applyValue": 1
+        }
+      ]
+    },
+    {
+      "id": "privacy.delivery_optimization",
+      "name": "Block Delivery Optimization Peer Sharing (Policy)",
+      "category": "Privacy",
+      "subcategory": "Windows Privacy",
+      "description": "Updates download only from Microsoft (HTTP), never uploading to or from other PCs.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": true,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\DeliveryOptimization\\DODownloadMode",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKLM",
+          "view": "Registry64",
+          "path": "SOFTWARE\\Policies\\Microsoft\\Windows\\DeliveryOptimization",
+          "valueName": "DODownloadMode",
+          "valueKind": "DWord",
+          "applyValue": 0
+        }
+      ]
+    },
+    {
+      "id": "privacy.advertising_id",
+      "name": "Disable Advertising ID",
+      "category": "Privacy",
+      "subcategory": "Ads & Suggestions",
+      "description": "Turns off the per-user advertising identifier apps use for targeted ads.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": true,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\AdvertisingInfo\\Enabled; HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\AdvertisingInfo\\DisabledByGroupPolicy",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKCU",
+          "view": "Registry64",
+          "path": "Software\\Microsoft\\Windows\\CurrentVersion\\AdvertisingInfo",
+          "valueName": "Enabled",
+          "valueKind": "DWord",
+          "applyValue": 0
+        },
+        {
+          "type": "registry",
+          "hive": "HKLM",
+          "view": "Registry64",
+          "path": "SOFTWARE\\Policies\\Microsoft\\Windows\\AdvertisingInfo",
+          "valueName": "DisabledByGroupPolicy",
+          "valueKind": "DWord",
+          "applyValue": 1
+        }
+      ]
+    },
+    {
+      "id": "privacy.settings_suggestions",
+      "name": "Block Suggested Content in Settings",
+      "category": "Privacy",
+      "subcategory": "Ads & Suggestions",
+      "description": "Hides suggested content and promotions inside the Settings app.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": true,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager\\SubscribedContent-338393Enabled; HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager\\SubscribedContent-353694Enabled; HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager\\SubscribedContent-353696Enabled",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKCU",
+          "view": "Registry64",
+          "path": "Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+          "valueName": "SubscribedContent-338393Enabled",
+          "valueKind": "DWord",
+          "applyValue": 0
+        },
+        {
+          "type": "registry",
+          "hive": "HKCU",
+          "view": "Registry64",
+          "path": "Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+          "valueName": "SubscribedContent-353694Enabled",
+          "valueKind": "DWord",
+          "applyValue": 0
+        },
+        {
+          "type": "registry",
+          "hive": "HKCU",
+          "view": "Registry64",
+          "path": "Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+          "valueName": "SubscribedContent-353696Enabled",
+          "valueKind": "DWord",
+          "applyValue": 0
+        }
+      ]
+    },
+    {
+      "id": "privacy.lock_screen_spotlight",
+      "name": "Disable Lock Screen Spotlight",
+      "category": "Privacy",
+      "subcategory": "Ads & Suggestions",
+      "description": "Stops rotating Spotlight images, fun facts and tips on the lock screen.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": true,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager\\RotatingLockScreenEnabled; HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager\\RotatingLockScreenOverlayEnabled; HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager\\SubscribedContent-338387Enabled",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKCU",
+          "view": "Registry64",
+          "path": "Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+          "valueName": "RotatingLockScreenEnabled",
+          "valueKind": "DWord",
+          "applyValue": 0
+        },
+        {
+          "type": "registry",
+          "hive": "HKCU",
+          "view": "Registry64",
+          "path": "Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+          "valueName": "RotatingLockScreenOverlayEnabled",
+          "valueKind": "DWord",
+          "applyValue": 0
+        },
+        {
+          "type": "registry",
+          "hive": "HKCU",
+          "view": "Registry64",
+          "path": "Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+          "valueName": "SubscribedContent-338387Enabled",
+          "valueKind": "DWord",
+          "applyValue": 0
+        }
+      ]
+    },
+    {
+      "id": "privacy.silent_app_installs",
+      "name": "Block Silently Installed Apps",
+      "category": "Privacy",
+      "subcategory": "Ads & Suggestions",
+      "description": "Prevents Windows from silently installing suggested Store apps.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": true,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager\\SilentInstalledAppsEnabled",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKCU",
+          "view": "Registry64",
+          "path": "Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+          "valueName": "SilentInstalledAppsEnabled",
+          "valueKind": "DWord",
+          "applyValue": 0
+        }
+      ]
+    },
+    {
+      "id": "privacy.preinstalled_suggestions",
+      "name": "Disable Pre-installed App Suggestions",
+      "category": "Privacy",
+      "subcategory": "Ads & Suggestions",
+      "description": "Stops OEM and Microsoft pre-installed app suggestions and Start suggestions.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": true,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager\\PreInstalledAppsEnabled; HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager\\OemPreInstalledAppsEnabled; HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager\\SystemPaneSuggestionsEnabled; HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager\\SubscribedContent-338388Enabled",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKCU",
+          "view": "Registry64",
+          "path": "Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+          "valueName": "PreInstalledAppsEnabled",
+          "valueKind": "DWord",
+          "applyValue": 0
+        },
+        {
+          "type": "registry",
+          "hive": "HKCU",
+          "view": "Registry64",
+          "path": "Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+          "valueName": "OemPreInstalledAppsEnabled",
+          "valueKind": "DWord",
+          "applyValue": 0
+        },
+        {
+          "type": "registry",
+          "hive": "HKCU",
+          "view": "Registry64",
+          "path": "Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+          "valueName": "SystemPaneSuggestionsEnabled",
+          "valueKind": "DWord",
+          "applyValue": 0
+        },
+        {
+          "type": "registry",
+          "hive": "HKCU",
+          "view": "Registry64",
+          "path": "Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+          "valueName": "SubscribedContent-338388Enabled",
+          "valueKind": "DWord",
+          "applyValue": 0
+        }
+      ]
+    },
+    {
+      "id": "privacy.bing_search",
+      "name": "Disable Bing Web Results in Search",
+      "category": "Privacy",
+      "subcategory": "Search & Cortana",
+      "description": "Start/taskbar search shows only local results — no Bing web suggestions.",
+      "impact": "Medium",
+      "riskTier": "Standard",
+      "inRecommendedPreset": true,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "HKCU\\Software\\Policies\\Microsoft\\Windows\\Explorer\\DisableSearchBoxSuggestions; HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Search\\BingSearchEnabled",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKCU",
+          "view": "Registry64",
+          "path": "Software\\Policies\\Microsoft\\Windows\\Explorer",
+          "valueName": "DisableSearchBoxSuggestions",
+          "valueKind": "DWord",
+          "applyValue": 1
+        },
+        {
+          "type": "registry",
+          "hive": "HKCU",
+          "view": "Registry64",
+          "path": "Software\\Microsoft\\Windows\\CurrentVersion\\Search",
+          "valueName": "BingSearchEnabled",
+          "valueKind": "DWord",
+          "applyValue": 0
+        }
+      ]
+    },
+    {
+      "id": "privacy.cortana",
+      "name": "Disable Cortana",
+      "category": "Privacy",
+      "subcategory": "Search & Cortana",
+      "description": "Disables Cortana via policy.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": true,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Search\\AllowCortana",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKLM",
+          "view": "Registry64",
+          "path": "SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Search",
+          "valueName": "AllowCortana",
+          "valueKind": "DWord",
+          "applyValue": 0
+        }
+      ]
+    },
+    {
+      "id": "privacy.search_highlights",
+      "name": "Disable Search Highlights",
+      "category": "Privacy",
+      "subcategory": "Search & Cortana",
+      "description": "Removes trending/\"today in history\" highlights from the search box and search home.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": true,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\SearchSettings\\IsDynamicSearchBoxEnabled; HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Search\\EnableDynamicContentInWSB",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKCU",
+          "view": "Registry64",
+          "path": "Software\\Microsoft\\Windows\\CurrentVersion\\SearchSettings",
+          "valueName": "IsDynamicSearchBoxEnabled",
+          "valueKind": "DWord",
+          "applyValue": 0
+        },
+        {
+          "type": "registry",
+          "hive": "HKLM",
+          "view": "Registry64",
+          "path": "SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Search",
+          "valueName": "EnableDynamicContentInWSB",
+          "valueKind": "DWord",
+          "applyValue": 0
+        }
+      ]
+    },
+    {
+      "id": "privacy.store_search_suggestions",
+      "name": "Disable Microsoft Store Search Suggestions",
+      "category": "Privacy",
+      "subcategory": "Search & Cortana",
+      "description": "Stops search from querying online/cloud sources (Store and Microsoft account content) as you type.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": true,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Search\\ConnectedSearchUseWeb; HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\SearchSettings\\IsMSACloudSearchEnabled",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKLM",
+          "view": "Registry64",
+          "path": "SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Search",
+          "valueName": "ConnectedSearchUseWeb",
+          "valueKind": "DWord",
+          "applyValue": 0
+        },
+        {
+          "type": "registry",
+          "hive": "HKCU",
+          "view": "Registry64",
+          "path": "Software\\Microsoft\\Windows\\CurrentVersion\\SearchSettings",
+          "valueName": "IsMSACloudSearchEnabled",
+          "valueKind": "DWord",
+          "applyValue": 0
+        }
+      ]
+    },
+    {
+      "id": "privacy.clipboard_cloud_sync",
+      "name": "Disable Clipboard Cloud Sync",
+      "category": "Privacy",
+      "subcategory": "Sync & Clipboard",
+      "description": "Prevents clipboard content being synced to your other devices through the cloud.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": true,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\System\\AllowCrossDeviceClipboard",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKLM",
+          "view": "Registry64",
+          "path": "SOFTWARE\\Policies\\Microsoft\\Windows\\System",
+          "valueName": "AllowCrossDeviceClipboard",
+          "valueKind": "DWord",
+          "applyValue": 0
+        }
+      ]
+    },
+    {
+      "id": "privacy.clipboard_history",
+      "name": "Disable Clipboard History",
+      "category": "Privacy",
+      "subcategory": "Sync & Clipboard",
+      "description": "Turns off Win+V clipboard history (items are no longer stored).",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\System\\AllowClipboardHistory",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKLM",
+          "view": "Registry64",
+          "path": "SOFTWARE\\Policies\\Microsoft\\Windows\\System",
+          "valueName": "AllowClipboardHistory",
+          "valueKind": "DWord",
+          "applyValue": 0
+        }
+      ]
+    },
+    {
+      "id": "privacy.settings_sync",
+      "name": "Disable Windows Settings Sync",
+      "category": "Privacy",
+      "subcategory": "Sync & Clipboard",
+      "description": "Stops syncing themes, passwords and preferences across devices with your Microsoft account.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\SettingSync\\DisableSettingSync; HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\SettingSync\\DisableSettingSyncUserOverride",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKLM",
+          "view": "Registry64",
+          "path": "SOFTWARE\\Policies\\Microsoft\\Windows\\SettingSync",
+          "valueName": "DisableSettingSync",
+          "valueKind": "DWord",
+          "applyValue": 2
+        },
+        {
+          "type": "registry",
+          "hive": "HKLM",
+          "view": "Registry64",
+          "path": "SOFTWARE\\Policies\\Microsoft\\Windows\\SettingSync",
+          "valueName": "DisableSettingSyncUserOverride",
+          "valueKind": "DWord",
+          "applyValue": 1
+        }
+      ]
+    },
+    {
+      "id": "privacy.find_my_device",
+      "name": "Disable Find My Device",
+      "category": "Privacy",
+      "subcategory": "Sync & Clipboard",
+      "description": "Turns off device location reporting for Find My Device (not useful on a desktop).",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": true,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "HKLM\\SOFTWARE\\Policies\\Microsoft\\FindMyDevice\\AllowFindMyDevice",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKLM",
+          "view": "Registry64",
+          "path": "SOFTWARE\\Policies\\Microsoft\\FindMyDevice",
+          "valueName": "AllowFindMyDevice",
+          "valueKind": "DWord",
+          "applyValue": 0
+        }
+      ]
+    },
+    {
+      "id": "privacy.recall",
+      "name": "Disable Windows Recall",
+      "category": "Privacy",
+      "subcategory": "AI Features",
+      "description": "Disables Recall snapshots and blocks Recall from being enabled.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": true,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsAI\\DisableAIDataAnalysis; HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsAI\\AllowRecallEnablement; HKCU\\Software\\Policies\\Microsoft\\Windows\\WindowsAI\\DisableAIDataAnalysis",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKLM",
+          "view": "Registry64",
+          "path": "SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsAI",
+          "valueName": "DisableAIDataAnalysis",
+          "valueKind": "DWord",
+          "applyValue": 1
+        },
+        {
+          "type": "registry",
+          "hive": "HKLM",
+          "view": "Registry64",
+          "path": "SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsAI",
+          "valueName": "AllowRecallEnablement",
+          "valueKind": "DWord",
+          "applyValue": 0
+        },
+        {
+          "type": "registry",
+          "hive": "HKCU",
+          "view": "Registry64",
+          "path": "Software\\Policies\\Microsoft\\Windows\\WindowsAI",
+          "valueName": "DisableAIDataAnalysis",
+          "valueKind": "DWord",
+          "applyValue": 1
+        }
+      ]
+    },
+    {
+      "id": "privacy.click_to_do",
+      "name": "Disable Click To Do",
+      "category": "Privacy",
+      "subcategory": "AI Features",
+      "description": "Disables Click to Do screen analysis.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": true,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsAI\\DisableClickToDo; HKCU\\Software\\Policies\\Microsoft\\Windows\\WindowsAI\\DisableClickToDo",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKLM",
+          "view": "Registry64",
+          "path": "SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsAI",
+          "valueName": "DisableClickToDo",
+          "valueKind": "DWord",
+          "applyValue": 1
+        },
+        {
+          "type": "registry",
+          "hive": "HKCU",
+          "view": "Registry64",
+          "path": "Software\\Policies\\Microsoft\\Windows\\WindowsAI",
+          "valueName": "DisableClickToDo",
+          "valueKind": "DWord",
+          "applyValue": 1
+        }
+      ]
+    },
+    {
+      "id": "privacy.edge_compose",
+      "name": "Disable Edge Compose AI",
+      "category": "Privacy",
+      "subcategory": "AI Features",
+      "description": "Disables Compose (AI writing) in Microsoft Edge.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": true,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Edge\\ComposeInlineEnabled",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKLM",
+          "view": "Registry64",
+          "path": "SOFTWARE\\Policies\\Microsoft\\Edge",
+          "valueName": "ComposeInlineEnabled",
+          "valueKind": "DWord",
+          "applyValue": 0
+        }
+      ]
+    },
+    {
+      "id": "privacy.paint_ai",
+      "name": "Disable Paint AI Features (Cocreator)",
+      "category": "Privacy",
+      "subcategory": "AI Features",
+      "description": "Disables Cocreator, Generative Fill and Image Creator in Paint.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": true,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Paint\\DisableCocreator; HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Paint\\DisableGenerativeFill; HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Paint\\DisableImageCreator",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKLM",
+          "view": "Registry64",
+          "path": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Paint",
+          "valueName": "DisableCocreator",
+          "valueKind": "DWord",
+          "applyValue": 1
+        },
+        {
+          "type": "registry",
+          "hive": "HKLM",
+          "view": "Registry64",
+          "path": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Paint",
+          "valueName": "DisableGenerativeFill",
+          "valueKind": "DWord",
+          "applyValue": 1
+        },
+        {
+          "type": "registry",
+          "hive": "HKLM",
+          "view": "Registry64",
+          "path": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Paint",
+          "valueName": "DisableImageCreator",
+          "valueKind": "DWord",
+          "applyValue": 1
+        }
+      ]
+    },
+    {
+      "id": "privacy.notepad_ai",
+      "name": "Disable Notepad AI Features",
+      "category": "Privacy",
+      "subcategory": "AI Features",
+      "description": "Disables Rewrite/Summarize AI features in Notepad.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": true,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "HKLM\\SOFTWARE\\Policies\\WindowsNotepad\\DisableAIFeatures",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKLM",
+          "view": "Registry64",
+          "path": "SOFTWARE\\Policies\\WindowsNotepad",
+          "valueName": "DisableAIFeatures",
+          "valueKind": "DWord",
+          "applyValue": 1
+        }
+      ]
+    },
+    {
+      "id": "privacy.ai_service",
+      "name": "Disable AI Service Auto-Start (AiHost)",
+      "category": "Privacy",
+      "subcategory": "AI Features",
+      "description": "Sets the Windows AI host service to manual start so it only runs when an AI feature asks for it. Skipped if the service is not present.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": true,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "Service AiHost → Manual",
+      "actions": [
+        {
+          "type": "service",
+          "serviceName": "AiHost",
+          "startType": "Manual",
+          "stopService": false
+        }
+      ]
+    },
+    {
+      "id": "privacy.edge_usage_data",
+      "name": "Disable Edge Usage Data Reporting",
+      "category": "Privacy",
+      "subcategory": "Microsoft Edge",
+      "description": "Stops Edge sending usage and crash data. (Edge policy)",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": true,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Edge\\MetricsReportingEnabled",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKLM",
+          "view": "Registry64",
+          "path": "SOFTWARE\\Policies\\Microsoft\\Edge",
+          "valueName": "MetricsReportingEnabled",
+          "valueKind": "DWord",
+          "applyValue": 0
+        }
+      ]
+    },
+    {
+      "id": "privacy.edge_site_info",
+      "name": "Disable Edge Site Info Collection",
+      "category": "Privacy",
+      "subcategory": "Microsoft Edge",
+      "description": "Stops Edge sending info about the sites you visit. (Edge policy)",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": true,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Edge\\SendSiteInfoToImproveServices",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKLM",
+          "view": "Registry64",
+          "path": "SOFTWARE\\Policies\\Microsoft\\Edge",
+          "valueName": "SendSiteInfoToImproveServices",
+          "valueKind": "DWord",
+          "applyValue": 0
+        }
+      ]
+    },
+    {
+      "id": "privacy.edge_personalization",
+      "name": "Disable Edge Personalization Reporting",
+      "category": "Privacy",
+      "subcategory": "Microsoft Edge",
+      "description": "Stops browsing activity being used to personalise ads and news. (Edge policy)",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": true,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Edge\\PersonalizationReportingEnabled",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKLM",
+          "view": "Registry64",
+          "path": "SOFTWARE\\Policies\\Microsoft\\Edge",
+          "valueName": "PersonalizationReportingEnabled",
+          "valueKind": "DWord",
+          "applyValue": 0
+        }
+      ]
+    },
+    {
+      "id": "privacy.edge_copilot_access",
+      "name": "Block Copilot Page Access in Edge",
+      "category": "Privacy",
+      "subcategory": "Microsoft Edge",
+      "description": "Prevents Copilot reading the page you are on. (Edge policy)",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": true,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Edge\\CopilotCDPPageContext",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKLM",
+          "view": "Registry64",
+          "path": "SOFTWARE\\Policies\\Microsoft\\Edge",
+          "valueName": "CopilotCDPPageContext",
+          "valueKind": "DWord",
+          "applyValue": 0
+        }
+      ]
+    },
+    {
+      "id": "privacy.edge_copilot_context",
+      "name": "Block Copilot Page Context in Edge",
+      "category": "Privacy",
+      "subcategory": "Microsoft Edge",
+      "description": "Prevents Edge passing page context to Copilot. (Edge policy)",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": true,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Edge\\CopilotPageContext",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKLM",
+          "view": "Registry64",
+          "path": "SOFTWARE\\Policies\\Microsoft\\Edge",
+          "valueName": "CopilotPageContext",
+          "valueKind": "DWord",
+          "applyValue": 0
+        }
+      ]
+    },
+    {
+      "id": "privacy.edge_discover",
+      "name": "Disable Edge Discover Page Scanning",
+      "category": "Privacy",
+      "subcategory": "Microsoft Edge",
+      "description": "Stops the Discover pane scanning page content. (Edge policy)",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": true,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Edge\\DiscoverPageContextEnabled",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKLM",
+          "view": "Registry64",
+          "path": "SOFTWARE\\Policies\\Microsoft\\Edge",
+          "valueName": "DiscoverPageContextEnabled",
+          "valueKind": "DWord",
+          "applyValue": 0
+        }
+      ]
+    },
+    {
+      "id": "privacy.edge_sidebar",
+      "name": "Hide the Edge Sidebar",
+      "category": "Privacy",
+      "subcategory": "Microsoft Edge",
+      "description": "Removes the Edge sidebar. (Edge policy)",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": true,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Edge\\HubsSidebarEnabled",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKLM",
+          "view": "Registry64",
+          "path": "SOFTWARE\\Policies\\Microsoft\\Edge",
+          "valueName": "HubsSidebarEnabled",
+          "valueKind": "DWord",
+          "applyValue": 0
+        }
+      ]
+    },
+    {
+      "id": "privacy.edge_shopping",
+      "name": "Disable Edge Shopping Assistant",
+      "category": "Privacy",
+      "subcategory": "Microsoft Edge",
+      "description": "Disables price comparison and coupon pop-ups. (Edge policy)",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": true,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Edge\\EdgeShoppingAssistantEnabled",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKLM",
+          "view": "Registry64",
+          "path": "SOFTWARE\\Policies\\Microsoft\\Edge",
+          "valueName": "EdgeShoppingAssistantEnabled",
+          "valueKind": "DWord",
+          "applyValue": 0
+        }
+      ]
+    },
+    {
+      "id": "privacy.chrome_usage_stats",
+      "name": "Disable Chrome Usage Statistics",
+      "category": "Privacy",
+      "subcategory": "Google Chrome",
+      "description": "Stops Chrome sending usage statistics and crash reports.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": true,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "HKLM\\SOFTWARE\\Policies\\Google\\Chrome\\MetricsReportingEnabled",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKLM",
+          "view": "Registry64",
+          "path": "SOFTWARE\\Policies\\Google\\Chrome",
+          "valueName": "MetricsReportingEnabled",
+          "valueKind": "DWord",
+          "applyValue": 0
+        }
+      ]
+    },
+    {
+      "id": "privacy.chrome_feedback",
+      "name": "Disable Chrome Feedback Reports",
+      "category": "Privacy",
+      "subcategory": "Google Chrome",
+      "description": "Disables the Chrome feedback reporter.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": true,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "HKLM\\SOFTWARE\\Policies\\Google\\Chrome\\UserFeedbackAllowed",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKLM",
+          "view": "Registry64",
+          "path": "SOFTWARE\\Policies\\Google\\Chrome",
+          "valueName": "UserFeedbackAllowed",
+          "valueKind": "DWord",
+          "applyValue": 0
+        }
+      ]
+    },
+    {
+      "id": "privacy.chrome_extended_reporting",
+      "name": "Disable Chrome Extended Safe Browsing Reporting",
+      "category": "Privacy",
+      "subcategory": "Google Chrome",
+      "description": "Stops sending extra page data to Google for Safe Browsing. Standard Safe Browsing protection stays ON.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": true,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "HKLM\\SOFTWARE\\Policies\\Google\\Chrome\\SafeBrowsingExtendedReportingEnabled",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKLM",
+          "view": "Registry64",
+          "path": "SOFTWARE\\Policies\\Google\\Chrome",
+          "valueName": "SafeBrowsingExtendedReportingEnabled",
+          "valueKind": "DWord",
+          "applyValue": 0
+        }
+      ]
+    },
+    {
+      "id": "privacy.firefox_telemetry",
+      "name": "Disable Firefox Telemetry",
+      "category": "Privacy",
+      "subcategory": "Mozilla Firefox",
+      "description": "Disables Firefox telemetry via enterprise policy.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": true,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "HKLM\\SOFTWARE\\Policies\\Mozilla\\Firefox\\DisableTelemetry",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKLM",
+          "view": "Registry64",
+          "path": "SOFTWARE\\Policies\\Mozilla\\Firefox",
+          "valueName": "DisableTelemetry",
+          "valueKind": "DWord",
+          "applyValue": 1
+        }
+      ]
+    },
+    {
+      "id": "privacy.firefox_browser_agent",
+      "name": "Disable Firefox Default Browser Agent",
+      "category": "Privacy",
+      "subcategory": "Mozilla Firefox",
+      "description": "Stops the scheduled agent that reports your default-browser choice to Mozilla.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": true,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "HKLM\\SOFTWARE\\Policies\\Mozilla\\Firefox\\DisableDefaultBrowserAgent",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKLM",
+          "view": "Registry64",
+          "path": "SOFTWARE\\Policies\\Mozilla\\Firefox",
+          "valueName": "DisableDefaultBrowserAgent",
+          "valueKind": "DWord",
+          "applyValue": 1
+        }
+      ]
+    },
+    {
+      "id": "debloat.features_refresh",
+      "name": "Refresh Optional Features Status",
+      "category": "Debloat",
+      "subcategory": "Optional Windows Features",
+      "description": "Re-reads the live install state of every Optional Windows Feature (read-only).",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "ReadOnly",
+      "targetSummary": "DISM query",
+      "actions": [
+        {
+          "type": "dism",
+          "operation": "query"
+        }
+      ]
+    },
+    {
+      "id": "debloat.print_to_pdf",
+      "name": "Toggle Microsoft Print to PDF",
+      "category": "Debloat",
+      "subcategory": "Optional Windows Features",
+      "description": "Removes the Microsoft Print to PDF virtual printer. Revert re-enables it.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "DISM feature Printing-PrintToPDFServices-Features",
+      "actions": [
+        {
+          "type": "dism",
+          "operation": "feature",
+          "feature": "Printing-PrintToPDFServices-Features",
+          "applyState": "Disabled"
+        }
+      ]
+    },
+    {
+      "id": "debloat.media_player_legacy",
+      "name": "Toggle Legacy Windows Media Player",
+      "category": "Debloat",
+      "subcategory": "Optional Windows Features",
+      "description": "Removes legacy Windows Media Player (the modern Media Player app is unaffected). Revert re-enables it.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "DISM feature WindowsMediaPlayer",
+      "actions": [
+        {
+          "type": "dism",
+          "operation": "feature",
+          "feature": "WindowsMediaPlayer",
+          "applyState": "Disabled"
+        }
+      ]
+    },
+    {
+      "id": "debloat.work_folders",
+      "name": "Toggle Work Folders Sync Client",
+      "category": "Debloat",
+      "subcategory": "Optional Windows Features",
+      "description": "Removes the Work Folders corporate sync client. Revert re-enables it.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "DISM feature WorkFolders-Client",
+      "actions": [
+        {
+          "type": "dism",
+          "operation": "feature",
+          "feature": "WorkFolders-Client",
+          "applyState": "Disabled"
+        }
+      ]
+    },
+    {
+      "id": "debloat.ie11",
+      "name": "Toggle Internet Explorer 11",
+      "category": "Debloat",
+      "subcategory": "Optional Windows Features",
+      "description": "Removes the Internet Explorer 11 engine (also used by Edge IE mode). Revert re-enables it.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "DISM feature Internet-Explorer-Optional-amd64",
+      "actions": [
+        {
+          "type": "dism",
+          "operation": "feature",
+          "feature": "Internet-Explorer-Optional-amd64",
+          "applyState": "Disabled"
+        }
+      ]
+    },
+    {
+      "id": "debloat.xps",
+      "name": "Toggle XPS Document Support",
+      "category": "Debloat",
+      "subcategory": "Optional Windows Features",
+      "description": "Removes the XPS document printer and services. Revert re-enables it.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "DISM feature Printing-XPSServices-Features",
+      "actions": [
+        {
+          "type": "dism",
+          "operation": "feature",
+          "feature": "Printing-XPSServices-Features",
+          "applyState": "Disabled"
+        }
+      ]
+    },
+    {
+      "id": "debloat.telnet",
+      "name": "Toggle Telnet Client",
+      "category": "Debloat",
+      "subcategory": "Optional Windows Features",
+      "description": "Ensures the insecure Telnet client is turned off. Revert re-enables it.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "DISM feature TelnetClient",
+      "actions": [
+        {
+          "type": "dism",
+          "operation": "feature",
+          "feature": "TelnetClient",
+          "applyState": "Disabled"
+        }
+      ]
+    },
+    {
+      "id": "debloat.smb1",
+      "name": "Toggle SMB 1.0 File Sharing",
+      "category": "Debloat",
+      "subcategory": "Optional Windows Features",
+      "description": "Keeps the obsolete, wormable SMB 1.0 protocol turned off. Changing SMB1 is Danger Zone because re-enabling it on revert exposes the PC.",
+      "impact": "Low",
+      "riskTier": "DangerZone",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "DISM feature SMB1Protocol",
+      "warning": "Old NAS boxes and very old network devices that only speak SMB1 will stop working.",
+      "actions": [
+        {
+          "type": "dism",
+          "operation": "feature",
+          "feature": "SMB1Protocol",
+          "applyState": "Disabled"
+        }
+      ]
+    },
+    {
+      "id": "debloat.remove_store",
+      "name": "Remove or Restore Microsoft Store",
+      "category": "Debloat",
+      "subcategory": "Microsoft Store & Edge",
+      "description": "Removes the Microsoft Store for all users and de-provisions it. Use \"Reinstall Microsoft Store\" to get it back.",
+      "impact": "Low",
+      "riskTier": "DangerZone",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "RunOnce",
+      "targetSummary": "DISM appx_remove Microsoft.WindowsStore",
+      "warning": "Store-delivered app updates (Xbox app, NVIDIA App components, Windows apps) stop until the Store is reinstalled.",
+      "actions": [
+        {
+          "type": "dism",
+          "operation": "appx_remove",
+          "packageName": "Microsoft.WindowsStore"
+        }
+      ]
+    },
+    {
+      "id": "debloat.uninstall_onedrive",
+      "name": "Uninstall OneDrive",
+      "category": "Debloat",
+      "subcategory": "Microsoft Store & Edge",
+      "description": "Runs Microsoft's OneDrive uninstaller. Files already in your OneDrive cloud are kept online; local sync stops.",
+      "impact": "Low",
+      "riskTier": "DangerZone",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "RunOnce",
+      "targetSummary": "DISM onedrive_uninstall",
+      "warning": "OneDrive is installed and in use on this PC.",
+      "actions": [
+        {
+          "type": "dism",
+          "operation": "onedrive_uninstall"
+        }
+      ]
+    },
+    {
+      "id": "debloat.uninstall_edge",
+      "name": "Uninstall Microsoft Edge",
+      "category": "Debloat",
+      "subcategory": "Microsoft Store & Edge",
+      "description": "Runs Edge's own system-level uninstaller. WebView2 (used by many apps) is NOT removed.",
+      "impact": "Low",
+      "riskTier": "DangerZone",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "RunOnce",
+      "targetSummary": "DISM edge_uninstall",
+      "warning": "Windows may block or later reinstall Edge outside the EEA. Some Windows links will open nothing until another browser is default.",
+      "actions": [
+        {
+          "type": "dism",
+          "operation": "edge_uninstall"
+        }
+      ]
+    },
+    {
+      "id": "debloat.block_edge_reinstall",
+      "name": "Stop Edge from Reinstalling Itself",
+      "category": "Debloat",
+      "subcategory": "Microsoft Store & Edge",
+      "description": "Disables the Edge update services (edgeupdate, edgeupdatem) and blocks automatic Chromium Edge redeployment.",
+      "impact": "Low",
+      "riskTier": "DangerZone",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "Service edgeupdate → Disabled; Service edgeupdatem → Disabled; HKLM\\SOFTWARE\\Microsoft\\EdgeUpdate\\DoNotUpdateToEdgeWithChromium",
+      "warning": "Edge (and WebView2 delivered by Edge Update) will no longer receive security updates.",
+      "actions": [
+        {
+          "type": "service",
+          "serviceName": "edgeupdate",
+          "startType": "Disabled",
+          "stopService": true
+        },
+        {
+          "type": "service",
+          "serviceName": "edgeupdatem",
+          "startType": "Disabled",
+          "stopService": true
+        },
+        {
+          "type": "registry",
+          "hive": "HKLM",
+          "view": "Registry64",
+          "path": "SOFTWARE\\Microsoft\\EdgeUpdate",
+          "valueName": "DoNotUpdateToEdgeWithChromium",
+          "valueKind": "DWord",
+          "applyValue": 1
+        }
+      ]
+    },
+    {
+      "id": "debloat.reinstall_store",
+      "name": "Reinstall Microsoft Store",
+      "category": "Debloat",
+      "subcategory": "Microsoft Store & Edge",
+      "description": "Reinstalls / repairs the Microsoft Store (wsreset -i).",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "RunOnce",
+      "targetSummary": "DISM appx_restore Microsoft.WindowsStore",
+      "actions": [
+        {
+          "type": "dism",
+          "operation": "appx_restore",
+          "packageName": "Microsoft.WindowsStore"
+        }
+      ]
+    },
+    {
+      "id": "services.apply_recommended",
+      "name": "Apply Recommended Services Tweaks",
+      "category": "Services",
+      "subcategory": "Service Groups",
+      "description": "Applies all Recommended service changes (telemetry & safe-to-disable services only).",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "RunOnce",
+      "targetSummary": "Applies the recommended Services tweaks",
+      "presetScope": {
+        "category": "Services"
+      },
+      "actions": []
+    },
+    {
+      "id": "services.group_telemetry",
+      "name": "Disable Telemetry Service Group",
+      "category": "Services",
+      "subcategory": "Service Groups",
+      "description": "Disables Connected User Experiences & Telemetry and the WAP push routing service.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": true,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "Service DiagTrack → Disabled; Service dmwappushservice → Disabled",
+      "actions": [
+        {
+          "type": "service",
+          "serviceName": "DiagTrack",
+          "startType": "Disabled",
+          "stopService": true
+        },
+        {
+          "type": "service",
+          "serviceName": "dmwappushservice",
+          "startType": "Disabled",
+          "stopService": true
+        }
+      ]
+    },
+    {
+      "id": "services.group_search",
+      "name": "Disable Search Indexing Service Group",
+      "category": "Services",
+      "subcategory": "Service Groups",
+      "description": "Disables Windows Search indexing and SysMain (Superfetch). On fast NVMe SSDs the benefit of both is small.",
+      "impact": "Medium",
+      "riskTier": "Standard",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "Service WSearch → Disabled; Service SysMain → Disabled",
+      "warning": "Start-menu and File Explorer search become slower (no index).",
+      "actions": [
+        {
+          "type": "service",
+          "serviceName": "WSearch",
+          "startType": "Disabled",
+          "stopService": true
+        },
+        {
+          "type": "service",
+          "serviceName": "SysMain",
+          "startType": "Disabled",
+          "stopService": true
+        }
+      ]
+    },
+    {
+      "id": "services.group_windows_update",
+      "name": "Disable Windows Update Service Group",
+      "category": "Services",
+      "subcategory": "Service Groups",
+      "description": "Disables Windows Update, Update Orchestrator, Update Medic, BITS and Delivery Optimization services.",
+      "impact": "High",
+      "riskTier": "DangerZone",
+      "inRecommendedPreset": false,
+      "requiresRestart": true,
+      "undoType": "Toggle",
+      "targetSummary": "Service wuauserv → Disabled; Service UsoSvc → Disabled; Service WaaSMedicSvc → Disabled; Service bits → Disabled; Service DoSvc → Disabled",
+      "warning": "No security updates, Store updates or Defender platform updates until reverted. This PC runs an Insider build (26300).",
+      "actions": [
+        {
+          "type": "service",
+          "serviceName": "wuauserv",
+          "startType": "Disabled",
+          "stopService": true
+        },
+        {
+          "type": "service",
+          "serviceName": "UsoSvc",
+          "startType": "Disabled",
+          "stopService": true
+        },
+        {
+          "type": "service",
+          "serviceName": "WaaSMedicSvc",
+          "startType": "Disabled",
+          "stopService": true
+        },
+        {
+          "type": "service",
+          "serviceName": "bits",
+          "startType": "Disabled",
+          "stopService": true
+        },
+        {
+          "type": "service",
+          "serviceName": "DoSvc",
+          "startType": "Disabled",
+          "stopService": true
+        }
+      ]
+    },
+    {
+      "id": "services.group_diagnostics",
+      "name": "Disable Diagnostics Service Group",
+      "category": "Services",
+      "subcategory": "Service Groups",
+      "description": "Disables the Diagnostic Policy Service and its service/system hosts (troubleshooters stop working).",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "Service DPS → Disabled; Service WdiServiceHost → Disabled; Service WdiSystemHost → Disabled",
+      "actions": [
+        {
+          "type": "service",
+          "serviceName": "DPS",
+          "startType": "Disabled",
+          "stopService": true
+        },
+        {
+          "type": "service",
+          "serviceName": "WdiServiceHost",
+          "startType": "Disabled",
+          "stopService": true
+        },
+        {
+          "type": "service",
+          "serviceName": "WdiSystemHost",
+          "startType": "Disabled",
+          "stopService": true
+        }
+      ]
+    },
+    {
+      "id": "services.diagtrack",
+      "name": "Disable DiagTrack",
+      "category": "Services",
+      "subcategory": "Individual Services",
+      "description": "Connected User Experiences and Telemetry.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": true,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "Service DiagTrack → Disabled",
+      "actions": [
+        {
+          "type": "service",
+          "serviceName": "DiagTrack",
+          "startType": "Disabled",
+          "stopService": true
+        }
+      ]
+    },
+    {
+      "id": "services.dmwappushservice",
+      "name": "Disable dmwappushservice",
+      "category": "Services",
+      "subcategory": "Individual Services",
+      "description": "Device Management WAP Push message routing (telemetry helper).",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": true,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "Service dmwappushservice → Disabled",
+      "actions": [
+        {
+          "type": "service",
+          "serviceName": "dmwappushservice",
+          "startType": "Disabled",
+          "stopService": true
+        }
+      ]
+    },
+    {
+      "id": "services.pcasvc",
+      "name": "Disable PcaSvc",
+      "category": "Services",
+      "subcategory": "Individual Services",
+      "description": "Program Compatibility Assistant (compatibility pop-ups for old apps).",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "Service PcaSvc → Disabled",
+      "actions": [
+        {
+          "type": "service",
+          "serviceName": "PcaSvc",
+          "startType": "Disabled",
+          "stopService": true
+        }
+      ]
+    },
+    {
+      "id": "services.sysmain",
+      "name": "Disable SysMain",
+      "category": "Services",
+      "subcategory": "Individual Services",
+      "description": "SysMain / Superfetch memory prefetching.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "Service SysMain → Disabled",
+      "actions": [
+        {
+          "type": "service",
+          "serviceName": "SysMain",
+          "startType": "Disabled",
+          "stopService": true
+        }
+      ]
+    },
+    {
+      "id": "services.wsearch",
+      "name": "Disable WSearch",
+      "category": "Services",
+      "subcategory": "Individual Services",
+      "description": "Windows Search indexer.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "Service WSearch → Disabled",
+      "warning": "Search becomes slower without an index.",
+      "actions": [
+        {
+          "type": "service",
+          "serviceName": "WSearch",
+          "startType": "Disabled",
+          "stopService": true
+        }
+      ]
+    },
+    {
+      "id": "services.dosvc",
+      "name": "Disable DoSvc",
+      "category": "Services",
+      "subcategory": "Individual Services",
+      "description": "Delivery Optimization service.",
+      "impact": "Low",
+      "riskTier": "DangerZone",
+      "inRecommendedPreset": false,
+      "requiresRestart": true,
+      "undoType": "Toggle",
+      "targetSummary": "Service DoSvc → Disabled",
+      "warning": "Windows Update and Store downloads may fail or slow down.",
+      "actions": [
+        {
+          "type": "service",
+          "serviceName": "DoSvc",
+          "startType": "Disabled",
+          "stopService": true
+        }
+      ]
+    },
+    {
+      "id": "services.waasmedicsvc",
+      "name": "Disable WaaSMedicSvc",
+      "category": "Services",
+      "subcategory": "Individual Services",
+      "description": "Windows Update Medic Service (repairs Windows Update components). Protected service: written via its service key.",
+      "impact": "Low",
+      "riskTier": "DangerZone",
+      "inRecommendedPreset": false,
+      "requiresRestart": true,
+      "undoType": "Toggle",
+      "targetSummary": "Service WaaSMedicSvc → Disabled",
+      "warning": "Windows will no longer self-heal Windows Update.",
+      "actions": [
+        {
+          "type": "service",
+          "serviceName": "WaaSMedicSvc",
+          "startType": "Disabled",
+          "stopService": true
+        }
+      ]
+    },
+    {
+      "id": "services.dps",
+      "name": "Disable DPS",
+      "category": "Services",
+      "subcategory": "Individual Services",
+      "description": "Diagnostic Policy Service.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "Service DPS → Disabled",
+      "actions": [
+        {
+          "type": "service",
+          "serviceName": "DPS",
+          "startType": "Disabled",
+          "stopService": true
+        }
+      ]
+    },
+    {
+      "id": "services.wdiservicehost",
+      "name": "Disable WdiServiceHost",
+      "category": "Services",
+      "subcategory": "Individual Services",
+      "description": "Diagnostic Service Host.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "Service WdiServiceHost → Disabled",
+      "actions": [
+        {
+          "type": "service",
+          "serviceName": "WdiServiceHost",
+          "startType": "Disabled",
+          "stopService": true
+        }
+      ]
+    },
+    {
+      "id": "services.wdisystemhost",
+      "name": "Disable WdiSystemHost",
+      "category": "Services",
+      "subcategory": "Individual Services",
+      "description": "Diagnostic System Host.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "Service WdiSystemHost → Disabled",
+      "actions": [
+        {
+          "type": "service",
+          "serviceName": "WdiSystemHost",
+          "startType": "Disabled",
+          "stopService": true
+        }
+      ]
+    },
+    {
+      "id": "services.mapsbroker",
+      "name": "Disable MapsBroker",
+      "category": "Services",
+      "subcategory": "Individual Services",
+      "description": "Downloaded Maps Manager.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": true,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "Service MapsBroker → Disabled",
+      "actions": [
+        {
+          "type": "service",
+          "serviceName": "MapsBroker",
+          "startType": "Disabled",
+          "stopService": true
+        }
+      ]
+    },
+    {
+      "id": "services.fax",
+      "name": "Disable Fax",
+      "category": "Services",
+      "subcategory": "Individual Services",
+      "description": "Fax service.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": true,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "Service Fax → Disabled",
+      "actions": [
+        {
+          "type": "service",
+          "serviceName": "Fax",
+          "startType": "Disabled",
+          "stopService": true
+        }
+      ]
+    },
+    {
+      "id": "services.printnotify",
+      "name": "Disable PrintNotify",
+      "category": "Services",
+      "subcategory": "Individual Services",
+      "description": "Printer Extensions and Notifications.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "Service PrintNotify → Disabled",
+      "warning": "Printer pop-ups and some printer apps stop working.",
+      "actions": [
+        {
+          "type": "service",
+          "serviceName": "PrintNotify",
+          "startType": "Disabled",
+          "stopService": true
+        }
+      ]
+    },
+    {
+      "id": "services.tabletinputservice",
+      "name": "Set TabletInputService to Manual",
+      "category": "Services",
+      "subcategory": "Individual Services",
+      "description": "Touch Keyboard and Handwriting Panel (set to Manual).",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "Service TabletInputService → Manual",
+      "warning": "Also powers the emoji panel and some IMEs; left on Manual rather than Disabled.",
+      "actions": [
+        {
+          "type": "service",
+          "serviceName": "TabletInputService",
+          "startType": "Manual",
+          "stopService": false
+        }
+      ]
+    },
+    {
+      "id": "services.qwave",
+      "name": "Disable QWAVE",
+      "category": "Services",
+      "subcategory": "Individual Services",
+      "description": "Quality Windows Audio Video Experience.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "Service QWAVE → Disabled",
+      "actions": [
+        {
+          "type": "service",
+          "serviceName": "QWAVE",
+          "startType": "Disabled",
+          "stopService": true
+        }
+      ]
+    },
+    {
+      "id": "services.sharedaccess",
+      "name": "Disable SharedAccess",
+      "category": "Services",
+      "subcategory": "Individual Services",
+      "description": "Internet Connection Sharing (ICS).",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "Service SharedAccess → Disabled",
+      "warning": "Mobile Hotspot stops working.",
+      "actions": [
+        {
+          "type": "service",
+          "serviceName": "SharedAccess",
+          "startType": "Disabled",
+          "stopService": true
+        }
+      ]
+    },
+    {
+      "id": "services.ssdpsrv",
+      "name": "Disable SSDPSRV",
+      "category": "Services",
+      "subcategory": "Individual Services",
+      "description": "SSDP Discovery (UPnP device discovery).",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "Service SSDPSRV → Disabled",
+      "warning": "Media devices and some network discovery stop working.",
+      "actions": [
+        {
+          "type": "service",
+          "serviceName": "SSDPSRV",
+          "startType": "Disabled",
+          "stopService": true
+        }
+      ]
+    },
+    {
+      "id": "services.upnphost",
+      "name": "Disable upnphost",
+      "category": "Services",
+      "subcategory": "Individual Services",
+      "description": "UPnP Device Host.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "Service upnphost → Disabled",
+      "actions": [
+        {
+          "type": "service",
+          "serviceName": "upnphost",
+          "startType": "Disabled",
+          "stopService": true
+        }
+      ]
+    },
+    {
+      "id": "services.wisvc",
+      "name": "Disable wisvc",
+      "category": "Services",
+      "subcategory": "Individual Services",
+      "description": "Windows Insider Service.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "Service wisvc → Disabled",
+      "warning": "This PC runs an Insider build (26300) — disabling wisvc breaks Insider flighting.",
+      "actions": [
+        {
+          "type": "service",
+          "serviceName": "wisvc",
+          "startType": "Disabled",
+          "stopService": true
+        }
+      ]
+    },
+    {
+      "id": "perf.power.configure_plan",
+      "name": "Configure Power Plan",
+      "category": "Performance",
+      "subcategory": "Power Plans",
+      "description": "Tune the active plan with sliders: sleep, disk and display timeouts and min/max processor state. The expert view lists every processor setting (incl. hidden ones) with live AC/DC values. Desktop checks: no battery, S0 Low Power Idle, hibernation state.",
+      "impact": "Medium",
+      "riskTier": "Standard",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "RunOnce",
+      "targetSummary": "Power 238c9fa8…/29f6c1db-86da-48c5-9fdb-f2b67b1f44da; Power 0012ee47…/6738e2c4-e8a5-4a42-b16a-e040e769756e; Power 7516b95f…/3c0bc021-c8a8-4e07-a973-6b14cbcb2b7e; Power 54533251…/893dee8e-2bef-41e0-89c6-b55d0929964c; Power 54533251…/bc5038f7-23e0-4960-96da-33abaf5935ec",
+      "interactive": "power_plan",
+      "actions": [
+        {
+          "type": "power",
+          "subgroup": "238c9fa8-0aad-41ed-83f4-97be242c8f20",
+          "setting": "29f6c1db-86da-48c5-9fdb-f2b67b1f44da",
+          "acValue": 0,
+          "key": "sleep",
+          "range": {
+            "min": 0,
+            "max": 18000,
+            "step": 60,
+            "unit": "seconds (0 = never)"
+          }
+        },
+        {
+          "type": "power",
+          "subgroup": "0012ee47-9041-4b5d-9b77-535fba8b1442",
+          "setting": "6738e2c4-e8a5-4a42-b16a-e040e769756e",
+          "acValue": 0,
+          "key": "disk",
+          "range": {
+            "min": 0,
+            "max": 18000,
+            "step": 60,
+            "unit": "seconds (0 = never)"
+          }
+        },
+        {
+          "type": "power",
+          "subgroup": "7516b95f-f776-4464-8c53-06167f40cc99",
+          "setting": "3c0bc021-c8a8-4e07-a973-6b14cbcb2b7e",
+          "acValue": 900,
+          "key": "display",
+          "range": {
+            "min": 0,
+            "max": 18000,
+            "step": 60,
+            "unit": "seconds (0 = never)"
+          }
+        },
+        {
+          "type": "power",
+          "subgroup": "54533251-82be-4824-96c1-47b60b740d00",
+          "setting": "893dee8e-2bef-41e0-89c6-b55d0929964c",
+          "acValue": 5,
+          "key": "min_cpu",
+          "range": {
+            "min": 0,
+            "max": 100,
+            "step": 5,
+            "unit": "%"
+          }
+        },
+        {
+          "type": "power",
+          "subgroup": "54533251-82be-4824-96c1-47b60b740d00",
+          "setting": "bc5038f7-23e0-4960-96da-33abaf5935ec",
+          "acValue": 100,
+          "key": "max_cpu",
+          "range": {
+            "min": 5,
+            "max": 100,
+            "step": 5,
+            "unit": "%"
+          }
+        }
+      ]
+    },
+    {
+      "id": "perf.power.pcie_aspm",
+      "name": "Check/Toggle PCIe Link Power Saving",
+      "category": "Performance",
+      "subcategory": "Power Plans",
+      "description": "Turns PCIe Active State Power Management off (AC and DC) so the RTX 4070 Ti SUPER and NVMe links never drop into low-power states mid-game.",
+      "impact": "Medium",
+      "riskTier": "Standard",
+      "inRecommendedPreset": true,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "Power 501a4d13…/ee12f906-d277-404b-b6da-e5fa1a576df5",
+      "actions": [
+        {
+          "type": "power",
+          "subgroup": "501a4d13-42af-4429-9fd1-a8218c268e20",
+          "setting": "ee12f906-d277-404b-b6da-e5fa1a576df5",
+          "acValue": 0,
+          "dcValue": 0
+        }
+      ]
+    },
+    {
+      "id": "perf.power.expose_hidden",
+      "name": "Expose Hidden Advanced Power Settings",
+      "category": "Performance",
+      "subcategory": "Power Plans",
+      "description": "Unhides the Intel hybrid scheduler policies, core parking, boost mode and EPP in Control Panel › Power Options (Attributes = 2).",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "Power 54533251…/7f2f5cfa-f10c-4823-b5e1-e93ae85f46b5 (unhide); Power 54533251…/93b8b6dc-0698-4d1c-9ee4-06ed4e92f5eb (unhide); Power 54533251…/bae08b81-2d5e-4688-ad6a-132433566544 (unhide); Power 54533251…/0cc5b647-c1df-4637-891a-dec35c318583 (unhide); Power 54533251…/be337238-0d82-4146-a960-4f3749d470c7 (unhide); Power 54533251…/36687f9e-e3a5-4dbf-b1dc-15eb381c6863 (unhide)",
+      "actions": [
+        {
+          "type": "power",
+          "subgroup": "54533251-82be-4824-96c1-47b60b740d00",
+          "setting": "7f2f5cfa-f10c-4823-b5e1-e93ae85f46b5",
+          "operation": "unhide"
+        },
+        {
+          "type": "power",
+          "subgroup": "54533251-82be-4824-96c1-47b60b740d00",
+          "setting": "93b8b6dc-0698-4d1c-9ee4-06ed4e92f5eb",
+          "operation": "unhide"
+        },
+        {
+          "type": "power",
+          "subgroup": "54533251-82be-4824-96c1-47b60b740d00",
+          "setting": "bae08b81-2d5e-4688-ad6a-132433566544",
+          "operation": "unhide"
+        },
+        {
+          "type": "power",
+          "subgroup": "54533251-82be-4824-96c1-47b60b740d00",
+          "setting": "0cc5b647-c1df-4637-891a-dec35c318583",
+          "operation": "unhide"
+        },
+        {
+          "type": "power",
+          "subgroup": "54533251-82be-4824-96c1-47b60b740d00",
+          "setting": "be337238-0d82-4146-a960-4f3749d470c7",
+          "operation": "unhide"
+        },
+        {
+          "type": "power",
+          "subgroup": "54533251-82be-4824-96c1-47b60b740d00",
+          "setting": "36687f9e-e3a5-4dbf-b1dc-15eb381c6863",
+          "operation": "unhide"
+        }
+      ]
+    },
+    {
+      "id": "perf.cpu.apply_recommended",
+      "name": "Apply Recommended CPU Tweaks",
+      "category": "Performance",
+      "subcategory": "CPU Scheduling",
+      "description": "Applies the Recommended CPU scheduling tweaks.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "RunOnce",
+      "targetSummary": "Applies the recommended Performance › CPU Scheduling tweaks",
+      "presetScope": {
+        "category": "Performance",
+        "subcategory": "CPU Scheduling"
+      },
+      "actions": []
+    },
+    {
+      "id": "perf.cpu.priority_separation",
+      "name": "Prioritize Foreground App CPU Time",
+      "category": "Performance",
+      "subcategory": "CPU Scheduling",
+      "description": "Sets Win32PrioritySeparation to 0x26 (short, variable quanta with foreground boost) so the game in focus gets more CPU time.",
+      "impact": "Medium",
+      "riskTier": "Standard",
+      "inRecommendedPreset": true,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "HKLM\\SYSTEM\\CurrentControlSet\\Control\\PriorityControl\\Win32PrioritySeparation",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKLM",
+          "view": "Registry64",
+          "path": "SYSTEM\\CurrentControlSet\\Control\\PriorityControl",
+          "valueName": "Win32PrioritySeparation",
+          "valueKind": "DWord",
+          "applyValue": 38
+        }
+      ]
+    },
+    {
+      "id": "perf.cpu.system_responsiveness",
+      "name": "Set System Responsiveness to Zero",
+      "category": "Performance",
+      "subcategory": "CPU Scheduling",
+      "description": "MMCSS reserves no CPU for background tasks (SystemResponsiveness = 0).",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": true,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Multimedia\\SystemProfile\\SystemResponsiveness",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKLM",
+          "view": "Registry64",
+          "path": "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Multimedia\\SystemProfile",
+          "valueName": "SystemResponsiveness",
+          "valueKind": "DWord",
+          "applyValue": 0
+        }
+      ]
+    },
+    {
+      "id": "perf.cpu.unpark_cores",
+      "name": "Unpark All CPU Cores",
+      "category": "Performance",
+      "subcategory": "CPU Scheduling",
+      "description": "Sets minimum unparked cores to 100% on AC so all 20 cores stay available.",
+      "impact": "Medium",
+      "riskTier": "Standard",
+      "inRecommendedPreset": true,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "Power 54533251…/0cc5b647-c1df-4637-891a-dec35c318583",
+      "actions": [
+        {
+          "type": "power",
+          "subgroup": "54533251-82be-4824-96c1-47b60b740d00",
+          "setting": "0cc5b647-c1df-4637-891a-dec35c318583",
+          "acValue": 100
+        }
+      ]
+    },
+    {
+      "id": "perf.cpu.power_throttling",
+      "name": "Disable CPU Power Throttling",
+      "category": "Performance",
+      "subcategory": "CPU Scheduling",
+      "description": "Turns off Windows power throttling for all processes.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power\\PowerThrottling\\PowerThrottlingOff",
+      "warning": "This also disables EcoQoS, which RigTune's Game Mode uses to push background apps onto the E-cores. Leave off unless you do not use Game Mode.",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKLM",
+          "view": "Registry64",
+          "path": "SYSTEM\\CurrentControlSet\\Control\\Power\\PowerThrottling",
+          "valueName": "PowerThrottlingOff",
+          "valueKind": "DWord",
+          "applyValue": 1
+        }
+      ]
+    },
+    {
+      "id": "perf.cpu.disable_paging_executive",
+      "name": "Keep Kernel in RAM / Disable Paging",
+      "category": "Performance",
+      "subcategory": "CPU Scheduling",
+      "description": "Keeps kernel-mode drivers and system code in physical RAM (DisablePagingExecutive = 1). With 64 GB there is headroom.",
+      "impact": "Low",
+      "riskTier": "DangerZone",
+      "inRecommendedPreset": false,
+      "requiresRestart": true,
+      "undoType": "Toggle",
+      "targetSummary": "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Memory Management\\DisablePagingExecutive",
+      "warning": "Can make kernel crash dumps less useful.",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKLM",
+          "view": "Registry64",
+          "path": "SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Memory Management",
+          "valueName": "DisablePagingExecutive",
+          "valueKind": "DWord",
+          "applyValue": 1
+        }
+      ]
+    },
+    {
+      "id": "perf.cpu.hybrid_scheduling",
+      "name": "Configure Intel Hybrid Thread Scheduling Policy",
+      "category": "Performance",
+      "subcategory": "CPU Scheduling",
+      "description": "Chooses how Windows 11 places threads on the i7-14700F's 8 P-cores and 12 E-cores (SCHEDPOLICY for long-running and SHORTSCHEDPOLICY for short-running threads under SUB_PROCESSOR). HETEROPOLICY is shown read-only in the expert view. Background work keeps landing on E-cores via EcoQoS.",
+      "impact": "Medium",
+      "riskTier": "Standard",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "Power 54533251…/93b8b6dc-0698-4d1c-9ee4-06ed4e92f5eb; Power 54533251…/bae08b81-2d5e-4688-ad6a-132433566544",
+      "interactive": "power_plan",
+      "options": [
+        {
+          "id": "automatic",
+          "name": "Windows default (Automatic)",
+          "values": {
+            "sched": 5,
+            "short": 5
+          }
+        },
+        {
+          "id": "prefer_p",
+          "name": "Prefer P-cores for foreground & short threads",
+          "description": "Recommended for gaming on Raptor Lake.",
+          "values": {
+            "sched": 2,
+            "short": 2
+          }
+        },
+        {
+          "id": "short_p",
+          "name": "Automatic, short threads prefer P-cores",
+          "values": {
+            "sched": 5,
+            "short": 2
+          }
+        }
+      ],
+      "defaultOption": "prefer_p",
+      "actions": [
+        {
+          "type": "power",
+          "subgroup": "54533251-82be-4824-96c1-47b60b740d00",
+          "setting": "93b8b6dc-0698-4d1c-9ee4-06ed4e92f5eb",
+          "acValue": 2,
+          "key": "sched"
+        },
+        {
+          "type": "power",
+          "subgroup": "54533251-82be-4824-96c1-47b60b740d00",
+          "setting": "bae08b81-2d5e-4688-ad6a-132433566544",
+          "acValue": 2,
+          "key": "short"
+        }
+      ]
+    },
+    {
+      "id": "perf.cpu.microcode_topology",
+      "name": "Inspect Intel 14th-Gen Microcode & Core Topology",
+      "category": "Performance",
+      "subcategory": "CPU Scheduling",
+      "description": "Read-only: shows the active Intel microcode revision (0x12B or newer recommended) and the P-core / E-core logical processor layout.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "ReadOnly",
+      "targetSummary": "HKLM\\HARDWARE\\DESCRIPTION\\System\\CentralProcessor\\0\\Update Revision; GetLogicalProcessorInformationEx",
+      "actions": [
+        {
+          "type": "cpu_microcode_inspect"
+        }
+      ]
+    },
+    {
+      "id": "perf.gpu.apply_recommended",
+      "name": "Apply Recommended Graphics Tweaks",
+      "category": "Performance",
+      "subcategory": "Graphics Pipeline",
+      "description": "Applies the Recommended graphics tweaks.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "RunOnce",
+      "targetSummary": "Applies the recommended Performance › Graphics Pipeline tweaks",
+      "presetScope": {
+        "category": "Performance",
+        "subcategory": "Graphics Pipeline"
+      },
+      "actions": []
+    },
+    {
+      "id": "perf.gpu.disable_fso",
+      "name": "Disable Fullscreen Optimizations",
+      "category": "Performance",
+      "subcategory": "Graphics Pipeline",
+      "description": "Forces true exclusive fullscreen behaviour for DirectX games globally.",
+      "impact": "Medium",
+      "riskTier": "Standard",
+      "inRecommendedPreset": false,
+      "requiresRestart": true,
+      "undoType": "Toggle",
+      "targetSummary": "HKCU\\System\\GameConfigStore\\GameDVR_FSEBehaviorMode; HKCU\\System\\GameConfigStore\\GameDVR_HonorUserFSEBehaviorMode; HKCU\\System\\GameConfigStore\\GameDVR_FSEBehavior; HKCU\\System\\GameConfigStore\\GameDVR_DXGIHonorFSEWindowsCompatible",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKCU",
+          "view": "Registry64",
+          "path": "System\\GameConfigStore",
+          "valueName": "GameDVR_FSEBehaviorMode",
+          "valueKind": "DWord",
+          "applyValue": 2
+        },
+        {
+          "type": "registry",
+          "hive": "HKCU",
+          "view": "Registry64",
+          "path": "System\\GameConfigStore",
+          "valueName": "GameDVR_HonorUserFSEBehaviorMode",
+          "valueKind": "DWord",
+          "applyValue": 1
+        },
+        {
+          "type": "registry",
+          "hive": "HKCU",
+          "view": "Registry64",
+          "path": "System\\GameConfigStore",
+          "valueName": "GameDVR_FSEBehavior",
+          "valueKind": "DWord",
+          "applyValue": 2
+        },
+        {
+          "type": "registry",
+          "hive": "HKCU",
+          "view": "Registry64",
+          "path": "System\\GameConfigStore",
+          "valueName": "GameDVR_DXGIHonorFSEWindowsCompatible",
+          "valueKind": "DWord",
+          "applyValue": 1
+        }
+      ]
+    },
+    {
+      "id": "perf.gpu.rebar_check",
+      "name": "Check Resizable BAR Support",
+      "category": "Performance",
+      "subcategory": "Graphics Pipeline",
+      "description": "Read-only: shows the NVIDIA driver's global ReBAR flag. Resizable BAR also needs Above 4G Decoding + Re-Size BAR enabled and CSM disabled in the motherboard BIOS.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "ReadOnly",
+      "targetSummary": "NVAPI DRS global 0x000F00BA",
+      "actions": [
+        {
+          "type": "nvapi_drs",
+          "settingId": "0x000F00BA",
+          "operation": "inspect"
+        }
+      ]
+    },
+    {
+      "id": "perf.gpu.dwm_transparency",
+      "name": "Disable DWM Transparency",
+      "category": "Performance",
+      "subcategory": "Graphics Pipeline",
+      "description": "Turns off acrylic/transparency effects in the shell.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize\\EnableTransparency",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKCU",
+          "view": "Registry64",
+          "path": "Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize",
+          "valueName": "EnableTransparency",
+          "valueKind": "DWord",
+          "applyValue": 0
+        }
+      ]
+    },
+    {
+      "id": "perf.gpu.disable_mpo",
+      "name": "Disable Multi-Plane Overlay (MPO)",
+      "category": "Performance",
+      "subcategory": "Graphics Pipeline",
+      "description": "Disables MPO, a common fix for flicker and stutter with NVIDIA GPUs on multi-monitor / mixed refresh setups.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": false,
+      "requiresRestart": true,
+      "undoType": "Toggle",
+      "targetSummary": "HKLM\\SOFTWARE\\Microsoft\\Windows\\Dwm\\OverlayTestMode; HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers\\DisableOverlays",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKLM",
+          "view": "Registry64",
+          "path": "SOFTWARE\\Microsoft\\Windows\\Dwm",
+          "valueName": "OverlayTestMode",
+          "valueKind": "DWord",
+          "applyValue": 5
+        },
+        {
+          "type": "registry",
+          "hive": "HKLM",
+          "view": "Registry64",
+          "path": "SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers",
+          "valueName": "DisableOverlays",
+          "valueKind": "DWord",
+          "applyValue": 1
+        }
+      ]
+    },
+    {
+      "id": "perf.gpu.hags",
+      "name": "Enable Hardware GPU Scheduling (HAGS)",
+      "category": "Performance",
+      "subcategory": "Graphics Pipeline",
+      "description": "Lets the RTX 4070 Ti SUPER manage its own VRAM scheduling (required for DLSS Frame Generation).",
+      "impact": "Medium",
+      "riskTier": "Standard",
+      "inRecommendedPreset": true,
+      "requiresRestart": true,
+      "undoType": "Toggle",
+      "targetSummary": "HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers\\HwSchMode",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKLM",
+          "view": "Registry64",
+          "path": "SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers",
+          "valueName": "HwSchMode",
+          "valueKind": "DWord",
+          "applyValue": 2
+        }
+      ]
+    },
+    {
+      "id": "perf.gpu.windowed_optimizations",
+      "name": "Disable DirectX Maximized Windowed Mode",
+      "category": "Performance",
+      "subcategory": "Graphics Pipeline",
+      "description": "Turns off \"Optimizations for windowed games\" (flip-model upgrade of borderless games).",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "RunOnce",
+      "targetSummary": "HKCU\\Software\\Microsoft\\DirectX\\UserGpuPreferences\\DirectXUserGlobalSettings",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKCU",
+          "view": "Registry64",
+          "path": "Software\\Microsoft\\DirectX\\UserGpuPreferences",
+          "valueName": "DirectXUserGlobalSettings",
+          "valueKind": "String",
+          "applyValue": "SwapEffectUpgradeEnable=0;"
+        }
+      ]
+    },
+    {
+      "id": "perf.gpu.timer_interrupt",
+      "name": "Disable GPU Timer Interrupt Overhead",
+      "category": "Performance",
+      "subcategory": "Graphics Pipeline",
+      "description": "Lowers the graphics kernel's monitor latency tolerance so the GPU is not woken by coarse timer coalescing.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": false,
+      "requiresRestart": true,
+      "undoType": "RunOnce",
+      "targetSummary": "HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers\\Power\\MonitorLatencyTolerance; HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers\\Power\\MonitorRefreshLatencyTolerance",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKLM",
+          "view": "Registry64",
+          "path": "SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers\\Power",
+          "valueName": "MonitorLatencyTolerance",
+          "valueKind": "DWord",
+          "applyValue": 1
+        },
+        {
+          "type": "registry",
+          "hive": "HKLM",
+          "view": "Registry64",
+          "path": "SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers\\Power",
+          "valueName": "MonitorRefreshLatencyTolerance",
+          "valueKind": "DWord",
+          "applyValue": 1
+        }
+      ]
+    },
+    {
+      "id": "perf.nvidia.hdcp",
+      "name": "Disable HDCP Overhead",
+      "category": "Performance",
+      "subcategory": "NVIDIA Driver",
+      "description": "Sets RMHdcpKeyglobZero on the NVIDIA display adapter to skip HDCP key handling.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": false,
+      "requiresRestart": true,
+      "undoType": "Toggle",
+      "targetSummary": "HKLM\\{NVIDIA_DISPLAY_KEY}\\RMHdcpKeyglobZero",
+      "warning": "Protected content (Netflix 4K, Blu-ray players) will refuse to play until reverted.",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKLM",
+          "view": "Registry64",
+          "path": "{NVIDIA_DISPLAY_KEY}",
+          "valueName": "RMHdcpKeyglobZero",
+          "valueKind": "DWord",
+          "applyValue": 1
+        }
+      ]
+    },
+    {
+      "id": "perf.nvidia.telemetry",
+      "name": "Disable NVIDIA Telemetry Container",
+      "category": "Performance",
+      "subcategory": "NVIDIA Driver",
+      "description": "Disables NvTelemetryContainer (skipped if the current driver no longer ships it).",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": true,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "Service NvTelemetryContainer → Disabled",
+      "actions": [
+        {
+          "type": "service",
+          "serviceName": "NvTelemetryContainer",
+          "startType": "Disabled",
+          "stopService": true
+        }
+      ]
+    },
+    {
+      "id": "perf.nvidia.network_service",
+      "name": "Disable NVIDIA Network Service",
+      "category": "Performance",
+      "subcategory": "NVIDIA Driver",
+      "description": "Disables NvNetworkService (skipped if not present).",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": true,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "Service NvNetworkService → Disabled",
+      "actions": [
+        {
+          "type": "service",
+          "serviceName": "NvNetworkService",
+          "startType": "Disabled",
+          "stopService": true
+        }
+      ]
+    },
+    {
+      "id": "perf.nvidia.shader_cache",
+      "name": "Configure NVIDIA Global Shader Cache Size",
+      "category": "Performance",
+      "subcategory": "NVIDIA Driver",
+      "description": "Sets the driver's global shader cache size via nvapi64.dll DRS (0x00A06946). A larger cache reduces shader-compile stutter on your 2 TB NVMe.",
+      "impact": "Medium",
+      "riskTier": "Standard",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "NVAPI DRS global 0x00A06946",
+      "options": [
+        {
+          "id": "default",
+          "name": "Driver Default",
+          "values": {
+            "size": "delete"
+          }
+        },
+        {
+          "id": "10gb",
+          "name": "10 GB",
+          "values": {
+            "size": 10240
+          }
+        },
+        {
+          "id": "100gb",
+          "name": "100 GB",
+          "values": {
+            "size": 102400
+          }
+        },
+        {
+          "id": "unlimited",
+          "name": "Unlimited",
+          "values": {
+            "size": "0xFFFFFFFF"
+          }
+        }
+      ],
+      "defaultOption": "100gb",
+      "actions": [
+        {
+          "type": "nvapi_drs",
+          "settingId": "0x00A06946",
+          "applyValue": 102400,
+          "key": "size"
+        }
+      ]
+    },
+    {
+      "id": "perf.nvidia.power_mode",
+      "name": "Configure NVIDIA Power Management Mode",
+      "category": "Performance",
+      "subcategory": "NVIDIA Driver",
+      "description": "Sets the global Power Management Mode via nvapi64.dll DRS (0x1057EB71).",
+      "impact": "Medium",
+      "riskTier": "Standard",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "NVAPI DRS global 0x1057EB71",
+      "options": [
+        {
+          "id": "normal",
+          "name": "Normal",
+          "values": {
+            "mode": 5
+          }
+        },
+        {
+          "id": "adaptive",
+          "name": "Adaptive",
+          "values": {
+            "mode": 0
+          }
+        },
+        {
+          "id": "max",
+          "name": "Prefer Maximum Performance",
+          "description": "Keeps clocks up; higher idle power.",
+          "values": {
+            "mode": 1
+          }
+        }
+      ],
+      "defaultOption": "normal",
+      "actions": [
+        {
+          "type": "nvapi_drs",
+          "settingId": "0x1057EB71",
+          "applyValue": 1,
+          "key": "mode"
+        }
+      ]
+    },
+    {
+      "id": "perf.nvidia.rebar",
+      "name": "Inspect & Toggle NVIDIA Resizable BAR DRS Profile",
+      "category": "Performance",
+      "subcategory": "NVIDIA Driver",
+      "description": "Experimental: forces the driver's global ReBAR feature flags (0x000F00BA, 0x000F00BB) for every game instead of NVIDIA's per-game allow list.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "NVAPI DRS global 0x000F00BA; NVAPI DRS global 0x000F00BB",
+      "warning": "Some games run slower with ReBAR forced on. Requires ReBAR enabled in the BIOS.",
+      "actions": [
+        {
+          "type": "nvapi_drs",
+          "settingId": "0x000F00BA",
+          "applyValue": 1
+        },
+        {
+          "type": "nvapi_drs",
+          "settingId": "0x000F00BB",
+          "applyValue": 1
+        }
+      ]
+    },
+    {
+      "id": "perf.input.apply_recommended",
+      "name": "Apply Recommended Input Tweaks",
+      "category": "Performance",
+      "subcategory": "Input & Device Pipeline",
+      "description": "Applies the Recommended input tweaks.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "RunOnce",
+      "targetSummary": "Applies the recommended Performance › Input & Device Pipeline tweaks",
+      "presetScope": {
+        "category": "Performance",
+        "subcategory": "Input & Device Pipeline"
+      },
+      "actions": []
+    },
+    {
+      "id": "perf.input.msi_mode",
+      "name": "Review/Configure MSI Mode for PCI Devices",
+      "category": "Performance",
+      "subcategory": "Input & Device Pipeline",
+      "description": "Lists PCI devices with their MSI (message-signaled interrupt) state and lets you enable MSI mode and device priority for the ones you select.",
+      "impact": "Low",
+      "riskTier": "DangerZone",
+      "inRecommendedPreset": false,
+      "requiresRestart": true,
+      "undoType": "RunOnce",
+      "targetSummary": "pci_msi:msi",
+      "warning": "A device whose driver does not support MSI may fail to start. Revert restores the exact previous values.",
+      "interactive": "pci_msi",
+      "actions": [
+        {
+          "type": "pci_msi",
+          "operation": "msi"
+        }
+      ]
+    },
+    {
+      "id": "perf.input.gpu_affinity",
+      "name": "Choose CPU Cores for GPU Interrupts",
+      "category": "Performance",
+      "subcategory": "Input & Device Pipeline",
+      "description": "Experimental: pins the RTX 4070 Ti SUPER's interrupts to chosen logical processors. P-cores are 0–15, E-cores 16–27 on the i7-14700F.",
+      "impact": "Low",
+      "riskTier": "DangerZone",
+      "inRecommendedPreset": false,
+      "requiresRestart": true,
+      "undoType": "RunOnce",
+      "targetSummary": "interrupt_affinity:affinity",
+      "warning": "Pinning to E-cores or too few cores can increase latency.",
+      "interactive": "interrupt_affinity",
+      "actions": [
+        {
+          "type": "interrupt_affinity",
+          "operation": "affinity",
+          "deviceClass": "Display"
+        }
+      ]
+    },
+    {
+      "id": "perf.input.io_affinity",
+      "name": "Choose CPU Cores for USB/Network/Audio Interrupts",
+      "category": "Performance",
+      "subcategory": "Input & Device Pipeline",
+      "description": "Experimental: pins USB controller, network adapter and audio controller interrupts to chosen cores (P-cores 0–15, E-cores 16–27).",
+      "impact": "Low",
+      "riskTier": "DangerZone",
+      "inRecommendedPreset": false,
+      "requiresRestart": true,
+      "undoType": "RunOnce",
+      "targetSummary": "interrupt_affinity:affinity",
+      "warning": "Wrong choices can cause audio crackle or input lag; revert restores Windows defaults.",
+      "interactive": "interrupt_affinity",
+      "actions": [
+        {
+          "type": "interrupt_affinity",
+          "operation": "affinity",
+          "deviceClass": "USB,Net,Audio"
+        }
+      ]
+    },
+    {
+      "id": "perf.input.usb_selective_suspend",
+      "name": "Check/Toggle USB Selective Suspend",
+      "category": "Performance",
+      "subcategory": "Input & Device Pipeline",
+      "description": "Stops Windows suspending idle USB devices (mouse, keyboard, headset, DAC).",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": true,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "Power 2a737441…/48e6b7a6-50f5-4782-a5d4-53bb8f07e226",
+      "actions": [
+        {
+          "type": "power",
+          "subgroup": "2a737441-1930-4402-8d77-b2bebba308a3",
+          "setting": "48e6b7a6-50f5-4782-a5d4-53bb8f07e226",
+          "acValue": 0,
+          "dcValue": 0
+        }
+      ]
+    },
+    {
+      "id": "perf.input.audio_latency",
+      "name": "Check Audio Latency Settings",
+      "category": "Performance",
+      "subcategory": "Input & Device Pipeline",
+      "description": "Read-only Core Audio / WASAPI inspection: endpoints, shared-mode format and engine periods.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "ReadOnly",
+      "targetSummary": "Core Audio (MMDevice API / IAudioClient)",
+      "actions": [
+        {
+          "type": "wasapi_inspect"
+        }
+      ]
+    },
+    {
+      "id": "perf.input.xhci_imod",
+      "name": "Disable xHCI USB Interrupt Moderation",
+      "category": "Performance",
+      "subcategory": "Input & Device Pipeline",
+      "description": "Shows your xHCI USB controllers and their MSI state. Interrupter moderation itself lives in controller MMIO registers and needs a kernel driver to change, so RigTune reports it instead of writing it.",
+      "impact": "Low",
+      "riskTier": "DangerZone",
+      "inRecommendedPreset": false,
+      "requiresRestart": true,
+      "undoType": "ReadOnly",
+      "targetSummary": "pci_msi:xhci_imod",
+      "actions": [
+        {
+          "type": "pci_msi",
+          "operation": "xhci_imod"
+        }
+      ]
+    },
+    {
+      "id": "perf.input.raw_input_queue",
+      "name": "Optimize Raw Input Message Queue",
+      "category": "Performance",
+      "subcategory": "Input & Device Pipeline",
+      "description": "Reduces mouse/keyboard class driver queue sizes from 100 to 32 events (applies after the next restart).",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\mouclass\\Parameters\\MouseDataQueueSize; HKLM\\SYSTEM\\CurrentControlSet\\Services\\kbdclass\\Parameters\\KeyboardDataQueueSize",
+      "warning": "Very small queues can drop input on high-polling-rate mice; 32 is a conservative value.",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKLM",
+          "view": "Registry64",
+          "path": "SYSTEM\\CurrentControlSet\\Services\\mouclass\\Parameters",
+          "valueName": "MouseDataQueueSize",
+          "valueKind": "DWord",
+          "applyValue": 32
+        },
+        {
+          "type": "registry",
+          "hive": "HKLM",
+          "view": "Registry64",
+          "path": "SYSTEM\\CurrentControlSet\\Services\\kbdclass\\Parameters",
+          "valueName": "KeyboardDataQueueSize",
+          "valueKind": "DWord",
+          "applyValue": 32
+        }
+      ]
+    },
+    {
+      "id": "perf.input.restore_devices",
+      "name": "Restore All Optional Devices",
+      "category": "Performance",
+      "subcategory": "Input & Device Pipeline",
+      "description": "Re-enables every device RigTune disabled, restoring their exact previous state.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "RunOnce",
+      "targetSummary": "device_manager:restore_all",
+      "actions": [
+        {
+          "type": "device_manager",
+          "operation": "restore_all"
+        }
+      ]
+    },
+    {
+      "id": "perf.input.disable_unused_devices",
+      "name": "Disable Unused Devices",
+      "category": "Performance",
+      "subcategory": "Input & Device Pipeline",
+      "description": "Lists rarely-needed system devices rated Safe / Moderate / Risky; disable only the ones you select.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "RunOnce",
+      "targetSummary": "device_manager:disable_candidates",
+      "interactive": "devices",
+      "actions": [
+        {
+          "type": "device_manager",
+          "operation": "disable_candidates",
+          "devices": [
+            {
+              "match": "Microsoft Kernel Debug Network Adapter",
+              "rating": "Safe"
+            },
+            {
+              "match": "Remote Desktop Device Redirector Bus",
+              "rating": "Safe",
+              "note": "Breaks redirecting local devices into Remote Desktop sessions."
+            },
+            {
+              "match": "Microsoft GS Wavetable Synth",
+              "rating": "Safe",
+              "note": "Only used by legacy MIDI playback."
+            },
+            {
+              "match": "System Speaker",
+              "rating": "Safe"
+            },
+            {
+              "match": "Composite Bus Enumerator",
+              "rating": "Moderate",
+              "note": "Used by some virtual devices (e.g. Xbox wireless adapters)."
+            },
+            {
+              "match": "NDIS Virtual Network Adapter Enumerator",
+              "rating": "Moderate"
+            },
+            {
+              "match": "Microsoft Virtual Drive Enumerator",
+              "rating": "Moderate",
+              "note": "Needed to mount VHD/ISO files."
+            },
+            {
+              "match": "UMBus Root Bus Enumerator",
+              "rating": "Moderate"
+            },
+            {
+              "match": "WAN Miniport",
+              "rating": "Moderate",
+              "note": "Needed for VPNs."
+            },
+            {
+              "match": "High precision event timer",
+              "rating": "Risky",
+              "note": "Benefit is disputed; can change timer behaviour."
+            },
+            {
+              "match": "Management Engine Interface",
+              "rating": "Risky",
+              "note": "Intel ME; some firmware and power features depend on it."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "perf.input.mouse_acceleration",
+      "name": "Disable Mouse Pointer Acceleration",
+      "category": "Performance",
+      "subcategory": "Input & Device Pipeline",
+      "description": "Turns off \"Enhance pointer precision\" for 1:1 mouse movement.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": true,
+      "requiresRestart": false,
+      "undoType": "RunOnce",
+      "targetSummary": "HKCU\\Control Panel\\Mouse\\MouseSpeed; HKCU\\Control Panel\\Mouse\\MouseThreshold1; HKCU\\Control Panel\\Mouse\\MouseThreshold2",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKCU",
+          "view": "Registry64",
+          "path": "Control Panel\\Mouse",
+          "valueName": "MouseSpeed",
+          "valueKind": "String",
+          "applyValue": "0"
+        },
+        {
+          "type": "registry",
+          "hive": "HKCU",
+          "view": "Registry64",
+          "path": "Control Panel\\Mouse",
+          "valueName": "MouseThreshold1",
+          "valueKind": "String",
+          "applyValue": "0"
+        },
+        {
+          "type": "registry",
+          "hive": "HKCU",
+          "view": "Registry64",
+          "path": "Control Panel\\Mouse",
+          "valueName": "MouseThreshold2",
+          "valueKind": "String",
+          "applyValue": "0"
+        }
+      ]
+    },
+    {
+      "id": "perf.input.raw_mouse_throttle",
+      "name": "Optimize Raw Mouse Throttle",
+      "category": "Performance",
+      "subcategory": "Input & Device Pipeline",
+      "description": "Sets RawMouseThrottleDuration to 1 ms (1000 Hz raw-input listener rate) instead of the Windows 11 default of 8 ms.",
+      "impact": "Medium",
+      "riskTier": "Standard",
+      "inRecommendedPreset": true,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "HKCU\\Control Panel\\Mouse\\RawMouseThrottleDuration",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKCU",
+          "view": "Registry64",
+          "path": "Control Panel\\Mouse",
+          "valueName": "RawMouseThrottleDuration",
+          "valueKind": "DWord",
+          "applyValue": 1
+        }
+      ]
+    },
+    {
+      "id": "perf.input.keyboard_repeat",
+      "name": "Optimize Keyboard Repeat Rate & Delay",
+      "category": "Performance",
+      "subcategory": "Input & Device Pipeline",
+      "description": "Shortest repeat delay and fastest repeat rate.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": true,
+      "requiresRestart": false,
+      "undoType": "RunOnce",
+      "targetSummary": "HKCU\\Control Panel\\Keyboard\\KeyboardDelay; HKCU\\Control Panel\\Keyboard\\KeyboardSpeed",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKCU",
+          "view": "Registry64",
+          "path": "Control Panel\\Keyboard",
+          "valueName": "KeyboardDelay",
+          "valueKind": "String",
+          "applyValue": "0"
+        },
+        {
+          "type": "registry",
+          "hive": "HKCU",
+          "view": "Registry64",
+          "path": "Control Panel\\Keyboard",
+          "valueName": "KeyboardSpeed",
+          "valueKind": "String",
+          "applyValue": "31"
+        }
+      ]
+    },
+    {
+      "id": "perf.input.accessibility_hotkeys",
+      "name": "Disable Sticky Keys, Filter Keys & Toggle Keys Popups",
+      "category": "Performance",
+      "subcategory": "Input & Device Pipeline",
+      "description": "Clears the hotkey-active bit (0x4) in the StickyKeys, Keyboard Response (Filter Keys) and ToggleKeys flags, so pressing Shift 5× or holding Shift no longer interrupts a game. The features themselves stay available in Settings.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": true,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "HKCU\\Control Panel\\Accessibility\\StickyKeys\\Flags; HKCU\\Control Panel\\Accessibility\\Keyboard Response\\Flags; HKCU\\Control Panel\\Accessibility\\ToggleKeys\\Flags",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKCU",
+          "view": "Registry64",
+          "path": "Control Panel\\Accessibility\\StickyKeys",
+          "valueName": "Flags",
+          "operation": "clearBits",
+          "bitMask": 4
+        },
+        {
+          "type": "registry",
+          "hive": "HKCU",
+          "view": "Registry64",
+          "path": "Control Panel\\Accessibility\\Keyboard Response",
+          "valueName": "Flags",
+          "operation": "clearBits",
+          "bitMask": 4
+        },
+        {
+          "type": "registry",
+          "hive": "HKCU",
+          "view": "Registry64",
+          "path": "Control Panel\\Accessibility\\ToggleKeys",
+          "valueName": "Flags",
+          "operation": "clearBits",
+          "bitMask": 4
+        }
+      ]
+    },
+    {
+      "id": "perf.input.ssd_trim",
+      "name": "Run SSD TRIM",
+      "category": "Performance",
+      "subcategory": "Input & Device Pipeline",
+      "description": "Sends a ReTrim to both WD_BLACK NVMe volumes so the SSD controllers know which blocks are free.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "Permanent",
+      "targetSummary": "ReTrim on every fixed NTFS volume",
+      "actions": [
+        {
+          "type": "ntfs",
+          "setting": "retrim"
+        }
+      ]
+    },
+    {
+      "id": "perf.input.ntfs_tweaks",
+      "name": "Apply NTFS Performance Tweaks",
+      "category": "Performance",
+      "subcategory": "Input & Device Pipeline",
+      "description": "Disables 8.3 short-name creation and last-access timestamp updates on NTFS volumes.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": false,
+      "requiresRestart": true,
+      "undoType": "Toggle",
+      "targetSummary": "NTFS disable8dot3; NTFS disableLastAccess",
+      "warning": "Very old 16-bit era installers may rely on 8.3 names.",
+      "actions": [
+        {
+          "type": "ntfs",
+          "setting": "disable8dot3",
+          "applyValue": 1
+        },
+        {
+          "type": "ntfs",
+          "setting": "disableLastAccess",
+          "applyValue": "0x80000001"
+        }
+      ]
+    },
+    {
+      "id": "perf.input.ntfs_memory",
+      "name": "Set NTFS Memory Usage to Maximum",
+      "category": "Performance",
+      "subcategory": "Input & Device Pipeline",
+      "description": "Lets NTFS use more paged-pool memory for its caches (NtfsMemoryUsage = 2); sensible with 64 GB RAM.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": false,
+      "requiresRestart": true,
+      "undoType": "Toggle",
+      "targetSummary": "NTFS memoryUsage",
+      "actions": [
+        {
+          "type": "ntfs",
+          "setting": "memoryUsage",
+          "applyValue": 2
+        }
+      ]
+    },
+    {
+      "id": "perf.net.apply_recommended",
+      "name": "Apply Recommended Network Tweaks",
+      "category": "Performance",
+      "subcategory": "Network Tuning",
+      "description": "Applies the Recommended network tweaks.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "RunOnce",
+      "targetSummary": "Applies the recommended Performance › Network Tuning tweaks",
+      "presetScope": {
+        "category": "Performance",
+        "subcategory": "Network Tuning"
+      },
+      "actions": []
+    },
+    {
+      "id": "perf.net.interrupt_moderation",
+      "name": "Inspect & Test Network Interrupt Moderation",
+      "category": "Performance",
+      "subcategory": "Network Tuning",
+      "description": "Shows Interrupt Moderation per physical adapter and lets you switch it per adapter (lower latency vs. CPU load). The adapter is briefly restarted.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "RunOnce",
+      "targetSummary": "tcp_profile:adapter_property",
+      "interactive": "network_adapters",
+      "actions": [
+        {
+          "type": "tcp_profile",
+          "operation": "adapter_property",
+          "keyword": "*InterruptModeration",
+          "applyState": "0"
+        }
+      ]
+    },
+    {
+      "id": "perf.net.rss",
+      "name": "Configure Receive Side Scaling (RSS) per Adapter",
+      "category": "Performance",
+      "subcategory": "Network Tuning",
+      "description": "Shows RSS per physical adapter and lets you enable/disable it so receive processing spreads across cores.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "RunOnce",
+      "targetSummary": "tcp_profile:adapter_property",
+      "interactive": "network_adapters",
+      "actions": [
+        {
+          "type": "tcp_profile",
+          "operation": "adapter_property",
+          "keyword": "*RSS",
+          "applyState": "1"
+        }
+      ]
+    },
+    {
+      "id": "perf.net.qos_dscp",
+      "name": "Enable Network QoS / DSCP Traffic Tagging",
+      "category": "Performance",
+      "subcategory": "Network Tuning",
+      "description": "Lets local QoS policies set DSCP tags on a non-domain PC (\"Do not use NLA\").",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Tcpip\\QoS\\Do not use NLA",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKLM",
+          "view": "Registry64",
+          "path": "SYSTEM\\CurrentControlSet\\Services\\Tcpip\\QoS",
+          "valueName": "Do not use NLA",
+          "valueKind": "String",
+          "applyValue": "1"
+        }
+      ]
+    },
+    {
+      "id": "perf.net.throttling_index",
+      "name": "Disable Network Throttling Index",
+      "category": "Performance",
+      "subcategory": "Network Tuning",
+      "description": "Removes MMCSS network throttling during multimedia playback (NetworkThrottlingIndex = 0xFFFFFFFF).",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": true,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Multimedia\\SystemProfile\\NetworkThrottlingIndex",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKLM",
+          "view": "Registry64",
+          "path": "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Multimedia\\SystemProfile",
+          "valueName": "NetworkThrottlingIndex",
+          "valueKind": "DWord",
+          "applyValue": "0xFFFFFFFF"
+        }
+      ]
+    },
+    {
+      "id": "perf.net.nagle",
+      "name": "Disable Nagle Algorithm",
+      "category": "Performance",
+      "subcategory": "Network Tuning",
+      "description": "Sets TcpAckFrequency = 1 and TCPNoDelay = 1 on every physical adapter's TCP/IP interface.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "tcp_profile:nagle",
+      "actions": [
+        {
+          "type": "tcp_profile",
+          "operation": "nagle"
+        }
+      ]
+    },
+    {
+      "id": "perf.net.tcp_safe_profile",
+      "name": "Apply TCP Optimizer Safe Profile",
+      "category": "Performance",
+      "subcategory": "Network Tuning",
+      "description": "Conservative global TCP settings: receive-window auto-tuning Normal, window scaling heuristics off, RSS on.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": true,
+      "requiresRestart": false,
+      "undoType": "RunOnce",
+      "targetSummary": "tcp_profile:global",
+      "actions": [
+        {
+          "type": "tcp_profile",
+          "operation": "global",
+          "setting": "autotuninglevel",
+          "applyState": "normal"
+        },
+        {
+          "type": "tcp_profile",
+          "operation": "global",
+          "setting": "heuristics",
+          "applyState": "disabled"
+        },
+        {
+          "type": "tcp_profile",
+          "operation": "global",
+          "setting": "rss",
+          "applyState": "enabled"
+        }
+      ]
+    },
+    {
+      "id": "perf.net.prefer_ipv4",
+      "name": "Prefer IPv4 Over IPv6",
+      "category": "Performance",
+      "subcategory": "Network Tuning",
+      "description": "Keeps IPv6 enabled but prefers IPv4 in the prefix policy (DisabledComponents = 0x20).",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Tcpip6\\Parameters\\DisabledComponents",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKLM",
+          "view": "Registry64",
+          "path": "SYSTEM\\CurrentControlSet\\Services\\Tcpip6\\Parameters",
+          "valueName": "DisabledComponents",
+          "valueKind": "DWord",
+          "applyValue": 32
+        }
+      ]
+    },
+    {
+      "id": "perf.net.teredo",
+      "name": "Disable Teredo IPv6 Tunneling",
+      "category": "Performance",
+      "subcategory": "Network Tuning",
+      "description": "Disables the Teredo tunnelling adapter via policy.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\TCPIP\\v6Transition\\Teredo_State",
+      "warning": "Xbox party chat and some peer-to-peer game networking use Teredo.",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKLM",
+          "view": "Registry64",
+          "path": "SOFTWARE\\Policies\\Microsoft\\Windows\\TCPIP\\v6Transition",
+          "valueName": "Teredo_State",
+          "valueKind": "String",
+          "applyValue": "Disabled"
+        }
+      ]
+    },
+    {
+      "id": "perf.net.disable_ipv6",
+      "name": "Disable IPv6 Protocol Stack",
+      "category": "Performance",
+      "subcategory": "Network Tuning",
+      "description": "Disables all IPv6 components except loopback (DisabledComponents = 0xFF).",
+      "impact": "Low",
+      "riskTier": "DangerZone",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Tcpip6\\Parameters\\DisabledComponents",
+      "warning": "Microsoft does not support disabling IPv6; HomeGroup-style features, some VPNs and Xbox networking can break.",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKLM",
+          "view": "Registry64",
+          "path": "SYSTEM\\CurrentControlSet\\Services\\Tcpip6\\Parameters",
+          "valueName": "DisabledComponents",
+          "valueKind": "DWord",
+          "applyValue": 255
+        }
+      ]
+    },
+    {
+      "id": "perf.net.timer_resolution",
+      "name": "Set High-Precision Timer Resolution",
+      "category": "Performance",
+      "subcategory": "Network Tuning",
+      "description": "Requests a 0.5 ms timer for RigTune's own process only and measures Sleep(1) before and after. Released on Reset or exit.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "RunOnce",
+      "targetSummary": "NtSetTimerResolution (RigTune process only)",
+      "actions": [
+        {
+          "type": "timer_resolution",
+          "targetMs": 0.5
+        }
+      ]
+    },
+    {
+      "id": "perf.net.media_sense",
+      "name": "Ignore Brief Network Link Drops",
+      "category": "Performance",
+      "subcategory": "Network Tuning",
+      "description": "Keeps the IP configuration when the cable/link drops for a moment (DisableDHCPMediaSense = 1).",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Tcpip\\Parameters\\DisableDHCPMediaSense",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKLM",
+          "view": "Registry64",
+          "path": "SYSTEM\\CurrentControlSet\\Services\\Tcpip\\Parameters",
+          "valueName": "DisableDHCPMediaSense",
+          "valueKind": "DWord",
+          "applyValue": 1
+        }
+      ]
+    },
+    {
+      "id": "perf.registry.apply_recommended",
+      "name": "Apply Recommended Registry Tweaks",
+      "category": "Performance",
+      "subcategory": "Registry & Policy",
+      "description": "Applies the Recommended registry & policy tweaks.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "RunOnce",
+      "targetSummary": "Applies the recommended Performance › Registry & Policy tweaks",
+      "presetScope": {
+        "category": "Performance",
+        "subcategory": "Registry & Policy"
+      },
+      "actions": []
+    },
+    {
+      "id": "perf.registry.maintenance_tasks",
+      "name": "Optimize Windows Task Scheduler Maintenance Tasks",
+      "category": "Performance",
+      "subcategory": "Registry & Policy",
+      "description": "Disables telemetry and data-collection maintenance tasks (compatibility appraiser, CEIP, disk diagnostics, feedback, error queue, maps updates).",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": true,
+      "requiresRestart": false,
+      "undoType": "RunOnce",
+      "targetSummary": "Task \\Microsoft\\Windows\\Application Experience\\Microsoft Compatibility Appraiser; Task \\Microsoft\\Windows\\Application Experience\\ProgramDataUpdater; Task \\Microsoft\\Windows\\Customer Experience Improvement Program\\Consolidator; Task \\Microsoft\\Windows\\Customer Experience Improvement Program\\UsbCeip; Task \\Microsoft\\Windows\\DiskDiagnostic\\Microsoft-Windows-DiskDiagnosticDataCollector; Task \\Micro…",
+      "actions": [
+        {
+          "type": "schtask",
+          "taskPath": "\\Microsoft\\Windows\\Application Experience\\Microsoft Compatibility Appraiser",
+          "applyState": "Disabled"
+        },
+        {
+          "type": "schtask",
+          "taskPath": "\\Microsoft\\Windows\\Application Experience\\ProgramDataUpdater",
+          "applyState": "Disabled"
+        },
+        {
+          "type": "schtask",
+          "taskPath": "\\Microsoft\\Windows\\Customer Experience Improvement Program\\Consolidator",
+          "applyState": "Disabled"
+        },
+        {
+          "type": "schtask",
+          "taskPath": "\\Microsoft\\Windows\\Customer Experience Improvement Program\\UsbCeip",
+          "applyState": "Disabled"
+        },
+        {
+          "type": "schtask",
+          "taskPath": "\\Microsoft\\Windows\\DiskDiagnostic\\Microsoft-Windows-DiskDiagnosticDataCollector",
+          "applyState": "Disabled"
+        },
+        {
+          "type": "schtask",
+          "taskPath": "\\Microsoft\\Windows\\Feedback\\Siuf\\DmClient",
+          "applyState": "Disabled"
+        },
+        {
+          "type": "schtask",
+          "taskPath": "\\Microsoft\\Windows\\Feedback\\Siuf\\DmClientOnScenarioDownload",
+          "applyState": "Disabled"
+        },
+        {
+          "type": "schtask",
+          "taskPath": "\\Microsoft\\Windows\\Windows Error Reporting\\QueueReporting",
+          "applyState": "Disabled"
+        },
+        {
+          "type": "schtask",
+          "taskPath": "\\Microsoft\\Windows\\Maps\\MapsUpdateTask",
+          "applyState": "Disabled"
+        }
+      ]
+    },
+    {
+      "id": "perf.registry.mmcss",
+      "name": "Optimize MMCSS Multimedia Scheduler",
+      "category": "Performance",
+      "subcategory": "Registry & Policy",
+      "description": "Raises the MMCSS \"Games\" task: GPU Priority 8, Priority 6, Scheduling Category High, SFIO Priority High.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": true,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Multimedia\\SystemProfile\\Tasks\\Games\\GPU Priority; HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Multimedia\\SystemProfile\\Tasks\\Games\\Priority; HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Multimedia\\SystemProfile\\Tasks\\Games\\Scheduling Category; HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Multimedia\\SystemProfile\\Tasks\\Games\\SFIO…",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKLM",
+          "view": "Registry64",
+          "path": "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Multimedia\\SystemProfile\\Tasks\\Games",
+          "valueName": "GPU Priority",
+          "valueKind": "DWord",
+          "applyValue": 8
+        },
+        {
+          "type": "registry",
+          "hive": "HKLM",
+          "view": "Registry64",
+          "path": "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Multimedia\\SystemProfile\\Tasks\\Games",
+          "valueName": "Priority",
+          "valueKind": "DWord",
+          "applyValue": 6
+        },
+        {
+          "type": "registry",
+          "hive": "HKLM",
+          "view": "Registry64",
+          "path": "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Multimedia\\SystemProfile\\Tasks\\Games",
+          "valueName": "Scheduling Category",
+          "valueKind": "String",
+          "applyValue": "High"
+        },
+        {
+          "type": "registry",
+          "hive": "HKLM",
+          "view": "Registry64",
+          "path": "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Multimedia\\SystemProfile\\Tasks\\Games",
+          "valueName": "SFIO Priority",
+          "valueKind": "String",
+          "applyValue": "High"
+        }
+      ]
+    },
+    {
+      "id": "perf.registry.wu_auto_download",
+      "name": "Disable Windows Update Auto-Download (wuauserv)",
+      "category": "Performance",
+      "subcategory": "Registry & Policy",
+      "description": "Windows Update notifies before downloading (AUOptions = 2) instead of downloading automatically.",
+      "impact": "Low",
+      "riskTier": "DangerZone",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsUpdate\\AU\\AUOptions; HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsUpdate\\AU\\NoAutoUpdate",
+      "warning": "Security updates wait until you install them manually.",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKLM",
+          "view": "Registry64",
+          "path": "SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsUpdate\\AU",
+          "valueName": "AUOptions",
+          "valueKind": "DWord",
+          "applyValue": 2
+        },
+        {
+          "type": "registry",
+          "hive": "HKLM",
+          "view": "Registry64",
+          "path": "SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsUpdate\\AU",
+          "valueName": "NoAutoUpdate",
+          "valueKind": "DWord",
+          "applyValue": 0
+        }
+      ]
+    },
+    {
+      "id": "perf.registry.block_wu_drivers",
+      "name": "Block Windows Update from Installing Drivers",
+      "category": "Performance",
+      "subcategory": "Registry & Policy",
+      "description": "Stops Windows Update replacing your NVIDIA and chipset drivers with older WHQL versions.",
+      "impact": "Medium",
+      "riskTier": "Standard",
+      "inRecommendedPreset": true,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsUpdate\\ExcludeWUDriversInQualityUpdate",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKLM",
+          "view": "Registry64",
+          "path": "SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsUpdate",
+          "valueName": "ExcludeWUDriversInQualityUpdate",
+          "valueKind": "DWord",
+          "applyValue": 1
+        }
+      ]
+    },
+    {
+      "id": "perf.registry.no_lock_screen",
+      "name": "Disable Lock Screen Policy",
+      "category": "Performance",
+      "subcategory": "Registry & Policy",
+      "description": "Goes straight to the sign-in screen.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Personalization\\NoLockScreen",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKLM",
+          "view": "Registry64",
+          "path": "SOFTWARE\\Policies\\Microsoft\\Windows\\Personalization",
+          "valueName": "NoLockScreen",
+          "valueKind": "DWord",
+          "applyValue": 1
+        }
+      ]
+    },
+    {
+      "id": "perf.registry.no_auto_reboot",
+      "name": "Disable Auto-Reboot While Logged In",
+      "category": "Performance",
+      "subcategory": "Registry & Policy",
+      "description": "Windows Update will not restart the PC while you are signed in (e.g. during an overnight download or game).",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": true,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsUpdate\\AU\\NoAutoRebootWithLoggedOnUsers",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKLM",
+          "view": "Registry64",
+          "path": "SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsUpdate\\AU",
+          "valueName": "NoAutoRebootWithLoggedOnUsers",
+          "valueKind": "DWord",
+          "applyValue": 1
+        }
+      ]
+    },
+    {
+      "id": "perf.registry.multiselect_limit",
+      "name": "Remove File Explorer Multi-Select Limit",
+      "category": "Performance",
+      "subcategory": "Registry & Policy",
+      "description": "Raises the 15-item limit for context-menu actions (Open/Print) on multiple selected files to 100.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "Permanent",
+      "targetSummary": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\MultipleInvokePromptMinimum",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKCU",
+          "view": "Registry64",
+          "path": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer",
+          "valueName": "MultipleInvokePromptMinimum",
+          "valueKind": "DWord",
+          "applyValue": 100
+        }
+      ]
+    },
+    {
+      "id": "perf.registry.menu_show_delay",
+      "name": "Set Menu Animation Delay to Zero",
+      "category": "Performance",
+      "subcategory": "Registry & Policy",
+      "description": "Menus open instantly (MenuShowDelay = 0).",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": true,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "HKCU\\Control Panel\\Desktop\\MenuShowDelay",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKCU",
+          "view": "Registry64",
+          "path": "Control Panel\\Desktop",
+          "valueName": "MenuShowDelay",
+          "valueKind": "String",
+          "applyValue": "0"
+        }
+      ]
+    },
+    {
+      "id": "perf.registry.consumer_features",
+      "name": "Disable Windows Consumer Features",
+      "category": "Performance",
+      "subcategory": "Registry & Policy",
+      "description": "Stops Windows auto-installing promoted apps and games (Candy Crush, etc.).",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": true,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\CloudContent\\DisableWindowsConsumerFeatures",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKLM",
+          "view": "Registry64",
+          "path": "SOFTWARE\\Policies\\Microsoft\\Windows\\CloudContent",
+          "valueName": "DisableWindowsConsumerFeatures",
+          "valueKind": "DWord",
+          "applyValue": 1
+        }
+      ]
+    },
+    {
+      "id": "system.fast_startup",
+      "name": "Disable Fast Startup (Hybrid Boot)",
+      "category": "System",
+      "subcategory": "Boot & Recovery",
+      "description": "Shutdown becomes a full shutdown, so driver and Windows Update state is always clean (hibernation is already off on this PC).",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": true,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Power\\HiberbootEnabled",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKLM",
+          "view": "Registry64",
+          "path": "SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Power",
+          "valueName": "HiberbootEnabled",
+          "valueKind": "DWord",
+          "applyValue": 0
+        }
+      ]
+    },
+    {
+      "id": "system.spectre_meltdown",
+      "name": "Toggle Spectre / Meltdown CPU Mitigations",
+      "category": "System",
+      "subcategory": "Boot & Recovery",
+      "description": "Disables the Spectre v2 / Meltdown kernel mitigations (FeatureSettingsOverride = 3).",
+      "impact": "Low",
+      "riskTier": "DangerZone",
+      "inRecommendedPreset": false,
+      "requiresRestart": true,
+      "undoType": "Toggle",
+      "targetSummary": "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Memory Management\\FeatureSettingsOverride; HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Memory Management\\FeatureSettingsOverrideMask",
+      "warning": "Removes protection against speculative-execution attacks from malicious code. Gains on a 14700F are small.",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKLM",
+          "view": "Registry64",
+          "path": "SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Memory Management",
+          "valueName": "FeatureSettingsOverride",
+          "valueKind": "DWord",
+          "applyValue": 3
+        },
+        {
+          "type": "registry",
+          "hive": "HKLM",
+          "view": "Registry64",
+          "path": "SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Memory Management",
+          "valueName": "FeatureSettingsOverrideMask",
+          "valueKind": "DWord",
+          "applyValue": 3
+        }
+      ]
+    },
+    {
+      "id": "system.vbs_hvci",
+      "name": "Disable VBS and HVCI Security Layer",
+      "category": "System",
+      "subcategory": "Boot & Recovery",
+      "description": "Turns off Virtualization-Based Security and Memory Integrity (HVCI).",
+      "impact": "Medium",
+      "riskTier": "DangerZone",
+      "inRecommendedPreset": false,
+      "requiresRestart": true,
+      "undoType": "Toggle",
+      "targetSummary": "HKLM\\SYSTEM\\CurrentControlSet\\Control\\DeviceGuard\\EnableVirtualizationBasedSecurity; HKLM\\SYSTEM\\CurrentControlSet\\Control\\DeviceGuard\\Scenarios\\HypervisorEnforcedCodeIntegrity\\Enabled",
+      "warning": "Removes kernel exploit protection; some anti-cheat titles require Memory Integrity ON.",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKLM",
+          "view": "Registry64",
+          "path": "SYSTEM\\CurrentControlSet\\Control\\DeviceGuard",
+          "valueName": "EnableVirtualizationBasedSecurity",
+          "valueKind": "DWord",
+          "applyValue": 0
+        },
+        {
+          "type": "registry",
+          "hive": "HKLM",
+          "view": "Registry64",
+          "path": "SYSTEM\\CurrentControlSet\\Control\\DeviceGuard\\Scenarios\\HypervisorEnforcedCodeIntegrity",
+          "valueName": "Enabled",
+          "valueKind": "DWord",
+          "applyValue": 0
+        }
+      ]
+    },
+    {
+      "id": "system.hyperv_hypervisor",
+      "name": "Disable Hyper-V Hypervisor",
+      "category": "System",
+      "subcategory": "Boot & Recovery",
+      "description": "Sets the boot hypervisor launch type to Off.",
+      "impact": "Low",
+      "riskTier": "DangerZone",
+      "inRecommendedPreset": false,
+      "requiresRestart": true,
+      "undoType": "Toggle",
+      "targetSummary": "DISM bcd hypervisorlaunchtype",
+      "warning": "Breaks WSL2 (installed on this PC), Docker, Windows Sandbox and VBS.",
+      "actions": [
+        {
+          "type": "dism",
+          "operation": "bcd",
+          "setting": "hypervisorlaunchtype",
+          "applyState": "Off"
+        }
+      ]
+    },
+    {
+      "id": "system.winre",
+      "name": "Toggle Windows Recovery Environment (WinRE)",
+      "category": "System",
+      "subcategory": "Boot & Recovery",
+      "description": "Disables WinRE (reagentc /disable). Revert re-enables it.",
+      "impact": "Low",
+      "riskTier": "DangerZone",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "RunOnce",
+      "targetSummary": "DISM winre",
+      "warning": "Without WinRE, automatic repair and \"Reset this PC\" from boot are unavailable.",
+      "actions": [
+        {
+          "type": "dism",
+          "operation": "winre",
+          "applyState": "Disabled"
+        }
+      ]
+    },
+    {
+      "id": "system.boot_menu",
+      "name": "Switch Classic F8 vs. Modern Boot Menu",
+      "category": "System",
+      "subcategory": "Boot & Recovery",
+      "description": "Switches to the classic text boot menu (F8 for Safe Mode). Revert restores the modern menu.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "RunOnce",
+      "targetSummary": "DISM bcd bootmenupolicy",
+      "actions": [
+        {
+          "type": "dism",
+          "operation": "bcd",
+          "setting": "bootmenupolicy",
+          "applyState": "Legacy"
+        }
+      ]
+    },
+    {
+      "id": "system.boot_log",
+      "name": "Toggle Boot Logging (ntbtlog.txt)",
+      "category": "System",
+      "subcategory": "Boot & Recovery",
+      "description": "Writes the driver load log to C:\\Windows\\ntbtlog.txt on every boot.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "RunOnce",
+      "targetSummary": "DISM bcd bootlog",
+      "actions": [
+        {
+          "type": "dism",
+          "operation": "bcd",
+          "setting": "bootlog",
+          "applyState": "Yes"
+        }
+      ]
+    },
+    {
+      "id": "system.ui.apply_recommended",
+      "name": "Apply Recommended Windows UI Tweaks",
+      "category": "System",
+      "subcategory": "Windows UI Tweaks",
+      "description": "Applies the Recommended Windows UI tweaks.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "RunOnce",
+      "targetSummary": "Applies the recommended System › Windows UI Tweaks tweaks",
+      "presetScope": {
+        "category": "System",
+        "subcategory": "Windows UI Tweaks"
+      },
+      "actions": []
+    },
+    {
+      "id": "system.ui.hibernation",
+      "name": "Disable Hibernation File",
+      "category": "System",
+      "subcategory": "Windows UI Tweaks",
+      "description": "Status-aware: hibernation is already off on this PC, so this normally shows as applied. Turning it off frees hiberfil.sys.",
+      "impact": "Low",
+      "riskTier": "DangerZone",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power\\HibernateEnabled",
+      "warning": "Also disables Fast Startup and hibernate.",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKLM",
+          "view": "Registry64",
+          "path": "SYSTEM\\CurrentControlSet\\Control\\Power",
+          "valueName": "HibernateEnabled",
+          "valueKind": "DWord",
+          "applyValue": 0
+        }
+      ]
+    },
+    {
+      "id": "system.ui.visual_effects",
+      "name": "Optimize Visual Effects for Performance",
+      "category": "System",
+      "subcategory": "Windows UI Tweaks",
+      "description": "Selects \"Adjust for best performance\" (animations, shadows and smoothing off).",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\VisualEffects\\VisualFXSetting",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKCU",
+          "view": "Registry64",
+          "path": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\VisualEffects",
+          "valueName": "VisualFXSetting",
+          "valueKind": "DWord",
+          "applyValue": 2
+        }
+      ]
+    },
+    {
+      "id": "system.ui.end_task",
+      "name": "Add End Task to Taskbar Right-Click Menu",
+      "category": "System",
+      "subcategory": "Windows UI Tweaks",
+      "description": "Adds End task to taskbar app menus.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": true,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced\\TaskbarDeveloperSettings\\TaskbarEndTask",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKCU",
+          "view": "Registry64",
+          "path": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced\\TaskbarDeveloperSettings",
+          "valueName": "TaskbarEndTask",
+          "valueKind": "DWord",
+          "applyValue": 1
+        }
+      ]
+    },
+    {
+      "id": "system.ui.classic_context_menu",
+      "name": "Restore Classic Windows 11 Right-Click Context Menu",
+      "category": "System",
+      "subcategory": "Windows UI Tweaks",
+      "description": "Shows the full classic context menu without \"Show more options\" (takes effect after Explorer restarts).",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "HKCU\\Software\\Classes\\CLSID\\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\\InprocServer32\\(Default)",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKCU",
+          "view": "Registry64",
+          "path": "Software\\Classes\\CLSID\\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\\InprocServer32",
+          "valueName": "",
+          "valueKind": "String",
+          "applyValue": ""
+        }
+      ]
+    },
+    {
+      "id": "system.ui.explorer_this_pc",
+      "name": "Set File Explorer to Open This PC",
+      "category": "System",
+      "subcategory": "Windows UI Tweaks",
+      "description": "File Explorer opens to This PC instead of Home.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": true,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced\\LaunchTo",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKCU",
+          "view": "Registry64",
+          "path": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
+          "valueName": "LaunchTo",
+          "valueKind": "DWord",
+          "applyValue": 1
+        }
+      ]
+    },
+    {
+      "id": "system.ui.notifications",
+      "name": "Disable All Windows Notifications",
+      "category": "System",
+      "subcategory": "Windows UI Tweaks",
+      "description": "Turns off toast notifications for every app.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\PushNotifications\\ToastEnabled",
+      "warning": "You will also miss RigTune's own tray alerts (e.g. refresh-rate watchdog).",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKCU",
+          "view": "Registry64",
+          "path": "Software\\Microsoft\\Windows\\CurrentVersion\\PushNotifications",
+          "valueName": "ToastEnabled",
+          "valueKind": "DWord",
+          "applyValue": 0
+        }
+      ]
+    },
+    {
+      "id": "system.ui.bluetooth_services",
+      "name": "Disable Bluetooth Background Services",
+      "category": "System",
+      "subcategory": "Windows UI Tweaks",
+      "description": "Disables the Bluetooth support and audio gateway services (bthserv, BTAGService).",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "Service bthserv → Disabled; Service BTAGService → Disabled",
+      "warning": "All Bluetooth devices stop working.",
+      "actions": [
+        {
+          "type": "service",
+          "serviceName": "bthserv",
+          "startType": "Disabled",
+          "stopService": true
+        },
+        {
+          "type": "service",
+          "serviceName": "BTAGService",
+          "startType": "Disabled",
+          "stopService": true
+        }
+      ]
+    },
+    {
+      "id": "system.ui.driver_autoinstall",
+      "name": "Stop Windows from Auto-Installing Drivers",
+      "category": "System",
+      "subcategory": "Windows UI Tweaks",
+      "description": "Stops device metadata and driver downloads when new hardware is connected.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Device Metadata\\PreventDeviceMetadataFromNetwork; HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\DriverSearching\\SearchOrderConfig",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKLM",
+          "view": "Registry64",
+          "path": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Device Metadata",
+          "valueName": "PreventDeviceMetadataFromNetwork",
+          "valueKind": "DWord",
+          "applyValue": 1
+        },
+        {
+          "type": "registry",
+          "hive": "HKLM",
+          "view": "Registry64",
+          "path": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\DriverSearching",
+          "valueName": "SearchOrderConfig",
+          "valueKind": "DWord",
+          "applyValue": 0
+        }
+      ]
+    },
+    {
+      "id": "system.ui.search_indexing",
+      "name": "Disable Windows Search File Indexing (WSearch)",
+      "category": "System",
+      "subcategory": "Windows UI Tweaks",
+      "description": "Disables the Windows Search indexing service.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "Service WSearch → Disabled",
+      "warning": "Start-menu and Explorer search become slower.",
+      "actions": [
+        {
+          "type": "service",
+          "serviceName": "WSearch",
+          "startType": "Disabled",
+          "stopService": true
+        }
+      ]
+    },
+    {
+      "id": "system.usability.file_extensions",
+      "name": "Show File Extensions in Explorer",
+      "category": "System",
+      "subcategory": "Usability & Convenience",
+      "description": "Always shows file extensions (safer against fake .pdf.exe files).",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": true,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced\\HideFileExt",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKCU",
+          "view": "Registry64",
+          "path": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
+          "valueName": "HideFileExt",
+          "valueKind": "DWord",
+          "applyValue": 0
+        }
+      ]
+    },
+    {
+      "id": "system.usability.hidden_files",
+      "name": "Show Hidden Files and Folders",
+      "category": "System",
+      "subcategory": "Usability & Convenience",
+      "description": "Shows hidden files and folders in Explorer.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced\\Hidden",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKCU",
+          "view": "Registry64",
+          "path": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
+          "valueName": "Hidden",
+          "valueKind": "DWord",
+          "applyValue": 1
+        }
+      ]
+    },
+    {
+      "id": "system.usability.numlock",
+      "name": "Enable NumLock on Startup",
+      "category": "System",
+      "subcategory": "Usability & Convenience",
+      "description": "NumLock is on at the sign-in screen and after sign-in.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": true,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "HKU\\.DEFAULT\\Control Panel\\Keyboard\\InitialKeyboardIndicators; HKCU\\Control Panel\\Keyboard\\InitialKeyboardIndicators",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKU",
+          "view": "Registry64",
+          "path": ".DEFAULT\\Control Panel\\Keyboard",
+          "valueName": "InitialKeyboardIndicators",
+          "valueKind": "String",
+          "applyValue": "2"
+        },
+        {
+          "type": "registry",
+          "hive": "HKCU",
+          "view": "Registry64",
+          "path": "Control Panel\\Keyboard",
+          "valueName": "InitialKeyboardIndicators",
+          "valueKind": "String",
+          "applyValue": "2"
+        }
+      ]
+    },
+    {
+      "id": "system.usability.snap_hover",
+      "name": "Disable Snap Layouts on Hover",
+      "category": "System",
+      "subcategory": "Usability & Convenience",
+      "description": "Hovering the maximize button no longer pops up Snap layouts.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced\\EnableSnapAssistFlyout",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKCU",
+          "view": "Registry64",
+          "path": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
+          "valueName": "EnableSnapAssistFlyout",
+          "valueKind": "DWord",
+          "applyValue": 0
+        }
+      ]
+    },
+    {
+      "id": "system.usability.taskbar_chat",
+      "name": "Disable Taskbar Chat",
+      "category": "System",
+      "subcategory": "Usability & Convenience",
+      "description": "Removes the Chat/Teams button from the taskbar.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": true,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced\\TaskbarMn; HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Chat\\ChatIcon",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKCU",
+          "view": "Registry64",
+          "path": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
+          "valueName": "TaskbarMn",
+          "valueKind": "DWord",
+          "applyValue": 0
+        },
+        {
+          "type": "registry",
+          "hive": "HKLM",
+          "view": "Registry64",
+          "path": "SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Chat",
+          "valueName": "ChatIcon",
+          "valueKind": "DWord",
+          "applyValue": 3
+        }
+      ]
+    },
+    {
+      "id": "system.usability.tips",
+      "name": "Disable Windows Tips & Suggestions",
+      "category": "System",
+      "subcategory": "Usability & Convenience",
+      "description": "Stops tips, tricks and \"finish setting up\" nags.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": true,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager\\SubscribedContent-338389Enabled; HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\UserProfileEngagement\\ScoobeSystemSettingEnabled",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKCU",
+          "view": "Registry64",
+          "path": "Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+          "valueName": "SubscribedContent-338389Enabled",
+          "valueKind": "DWord",
+          "applyValue": 0
+        },
+        {
+          "type": "registry",
+          "hive": "HKCU",
+          "view": "Registry64",
+          "path": "Software\\Microsoft\\Windows\\CurrentVersion\\UserProfileEngagement",
+          "valueName": "ScoobeSystemSettingEnabled",
+          "valueKind": "DWord",
+          "applyValue": 0
+        }
+      ]
+    },
+    {
+      "id": "system.usability.wallpaper_quality",
+      "name": "Enable Full Wallpaper Quality",
+      "category": "System",
+      "subcategory": "Usability & Convenience",
+      "description": "Stops Windows recompressing JPEG wallpapers (JPEGImportQuality = 100).",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": true,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "HKCU\\Control Panel\\Desktop\\JPEGImportQuality",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKCU",
+          "view": "Registry64",
+          "path": "Control Panel\\Desktop",
+          "valueName": "JPEGImportQuality",
+          "valueKind": "DWord",
+          "applyValue": 100
+        }
+      ]
+    },
+    {
+      "id": "system.usability.clipboard_suggestions",
+      "name": "Remove Clipboard Suggested Actions",
+      "category": "System",
+      "subcategory": "Usability & Convenience",
+      "description": "Stops suggested actions (call, add to calendar) popping up when you copy text.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "Permanent",
+      "targetSummary": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\SmartActionPlatform\\SmartClipboard\\Disabled",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKCU",
+          "view": "Registry64",
+          "path": "Software\\Microsoft\\Windows\\CurrentVersion\\SmartActionPlatform\\SmartClipboard",
+          "valueName": "Disabled",
+          "valueKind": "DWord",
+          "applyValue": 1
+        }
+      ]
+    },
+    {
+      "id": "system.usability.start_recommendations",
+      "name": "Disable Start Menu Recommendations",
+      "category": "System",
+      "subcategory": "Usability & Convenience",
+      "description": "Hides recommended files and app promotions in Start.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": true,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced\\Start_IrisRecommendations; HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced\\Start_TrackDocs",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKCU",
+          "view": "Registry64",
+          "path": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
+          "valueName": "Start_IrisRecommendations",
+          "valueKind": "DWord",
+          "applyValue": 0
+        },
+        {
+          "type": "registry",
+          "hive": "HKCU",
+          "view": "Registry64",
+          "path": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
+          "valueName": "Start_TrackDocs",
+          "valueKind": "DWord",
+          "applyValue": 0
+        }
+      ]
+    },
+    {
+      "id": "system.usability.safe_search",
+      "name": "Disable Safe Search in Windows Search",
+      "category": "System",
+      "subcategory": "Usability & Convenience",
+      "description": "Sets Windows Search SafeSearch to Off.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "Toggle",
+      "targetSummary": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\SearchSettings\\SafeSearchMode",
+      "actions": [
+        {
+          "type": "registry",
+          "hive": "HKCU",
+          "view": "Registry64",
+          "path": "Software\\Microsoft\\Windows\\CurrentVersion\\SearchSettings",
+          "valueName": "SafeSearchMode",
+          "valueKind": "DWord",
+          "applyValue": 0
+        }
+      ]
+    },
+    {
+      "id": "care.temp_system_files",
+      "name": "Clean Up Temporary System Files",
+      "category": "System Care",
+      "subcategory": "System Cleanup",
+      "description": "Windows Update leftovers, delivery optimization cache and old logs. Runs from System Care with a size preview.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "Permanent",
+      "targetSummary": "cleanup:temp_system_files",
+      "actions": [
+        {
+          "type": "cleanup",
+          "operation": "temp_system_files"
+        }
+      ]
+    },
+    {
+      "id": "care.temp_files",
+      "name": "Delete Windows & User Temp Files",
+      "category": "System Care",
+      "subcategory": "System Cleanup",
+      "description": "%TEMP% and C:\\Windows\\Temp files not in use. Runs from System Care with a size preview.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "Permanent",
+      "targetSummary": "cleanup:temp_files",
+      "actions": [
+        {
+          "type": "cleanup",
+          "operation": "temp_files"
+        }
+      ]
+    },
+    {
+      "id": "care.prefetch",
+      "name": "Clear Windows Prefetch Cache",
+      "category": "System Care",
+      "subcategory": "System Cleanup",
+      "description": "C:\\Windows\\Prefetch (rebuilt automatically). Runs from System Care with a size preview.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "RunOnce",
+      "targetSummary": "cleanup:prefetch",
+      "actions": [
+        {
+          "type": "cleanup",
+          "operation": "prefetch"
+        }
+      ]
+    },
+    {
+      "id": "care.dns_cache",
+      "name": "Flush DNS Cache",
+      "category": "System Care",
+      "subcategory": "System Cleanup",
+      "description": "Clears the DNS resolver cache. Runs from System Care with a size preview.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "RunOnce",
+      "targetSummary": "cleanup:dns_cache",
+      "actions": [
+        {
+          "type": "cleanup",
+          "operation": "dns_cache"
+        }
+      ]
+    },
+    {
+      "id": "care.gpu_shader_cache",
+      "name": "Clear GPU Shader Cache",
+      "category": "System Care",
+      "subcategory": "System Cleanup",
+      "description": "NVIDIA DXCache/GLCache and the DirectX shader cache (rebuilt by games). Runs from System Care with a size preview.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "RunOnce",
+      "targetSummary": "cleanup:gpu_shader_cache",
+      "actions": [
+        {
+          "type": "cleanup",
+          "operation": "gpu_shader_cache"
+        }
+      ]
+    },
+    {
+      "id": "care.thumbnails",
+      "name": "Delete Thumbnail Cache",
+      "category": "System Care",
+      "subcategory": "System Cleanup",
+      "description": "Explorer thumbnail databases (rebuilt on demand). Runs from System Care with a size preview.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "Permanent",
+      "targetSummary": "cleanup:thumbnails",
+      "actions": [
+        {
+          "type": "cleanup",
+          "operation": "thumbnails"
+        }
+      ]
+    },
+    {
+      "id": "care.ram_standby",
+      "name": "Clean RAM Working Sets & Standby Cache",
+      "category": "System Care",
+      "subcategory": "System Cleanup",
+      "description": "Trims working sets and purges the standby list. Runs from System Care with a size preview.",
+      "impact": "Low",
+      "riskTier": "Standard",
+      "inRecommendedPreset": false,
+      "requiresRestart": false,
+      "undoType": "Permanent",
+      "targetSummary": "cleanup:ram_standby",
+      "actions": [
+        {
+          "type": "cleanup",
+          "operation": "ram_standby"
+        }
+      ]
+    }
+  ]
+}
