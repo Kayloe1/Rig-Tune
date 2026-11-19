@@ -1,0 +1,20 @@
+<Page
+    x:Class="RigTune.App.Views.TweaksView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:RigTune.App.Controls"
+    xmlns:sys="clr-namespace:System;assembly=System.Runtime"
+    Title="Tweaks">
+    <controls:ComingSoonPanel
+        Title="Tweaks"
+        Phase="Coming in a later build phase"
+        Subtitle="Searchable catalog of 185 tailored Windows tweaks across Privacy, Debloat, Services, Performance and System — every change snapshotted and revertable.">
+        <controls:ComingSoonPanel.Features>
+                <sys:String>Category groups with All / Active / Needs Restart / Danger Zone filter pills</sys:String>
+                <sys:String>Danger Zone opt-in toggle (off by default)</sys:String>
+                <sys:String>Area-level “Apply Recommended” presets with a restore-point prompt</sys:String>
+                <sys:String>Per-tweak inspector drawer: exact registry/service/power/NVAPI target and live status</sys:String>
+                <sys:String>Global “Revert All Tweaks”</sys:String>
+        </controls:ComingSoonPanel.Features>
+    </controls:ComingSoonPanel>
+</Page>

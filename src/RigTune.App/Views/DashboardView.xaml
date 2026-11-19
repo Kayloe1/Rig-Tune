@@ -1,0 +1,317 @@
+<Page
+    x:Class="RigTune.App.Views.DashboardView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:models="clr-namespace:RigTune.Core.Models;assembly=RigTune.Core"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    xmlns:vm="clr-namespace:RigTune.App.ViewModels"
+    Title="Dashboard"
+    d:DataContext="{d:DesignInstance Type=vm:DashboardViewModel}"
+    mc:Ignorable="d">
+    <ScrollViewer Padding="32,24,24,24" VerticalScrollBarVisibility="Auto">
+        <StackPanel>
+            <!--  Header  -->
+            <Grid Margin="0,0,12,20">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <StackPanel>
+                    <TextBlock Style="{StaticResource PageTitle}" Text="Dashboard" />
+                    <TextBlock Style="{StaticResource PageSubtitle}">
+                        <Run Text="{Binding MachineName, Mode=OneWay}" />
+                        <Run Text=" · live host snapshot · uptime " />
+                        <Run Text="{Binding Uptime, Mode=OneWay}" />
+                    </TextBlock>
+                </StackPanel>
+                <StackPanel Grid.Column="1" VerticalAlignment="Center" Orientation="Horizontal">
+                    <ui:ProgressRing
+                        Width="20"
+                        Height="20"
+                        Margin="0,0,12,0"
+                        IsIndeterminate="True"
+                        Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibility}}" />
+                    <ui:Button
+                        Command="{Binding RefreshCommand}"
+                        Content="Refresh"
+                        Icon="{ui:SymbolIcon ArrowClockwise24}" />
+                </StackPanel>
+            </Grid>
+
+            <!--  Host profile cards  -->
+            <UniformGrid Columns="3">
+                <ui:Card Style="{StaticResource HostCard}">
+                    <StackPanel>
+                        <TextBlock Style="{StaticResource CardTitle}" Text="OPERATING SYSTEM" />
+                        <TextBlock Style="{StaticResource CardValue}" Text="{Binding OsTitle}" />
+                        <TextBlock Style="{StaticResource CardDetail}" Text="{Binding OsDetail}" />
+                        <TextBlock Style="{StaticResource CardDetail}" Text="{Binding Virtualization}" />
+                    </StackPanel>
+                </ui:Card>
+
+                <ui:Card Style="{StaticResource HostCard}">
+                    <StackPanel>
+                        <TextBlock Style="{StaticResource CardTitle}" Text="PROCESSOR" />
+                        <TextBlock Style="{StaticResource CardValue}" Text="{Binding CpuName}" />
+                        <TextBlock Style="{StaticResource CardDetail}" Text="{Binding CpuTopologyText}" />
+                        <Grid Margin="0,10,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <TextBlock Style="{StaticResource CardDetail}" Text="P-core threads" />
+                            <TextBlock
+                                Grid.Column="1"
+                                Margin="12,4,0,0"
+                                FontWeight="SemiBold"
+                                Text="{Binding PCoreRange}" />
+                            <TextBlock
+                                Grid.Row="1"
+                                Style="{StaticResource CardDetail}"
+                                Text="E-core threads" />
+                            <TextBlock
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                Margin="12,4,0,0"
+                                FontWeight="SemiBold"
+                                Text="{Binding ECoreRange}" />
+                            <TextBlock
+                                Grid.Row="2"
+                                Style="{StaticResource CardDetail}"
+                                Text="Microcode" />
+                            <TextBlock
+                                Grid.Row="2"
+                                Grid.Column="1"
+                                Margin="12,4,0,0"
+                                FontFamily="Consolas"
+                                FontWeight="SemiBold"
+                                Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"
+                                Text="{Binding Microcode}"
+                                ToolTip="{Binding MicrocodeDetail}" />
+                        </Grid>
+                    </StackPanel>
+                </ui:Card>
+
+                <ui:Card Style="{StaticResource HostCard}">
+                    <StackPanel>
+                        <TextBlock Style="{StaticResource CardTitle}" Text="GRAPHICS" />
+                        <TextBlock Style="{StaticResource CardValue}" Text="{Binding GpuName}" />
+                        <TextBlock Style="{StaticResource CardDetail}" Text="{Binding GpuDetail}" />
+                    </StackPanel>
+                </ui:Card>
+
+                <ui:Card Style="{StaticResource HostCard}">
+                    <StackPanel>
+                        <TextBlock Style="{StaticResource CardTitle}" Text="CPU LOAD" />
+                        <TextBlock Style="{StaticResource CardValue}" Text="{Binding CpuUsageText}" />
+                        <ProgressBar
+                            Height="6"
+                            Margin="0,10,0,0"
+                            Maximum="100"
+                            Value="{Binding CpuUsage, Mode=OneWay}" />
+                        <TextBlock Style="{StaticResource CardDetail}" Text="Sampled every 2 seconds" />
+                    </StackPanel>
+                </ui:Card>
+
+                <ui:Card Style="{StaticResource HostCard}">
+                    <StackPanel>
+                        <TextBlock Style="{StaticResource CardTitle}" Text="MEMORY" />
+                        <TextBlock Style="{StaticResource CardValue}">
+                            <Run Text="{Binding MemoryTotal, Mode=OneWay}" />
+                            <Run
+                                FontSize="13"
+                                FontWeight="Normal"
+                                Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                Text="{Binding MemoryLoadText, Mode=OneWay, StringFormat='· {0} in use'}" />
+                        </TextBlock>
+                        <ProgressBar
+                            Height="6"
+                            Margin="0,10,0,0"
+                            Maximum="100"
+                            Value="{Binding MemoryLoad, Mode=OneWay}" />
+                        <TextBlock Style="{StaticResource CardDetail}" Text="{Binding MemoryDetail}" />
+                    </StackPanel>
+                </ui:Card>
+
+                <ui:Card Style="{StaticResource HostCard}">
+                    <StackPanel>
+                        <TextBlock Style="{StaticResource CardTitle}" Text="STORAGE" />
+                        <ItemsControl ItemsSource="{Binding Volumes}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate DataType="{x:Type vm:VolumeItem}">
+                                    <StackPanel Margin="0,0,0,10">
+                                        <Grid>
+                                            <TextBlock FontWeight="SemiBold">
+                                                <Run Text="{Binding Name, Mode=OneWay}" />
+                                                <Run Foreground="{DynamicResource TextFillColorSecondaryBrush}" Text="{Binding Label, Mode=OneWay}" />
+                                            </TextBlock>
+                                            <TextBlock HorizontalAlignment="Right" Text="{Binding FreeText}" />
+                                        </Grid>
+                                        <ProgressBar
+                                            Height="6"
+                                            Margin="0,6,0,0"
+                                            Maximum="100"
+                                            Value="{Binding UsedPercent, Mode=OneWay}" />
+                                        <TextBlock Style="{StaticResource CardDetail}" Text="{Binding Detail}" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                        <TextBlock
+                            Style="{StaticResource CardDetail}"
+                            Text="{Binding PhysicalDisks}"
+                            Visibility="{Binding PhysicalDisks, Converter={StaticResource NullToCollapsed}}" />
+                    </StackPanel>
+                </ui:Card>
+            </UniformGrid>
+
+            <!--  Restore points + history  -->
+            <Grid Margin="0,4,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <ui:Card Style="{StaticResource HostCard}">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <ui:SymbolIcon
+                                Margin="0,0,8,0"
+                                FontSize="18"
+                                Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"
+                                Symbol="ShieldCheckmark24" />
+                            <TextBlock
+                                VerticalAlignment="Center"
+                                FontSize="15"
+                                FontWeight="SemiBold"
+                                Text="System Restore" />
+                        </StackPanel>
+                        <TextBlock Style="{StaticResource CardDetail}" Text="Create a restore point instantly — the 24-hour Windows cooldown is bypassed (and its original setting snapshotted for revert)." />
+
+                        <Grid Margin="0,12,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <ui:TextBox
+                                MaxLength="255"
+                                PlaceholderText="Label (optional), e.g. Before network tweaks"
+                                Text="{Binding RestorePointLabel, UpdateSourceTrigger=PropertyChanged}" />
+                            <ui:Button
+                                Grid.Column="1"
+                                Margin="8,0,0,0"
+                                Appearance="Primary"
+                                Command="{Binding CreateRestorePointCommand}"
+                                Content="Create Restore Point"
+                                Icon="{ui:SymbolIcon Add24}" />
+                        </Grid>
+
+                        <ui:InfoBar
+                            Title="{Binding RestorePointStatusTitle}"
+                            Margin="0,12,0,0"
+                            IsClosable="True"
+                            IsOpen="{Binding IsRestorePointStatusOpen, Mode=TwoWay}"
+                            Message="{Binding RestorePointStatus}"
+                            Severity="{Binding RestorePointSeverity}" />
+
+                        <Grid Margin="0,16,0,6">
+                            <TextBlock Style="{StaticResource CardTitle}" Text="RECENT RESTORE POINTS" />
+                            <ui:HyperlinkButton
+                                Padding="4,0"
+                                HorizontalAlignment="Right"
+                                Command="{Binding OpenSystemRestoreCommand}"
+                                Content="Open System Restore…" />
+                        </Grid>
+                        <TextBlock Style="{StaticResource CardDetail}" Text="{Binding RestorePointListStatus}" />
+                        <ItemsControl Margin="0,6,0,0" ItemsSource="{Binding RestorePoints}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate DataType="{x:Type models:RestorePointInfo}">
+                                    <Border
+                                        Margin="0,3"
+                                        Padding="10,6"
+                                        Background="{DynamicResource ControlFillColorDefaultBrush}"
+                                        BorderBrush="{DynamicResource ControlStrokeColorDefaultBrush}"
+                                        BorderThickness="1"
+                                        CornerRadius="4">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+                                            <StackPanel>
+                                                <TextBlock Text="{Binding Description}" TextTrimming="CharacterEllipsis" />
+                                                <TextBlock Style="{StaticResource CardDetail}" Text="{Binding CreatedAt, StringFormat='{}{0:yyyy-MM-dd HH:mm}'}" />
+                                            </StackPanel>
+                                            <Border
+                                                Grid.Column="1"
+                                                Margin="8,0,0,0"
+                                                Padding="8,2"
+                                                VerticalAlignment="Center"
+                                                Background="{DynamicResource SubtleFillColorSecondaryBrush}"
+                                                CornerRadius="10">
+                                                <TextBlock FontSize="11" Text="{Binding OriginTag}" />
+                                            </Border>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </ui:Card>
+
+                <ui:Card Grid.Column="1" Style="{StaticResource HostCard}">
+                    <StackPanel>
+                        <Grid>
+                            <StackPanel Orientation="Horizontal">
+                                <ui:SymbolIcon
+                                    Margin="0,0,8,0"
+                                    FontSize="18"
+                                    Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"
+                                    Symbol="History24" />
+                                <TextBlock
+                                    VerticalAlignment="Center"
+                                    FontSize="15"
+                                    FontWeight="SemiBold"
+                                    Text="Recent changes" />
+                            </StackPanel>
+                            <TextBlock
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Center"
+                                Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                Text="{Binding ActiveSnapshotCount, StringFormat='{}{0} active snapshot(s)'}" />
+                        </Grid>
+                        <ItemsControl Margin="0,12,0,0" ItemsSource="{Binding RecentHistory}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate DataType="{x:Type models:AuditEntry}">
+                                    <Grid Margin="0,4">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="110" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock
+                                            Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                            Text="{Binding TimestampUtc.LocalDateTime, StringFormat='{}{0:MM-dd HH:mm:ss}'}" />
+                                        <StackPanel Grid.Column="1">
+                                            <TextBlock Text="{Binding Summary}" TextWrapping="Wrap" />
+                                            <TextBlock
+                                                FontSize="11"
+                                                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                                Text="{Binding Action}" />
+                                        </StackPanel>
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </ui:Card>
+            </Grid>
+        </StackPanel>
+    </ScrollViewer>
+</Page>
