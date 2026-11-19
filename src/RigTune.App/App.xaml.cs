@@ -10,6 +10,8 @@ using RigTune.Core.Platform;
 using RigTune.Core.Runners;
 using RigTune.Core.Runners.Handlers;
 using RigTune.Core.Services;
+using RigTune.Core.Services.AppxWinget;
+using RigTune.Core.Services.SystemCare;
 using RigTune.Core.Storage;
 
 namespace RigTune.App;
@@ -115,6 +117,18 @@ public partial class App : Application
         services.AddSingleton<TimerResolutionService>();
         services.AddSingleton<TweakCatalogService>();
 
+        // Core: System Care (Phase 3)
+        services.AddSingleton<ISystemMaintenanceNative, SystemMaintenanceNative>();
+        services.AddSingleton<CleanupEngine>(sp => new CleanupEngine(
+            sp.GetRequiredService<AuditLogService>(), sp.GetRequiredService<ISystemMaintenanceNative>()));
+        services.AddSingleton<StartupManager>(sp => new StartupManager(
+            sp.GetRequiredService<IRegistryAccess>(), sp.GetRequiredService<SnapshotService>(), sp.GetRequiredService<AuditLogService>()));
+        services.AddSingleton<RepairScanner>();
+        services.AddSingleton<SystemCareService>();
+        services.AddSingleton<IAppxPackageSource, WinRtAppxPackageSource>();
+        services.AddSingleton<IWingetCli, WingetCli>();
+        services.AddSingleton<AppxWingetService>();
+
         // Core: tweak engine + one handler per SPEC §4.1 action type
         services.AddSingleton<RegistryActionHandler>();
         services.AddSingleton<ITweakActionHandler>(sp => sp.GetRequiredService<RegistryActionHandler>());
@@ -136,6 +150,12 @@ public partial class App : Application
         services.AddSingleton<DashboardViewModel>();
         services.AddSingleton<HistoryViewModel>();
         services.AddSingleton<TweaksViewModel>();
+        services.AddSingleton<RestorePointsTabViewModel>();
+        services.AddSingleton<CleanupTabViewModel>();
+        services.AddSingleton<StartupTabViewModel>();
+        services.AddSingleton<AppxWingetTabViewModel>();
+        services.AddSingleton<RepairTabViewModel>();
+        services.AddSingleton<SystemCareViewModel>();
         services.AddSingleton<DialogService>();
         services.AddSingleton<DashboardView>();
         services.AddSingleton<TweaksView>();

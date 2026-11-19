@@ -56,6 +56,13 @@ public sealed class RegistryRunner : IRegistryAccess
         return true;
     }
 
+    public IReadOnlyList<string> GetValueNames(RegistryHiveName hive, RegistryViewName view, string keyPath)
+    {
+        using RegistryKey baseKey = OpenBase(hive, view);
+        using RegistryKey? key = baseKey.OpenSubKey(Normalize(keyPath), writable: false);
+        return key?.GetValueNames() ?? Array.Empty<string>();
+    }
+
     public bool DeleteKeyIfEmpty(RegistryHiveName hive, RegistryViewName view, string keyPath)
     {
         string path = Normalize(keyPath);

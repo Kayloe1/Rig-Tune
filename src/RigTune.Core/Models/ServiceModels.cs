@@ -14,4 +14,4 @@ public enum ServiceStartType
 }
 
 /// <summary>Live state of a Windows service as observed by <see cref="Platform.IServiceAccess"/>.</summary>
-public sealed record ServiceState(string ServiceName, ServiceStartType StartType, bool IsRunning);
+public sealed record ServiceState(string ServiceName, ServiceStartType StartType, bool IsRunning, bool IsPending = false);

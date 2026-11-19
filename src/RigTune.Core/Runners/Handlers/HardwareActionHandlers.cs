@@ -368,18 +368,27 @@ public sealed class InspectionActionHandler : ITweakActionHandler
     }
 }
 
-/// <summary><c>cleanup</c> actions are executed from the System Care module (later phase).</summary>
+/// <summary><c>cleanup</c> actions: the 7 System Care cleanups, with a live reclaimable-size estimate as status.</summary>
 public sealed class CleanupActionHandler : ITweakActionHandler
 {
+    private readonly Services.SystemCare.CleanupEngine _cleanup;
+
+    public CleanupActionHandler(Services.SystemCare.CleanupEngine cleanup) => _cleanup = cleanup;
+
     public IReadOnlyCollection<string> Types { get; } = new[] { TweakActionTypes.Cleanup };
 
-    public Task<IReadOnlyList<ActionState>> GetStateAsync(TweakAction action, ActionContext context) =>
-        Task.FromResult<IReadOnlyList<ActionState>>(new[]
+    public async Task<IReadOnlyList<ActionState>> GetStateAsync(TweakAction action, ActionContext context)
+    {
+        CleanupEstimate e = await _cleanup.EstimateAsync(action.Operation!, context.CancellationToken).ConfigureAwait(false);
+        return new[]
         {
-            new ActionState(ActionStatus.Unsupported, $"Cleanup: {action.Operation}",
-                Note: "Runs from System Care › System Cleanup with a reclaimable-size preview (next phase)."),
-        });
+            ActionState.Info($"Cleanup: {action.Operation}", e.Note ?? $"{Services.SystemCare.CleanupEngine.FormatBytes(e.Bytes)} in {e.Files} files"),
+        };
+    }
 
-    public Task<IReadOnlyList<string>> ApplyAsync(TweakAction action, ActionContext context) =>
-        throw new NotSupportedException("Cleanup actions run from System Care › System Cleanup (next phase).");
+    public async Task<IReadOnlyList<string>> ApplyAsync(TweakAction action, ActionContext context)
+    {
+        CleanupResult r = await _cleanup.CleanAsync(action.Operation!, context.CancellationToken).ConfigureAwait(false);
+        return r.Success ? new[] { r.Message } : throw new InvalidOperationException(r.Message);
+    }
 }

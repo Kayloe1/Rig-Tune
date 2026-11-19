@@ -2,19 +2,403 @@
     x:Class="RigTune.App.Views.SystemCareView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:controls="clr-namespace:RigTune.App.Controls"
-    xmlns:sys="clr-namespace:System;assembly=System.Runtime"
-    Title="System Care">
-    <controls:ComingSoonPanel
-        Title="System Care"
-        Phase="Coming in a later build phase"
-        Subtitle="Guided maintenance: restore points, cleanup, startup apps, Appx/winget and repair.">
-        <controls:ComingSoonPanel.Features>
-                <sys:String>Restore Points: cooldown-free creation with custom label, list with origin tags, open rstrui.exe</sys:String>
-                <sys:String>System Cleanup: 7 user-confirmed actions with live reclaimable size</sys:String>
-                <sys:String>Startup Apps via StartupApproved (entries stay visible in Task Manager)</sys:String>
-                <sys:String>Appx bloatware manager + winget updater</sys:String>
-                <sys:String>Repair &amp; Recovery status scanner</sys:String>
-        </controls:ComingSoonPanel.Features>
-    </controls:ComingSoonPanel>
+    xmlns:core="clr-namespace:RigTune.Core.Models;assembly=RigTune.Core"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    xmlns:vm="clr-namespace:RigTune.App.ViewModels"
+    x:Name="Root"
+    Title="System Care"
+    d:DataContext="{d:DesignInstance Type=vm:SystemCareViewModel}"
+    mc:Ignorable="d">
+    <Page.Resources>
+        <Style x:Key="RowBorder" TargetType="Border">
+            <Setter Property="Margin" Value="0,3" />
+            <Setter Property="Padding" Value="12,8" />
+            <Setter Property="CornerRadius" Value="4" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Background" Value="{DynamicResource ControlFillColorDefaultBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource ControlStrokeColorDefaultBrush}" />
+        </Style>
+        <Style x:Key="Tag" TargetType="Border">
+            <Setter Property="Margin" Value="6,0,0,0" />
+            <Setter Property="Padding" Value="6,1" />
+            <Setter Property="CornerRadius" Value="8" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Background" Value="{DynamicResource SubtleFillColorSecondaryBrush}" />
+        </Style>
+        <Style x:Key="StatusBar" TargetType="ui:InfoBar">
+            <Setter Property="Margin" Value="0,0,0,10" />
+            <Setter Property="IsClosable" Value="True" />
+        </Style>
+    </Page.Resources>
+
+    <Grid Margin="28,20,20,16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <StackPanel Margin="0,0,0,12">
+            <TextBlock Style="{StaticResource PageTitle}" Text="System Care" />
+            <TextBlock Style="{StaticResource PageSubtitle}" Text="Restore points, cleanup, startup apps, Store apps &amp; updates, and status-first repair. Every action is recorded in the audit log." />
+        </StackPanel>
+
+        <TabControl Grid.Row="1" SelectedIndex="{Binding SelectedTab, Mode=TwoWay}">
+            <!--  ============================== RESTORE POINTS  -->
+            <TabItem Header="Restore Points">
+                <Grid Margin="0,14,0,0" DataContext="{Binding RestorePoints}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <ui:TextBox MaxLength="255" PlaceholderText="Restore point name, e.g. Before driver update" Text="{Binding Label, UpdateSourceTrigger=PropertyChanged}" />
+                        <StackPanel Grid.Column="1" Margin="8,0,0,0" Orientation="Horizontal">
+                            <ui:Button Appearance="Primary" Command="{Binding CreateCommand}" Content="Create Restore Point" Icon="{ui:SymbolIcon Add24}" IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBool}}" />
+                            <ui:Button Margin="8,0,0,0" Command="{Binding RefreshCommand}" Content="Refresh" Icon="{ui:SymbolIcon ArrowClockwise24}" />
+                            <ui:Button Margin="8,0,0,0" Command="{Binding OpenSystemRestoreCommand}" Content="Open rstrui.exe" Icon="{ui:SymbolIcon Open24}" />
+                        </StackPanel>
+                    </Grid>
+                    <ui:InfoBar Grid.Row="1" Margin="0,10,0,0" Title="{Binding StatusTitle}" IsClosable="True" IsOpen="{Binding IsStatusOpen, Mode=TwoWay}" Message="{Binding StatusMessage}" Severity="{Binding StatusSeverity}" />
+                    <ListView Grid.Row="2" Margin="0,10,0,0" ItemsSource="{Binding Points}">
+                        <ListView.ItemTemplate>
+                            <DataTemplate DataType="{x:Type core:RestorePointInfo}">
+                                <Grid Margin="4,6">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="60" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="170" />
+                                        <ColumnDefinition Width="200" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Foreground="{DynamicResource TextFillColorSecondaryBrush}" Text="{Binding SequenceNumber, StringFormat='#{0}'}" />
+                                    <TextBlock Grid.Column="1" Text="{Binding Description}" TextTrimming="CharacterEllipsis" />
+                                    <TextBlock Grid.Column="2" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Text="{Binding CreatedAt, StringFormat='{}{0:yyyy-MM-dd HH:mm:ss}'}" />
+                                    <Border Grid.Column="3" HorizontalAlignment="Left" Style="{StaticResource Tag}">
+                                        <TextBlock FontSize="11" Text="{Binding OriginTag}" />
+                                    </Border>
+                                </Grid>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </Grid>
+            </TabItem>
+
+            <!--  ============================== CLEANUP  -->
+            <TabItem Header="System Cleanup">
+                <Grid Margin="0,14,0,0" DataContext="{Binding Cleanup}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Grid>
+                        <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="{Binding TotalText}" />
+                        <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+                            <ui:ProgressRing Width="18" Height="18" Margin="0,0,10,0" IsIndeterminate="True" Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibility}}" />
+                            <ui:Button Command="{Binding ScanCommand}" Content="Re-scan sizes" Icon="{ui:SymbolIcon ArrowClockwise24}" />
+                            <ui:Button Margin="8,0,0,0" Appearance="Primary" Command="{Binding CleanSelectedCommand}" Content="Clean Selected" Icon="{ui:SymbolIcon Broom24}" IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBool}}" />
+                        </StackPanel>
+                    </Grid>
+                    <ui:InfoBar Grid.Row="1" Margin="0,10,0,0" Title="{Binding StatusTitle}" IsClosable="True" IsOpen="{Binding IsStatusOpen, Mode=TwoWay}" Message="{Binding StatusMessage}" Severity="{Binding StatusSeverity}" />
+                    <ItemsControl Grid.Row="2" Margin="0,10,0,0" ItemsSource="{Binding Items}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate DataType="{x:Type vm:CleanupItemViewModel}">
+                                <Border Style="{StaticResource RowBorder}">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="220" />
+                                        </Grid.ColumnDefinitions>
+                                        <CheckBox VerticalAlignment="Center" IsChecked="{Binding IsSelected, Mode=TwoWay}" />
+                                        <StackPanel Grid.Column="1" Margin="4,0,0,0">
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock FontWeight="SemiBold" Text="{Binding Name}" />
+                                                <Border Style="{StaticResource Tag}">
+                                                    <TextBlock FontSize="10.5" Text="{Binding PermanenceTag}" />
+                                                </Border>
+                                            </StackPanel>
+                                            <TextBlock FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Text="{Binding Description}" TextWrapping="Wrap" />
+                                            <TextBlock FontSize="12" Foreground="{DynamicResource SystemFillColorSuccessBrush}" Text="{Binding ResultText}" Visibility="{Binding ResultText, Converter={StaticResource NullToCollapsed}}" />
+                                        </StackPanel>
+                                        <StackPanel Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center" Orientation="Horizontal">
+                                            <ui:ProgressRing Width="14" Height="14" Margin="0,0,8,0" IsIndeterminate="True" Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibility}}" />
+                                            <TextBlock FontWeight="SemiBold" Text="{Binding EstimateText}" TextWrapping="Wrap" />
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </Grid>
+            </TabItem>
+
+            <!--  ============================== STARTUP APPS  -->
+            <TabItem Header="Startup Apps">
+                <Grid Margin="0,14,0,0" DataContext="{Binding Startup}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Grid>
+                        <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="{Binding Summary}" />
+                        <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+                            <ui:Button Command="{Binding RefreshCommand}" Content="Refresh" Icon="{ui:SymbolIcon ArrowClockwise24}" />
+                            <ui:Button Margin="8,0,0,0" Command="{Binding OpenTaskManagerCommand}" Content="Open Task Manager" Icon="{ui:SymbolIcon Open24}" />
+                        </StackPanel>
+                    </Grid>
+                    <ui:InfoBar Grid.Row="1" Margin="0,10,0,0" Title="{Binding StatusTitle}" IsClosable="True" IsOpen="{Binding IsStatusOpen, Mode=TwoWay}" Message="{Binding StatusMessage}" Severity="{Binding StatusSeverity}" />
+                    <ListView Grid.Row="2" Margin="0,10,0,0" ItemsSource="{Binding Items}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                        <ListView.ItemContainerStyle>
+                            <Style BasedOn="{StaticResource {x:Type ListViewItem}}" TargetType="ListViewItem">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                        <ListView.ItemTemplate>
+                            <DataTemplate DataType="{x:Type vm:StartupItemViewModel}">
+                                <Grid Margin="4,6">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="190" />
+                                    </Grid.ColumnDefinitions>
+                                    <ui:ToggleSwitch Margin="0,0,12,0" VerticalAlignment="Center" IsChecked="{Binding IsEnabled, Mode=TwoWay}" />
+                                    <StackPanel Grid.Column="1">
+                                        <TextBlock FontWeight="SemiBold">
+                                            <Run Text="{Binding Name, Mode=OneWay}" />
+                                            <Run FontWeight="Normal" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Text="{Binding Publisher, Mode=OneWay, StringFormat='· {0}'}" />
+                                        </TextBlock>
+                                        <TextBlock FontFamily="Consolas" FontSize="11" Foreground="{DynamicResource TextFillColorTertiaryBrush}" Text="{Binding Command}" TextTrimming="CharacterEllipsis" ToolTip="{Binding Command}" />
+                                    </StackPanel>
+                                    <TextBlock Grid.Column="2" VerticalAlignment="Center" FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Text="{Binding Location}" />
+                                </Grid>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </Grid>
+            </TabItem>
+
+            <!--  ============================== APPX + WINGET  -->
+            <TabItem Header="Appx Bloatware &amp; winget">
+                <Grid Margin="0,14,0,0" DataContext="{Binding Appx}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="16" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <!--  Appx manager  -->
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <TextBlock FontSize="16" FontWeight="SemiBold" Text="UWP / Appx Manager" />
+                        <WrapPanel Grid.Row="1" Margin="0,8,0,0">
+                            <ui:Button Margin="0,0,8,6" Command="{Binding RefreshPackagesCommand}" Content="Refresh" Icon="{ui:SymbolIcon ArrowClockwise24}" />
+                            <ui:Button Margin="0,0,8,6" Appearance="Primary" Command="{Binding RemoveSelectedCommand}" Content="Remove Selected" Icon="{ui:SymbolIcon Delete24}" IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBool}}" />
+                            <CheckBox Margin="0,0,12,6" Content="Also de-provision for new users" IsChecked="{Binding Deprovision, Mode=TwoWay}" />
+                            <CheckBox Margin="0,0,0,6" Content="Show protected packages" IsChecked="{Binding ShowProtected, Mode=TwoWay}" />
+                        </WrapPanel>
+                        <ui:InfoBar Grid.Row="2" Title="{Binding StatusTitle}" IsClosable="True" IsOpen="{Binding IsStatusOpen, Mode=TwoWay}" Message="{Binding StatusMessage}" Severity="{Binding StatusSeverity}" />
+                        <ListView Grid.Row="3" ItemsSource="{Binding PackagesView}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" VirtualizingPanel.IsVirtualizingWhenGrouping="True">
+                            <ListView.GroupStyle>
+                                <GroupStyle>
+                                    <GroupStyle.HeaderTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Margin="4,14,0,4" FontSize="14" FontWeight="SemiBold">
+                                                <Run Text="{Binding Name, Mode=OneWay}" />
+                                                <Run Foreground="{DynamicResource TextFillColorSecondaryBrush}" Text="{Binding ItemCount, Mode=OneWay, StringFormat=' ({0})'}" />
+                                            </TextBlock>
+                                        </DataTemplate>
+                                    </GroupStyle.HeaderTemplate>
+                                </GroupStyle>
+                            </ListView.GroupStyle>
+                            <ListView.ItemTemplate>
+                                <DataTemplate DataType="{x:Type vm:AppxItemViewModel}">
+                                    <Grid Margin="2,4">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <CheckBox VerticalAlignment="Center" IsChecked="{Binding IsSelected, Mode=TwoWay}" IsEnabled="{Binding IsLocked, Converter={StaticResource InverseBool}}" />
+                                        <StackPanel Grid.Column="1">
+                                            <StackPanel Orientation="Horizontal">
+                                                <ui:SymbolIcon Margin="0,0,6,0" FontSize="13" Foreground="{DynamicResource SystemFillColorCautionBrush}" Symbol="LockClosed24" ToolTip="Hard-blocked unless the Danger Zone is on" Visibility="{Binding IsLocked, Converter={StaticResource BoolToVisibility}}" />
+                                                <TextBlock FontWeight="SemiBold" Text="{Binding DisplayName}" />
+                                                <TextBlock Margin="6,0,0,0" Foreground="{DynamicResource TextFillColorTertiaryBrush}" Text="{Binding Version}" />
+                                            </StackPanel>
+                                            <TextBlock FontSize="11" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Text="{Binding Name}" />
+                                            <TextBlock FontSize="11" Foreground="{DynamicResource TextFillColorTertiaryBrush}" Text="{Binding Reason}" />
+                                            <TextBlock FontSize="11" Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}" Text="{Binding ResultText}" Visibility="{Binding ResultText, Converter={StaticResource NullToCollapsed}}" />
+                                        </StackPanel>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </Grid>
+
+                    <!--  winget updater  -->
+                    <Grid Grid.Column="2">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="200" />
+                        </Grid.RowDefinitions>
+                        <TextBlock FontSize="16" FontWeight="SemiBold" Text="winget Updater" />
+                        <WrapPanel Grid.Row="1" Margin="0,8,0,0">
+                            <ui:Button Margin="0,0,8,6" Command="{Binding CheckUpdatesCommand}" Content="Check for updates" Icon="{ui:SymbolIcon ArrowSync24}" IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBool}}" />
+                            <ui:Button Margin="0,0,8,6" Appearance="Primary" Command="{Binding UpgradeSelectedCommand}" Content="Upgrade Selected" IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBool}}" />
+                            <ui:Button Margin="0,0,8,6" Command="{Binding UpgradeAllCommand}" Content="Upgrade All" IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBool}}" />
+                        </WrapPanel>
+                        <TextBlock Grid.Row="2" Margin="0,4,0,6" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Text="{Binding WingetSummary}" TextWrapping="Wrap" />
+                        <ListView Grid.Row="3" ItemsSource="{Binding Upgrades}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                            <ListView.ItemTemplate>
+                                <DataTemplate DataType="{x:Type vm:WingetItemViewModel}">
+                                    <Grid Margin="2,4">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <CheckBox VerticalAlignment="Center" IsChecked="{Binding IsSelected, Mode=TwoWay}" />
+                                        <StackPanel Grid.Column="1">
+                                            <TextBlock FontWeight="SemiBold" Text="{Binding Name}" TextTrimming="CharacterEllipsis" />
+                                            <TextBlock FontFamily="Consolas" FontSize="11" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Text="{Binding Id}" />
+                                            <TextBlock FontSize="11" Foreground="{DynamicResource TextFillColorTertiaryBrush}" Text="{Binding Note}" />
+                                        </StackPanel>
+                                        <StackPanel Grid.Column="2" HorizontalAlignment="Right">
+                                            <TextBlock HorizontalAlignment="Right">
+                                                <Run Text="{Binding Version, Mode=OneWay}" />
+                                                <Run Text=" → " />
+                                                <Run FontWeight="SemiBold" Foreground="{DynamicResource SystemFillColorSuccessBrush}" Text="{Binding Available, Mode=OneWay}" />
+                                            </TextBlock>
+                                            <TextBlock HorizontalAlignment="Right" FontSize="11" Text="{Binding Status}" />
+                                        </StackPanel>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                        <Grid Grid.Row="4" Margin="0,8,0,0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <Grid>
+                                <TextBlock Style="{StaticResource CardTitle}" Text="LIVE CONSOLE" />
+                                <ui:HyperlinkButton Padding="4,0" HorizontalAlignment="Right" Command="{Binding ClearConsoleCommand}" Content="Clear" />
+                            </Grid>
+                            <TextBox
+                                x:Name="WingetConsole"
+                                Grid.Row="1"
+                                Background="#FF0C0C0C"
+                                FontFamily="Consolas"
+                                FontSize="11.5"
+                                Foreground="#FFCCCCCC"
+                                HorizontalScrollBarVisibility="Auto"
+                                IsReadOnly="True"
+                                Text="{Binding ConsoleText, Mode=OneWay}"
+                                TextChanged="OnConsoleTextChanged"
+                                TextWrapping="NoWrap"
+                                VerticalScrollBarVisibility="Auto" />
+                        </Grid>
+                    </Grid>
+                </Grid>
+            </TabItem>
+
+            <!--  ============================== REPAIR  -->
+            <TabItem Header="Repair &amp; Recovery">
+                <Grid x:Name="RepairRoot" Margin="0,14,0,0" DataContext="{Binding Repair}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Grid>
+                        <StackPanel>
+                            <TextBlock FontWeight="SemiBold" Text="{Binding Summary}" TextWrapping="Wrap" />
+                            <TextBlock Style="{StaticResource CardDetail}" Text="Checks Bluetooth/audio/network/USB devices, Windows Update, Print Spooler and BITS, and the Search indexing, Storage Sense and Hyper-V/WSL2 policies. Disk and file-system repair tools (chkdsk, sfc) are never run." />
+                        </StackPanel>
+                        <StackPanel HorizontalAlignment="Right" VerticalAlignment="Top" Orientation="Horizontal">
+                            <ui:ProgressRing Width="18" Height="18" Margin="0,0,10,0" IsIndeterminate="True" Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibility}}" />
+                            <CheckBox Margin="0,0,12,0" Content="Show healthy items" IsChecked="{Binding ShowHealthy, Mode=TwoWay}" />
+                            <ui:Button Appearance="Primary" Command="{Binding ScanCommand}" Content="Scan" Icon="{ui:SymbolIcon Wrench24}" IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBool}}" />
+                        </StackPanel>
+                    </Grid>
+                    <ui:InfoBar Grid.Row="1" Margin="0,10,0,0" Title="{Binding StatusTitle}" IsClosable="True" IsOpen="{Binding IsStatusOpen, Mode=TwoWay}" Message="{Binding StatusMessage}" Severity="{Binding StatusSeverity}" />
+                    <ItemsControl Grid.Row="2" Margin="0,10,0,0" ItemsSource="{Binding Checks}">
+                        <ItemsControl.Template>
+                            <ControlTemplate TargetType="ItemsControl">
+                                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                    <ItemsPresenter />
+                                </ScrollViewer>
+                            </ControlTemplate>
+                        </ItemsControl.Template>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate DataType="{x:Type vm:RepairItemViewModel}">
+                                <Border Style="{StaticResource RowBorder}">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="28" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <ui:SymbolIcon x:Name="Icon" VerticalAlignment="Top" FontSize="18" Foreground="{DynamicResource SystemFillColorSuccessBrush}" Symbol="CheckmarkCircle24" />
+                                        <StackPanel Grid.Column="1">
+                                            <TextBlock FontWeight="SemiBold">
+                                                <Run Text="{Binding Name, Mode=OneWay}" />
+                                                <Run FontWeight="Normal" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Text="{Binding Category, Mode=OneWay, StringFormat='· {0}'}" />
+                                                <Run x:Name="StatusRun" FontWeight="Normal" Text="{Binding StatusLabel, Mode=OneWay, StringFormat='· {0}'}" />
+                                            </TextBlock>
+                                            <TextBlock FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Text="{Binding Detail}" TextWrapping="Wrap" />
+                                            <TextBlock FontSize="12" Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}" Text="{Binding ResultText}" TextWrapping="Wrap" Visibility="{Binding ResultText, Converter={StaticResource NullToCollapsed}}" />
+                                        </StackPanel>
+                                        <StackPanel Grid.Column="2" VerticalAlignment="Center" Orientation="Horizontal">
+                                            <ui:ProgressRing Width="14" Height="14" Margin="0,0,8,0" IsIndeterminate="True" Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibility}}" />
+                                            <ui:Button
+                                                Appearance="Primary"
+                                                Command="{Binding DataContext.FixCommand, ElementName=RepairRoot}"
+                                                CommandParameter="{Binding}"
+                                                Content="{Binding FixLabel}"
+                                                IsEnabled="{Binding IsFixed, Converter={StaticResource InverseBool}}"
+                                                Visibility="{Binding CanFix, Converter={StaticResource BoolToVisibility}}" />
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+                                <DataTemplate.Triggers>
+                                    <DataTrigger Binding="{Binding Status}" Value="{x:Static core:RepairStatus.Broken}">
+                                        <Setter TargetName="Icon" Property="Symbol" Value="ErrorCircle24" />
+                                        <Setter TargetName="Icon" Property="Foreground" Value="{DynamicResource SystemFillColorCriticalBrush}" />
+                                        <Setter TargetName="StatusRun" Property="Foreground" Value="{DynamicResource SystemFillColorCriticalBrush}" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Status}" Value="{x:Static core:RepairStatus.Unknown}">
+                                        <Setter TargetName="Icon" Property="Symbol" Value="QuestionCircle24" />
+                                        <Setter TargetName="Icon" Property="Foreground" Value="{DynamicResource SystemFillColorCautionBrush}" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Status}" Value="{x:Static core:RepairStatus.NotApplicable}">
+                                        <Setter TargetName="Icon" Property="Symbol" Value="SubtractCircle24" />
+                                        <Setter TargetName="Icon" Property="Foreground" Value="{DynamicResource TextFillColorTertiaryBrush}" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsFixed}" Value="True">
+                                        <Setter TargetName="Icon" Property="Symbol" Value="CheckmarkCircle24" />
+                                        <Setter TargetName="Icon" Property="Foreground" Value="{DynamicResource SystemFillColorSuccessBrush}" />
+                                    </DataTrigger>
+                                </DataTemplate.Triggers>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
 </Page>
