@@ -172,6 +172,31 @@
                 </ui:Card>
             </UniformGrid>
 
+            <!--  Watchdog + Game Mode  -->
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <ui:Card Style="{StaticResource HostCard}">
+                    <StackPanel>
+                        <Grid>
+                            <TextBlock Style="{StaticResource CardTitle}" Text="REFRESH RATE WATCHDOG" />
+                            <ui:Button HorizontalAlignment="Right" Padding="10,3" Appearance="Primary" Command="{Binding RestoreRefreshCommand}" Content="Restore" Visibility="{Binding IsRefreshDrifted, Converter={StaticResource BoolToVisibility}}" />
+                        </Grid>
+                        <TextBlock x:Name="WatchdogStatus" FontWeight="SemiBold" Text="{Binding WatchdogText}" TextWrapping="Wrap" />
+                        <TextBlock Style="{StaticResource CardDetail}" Text="Pin target refresh rates in Game Mode." />
+                    </StackPanel>
+                </ui:Card>
+                <ui:Card Grid.Column="1" Style="{StaticResource HostCard}">
+                    <StackPanel>
+                        <TextBlock Style="{StaticResource CardTitle}" Text="GAME MODE" />
+                        <TextBlock Style="{StaticResource CardValue}" Text="{Binding GameModeText}" />
+                        <TextBlock Style="{StaticResource CardDetail}" Text="{Binding GameModeDetail}" />
+                    </StackPanel>
+                </ui:Card>
+            </Grid>
+
             <!--  Restore points + history  -->
             <Grid Margin="0,4,0,0">
                 <Grid.ColumnDefinitions>

@@ -78,19 +78,11 @@
         </ui:NavigationView>
 
         <tray:NotifyIcon
+            x:Name="TrayIcon"
             Grid.Row="0"
             FocusOnLeftClick="True"
             Icon="pack://application:,,,/Assets/rigtune.ico"
-            LeftDoubleClick="OnTrayOpen"
             MenuOnRightClick="True"
-            TooltipText="RigTune">
-            <tray:NotifyIcon.Menu>
-                <ContextMenu>
-                    <MenuItem Click="OnTrayOpen" Header="Open RigTune" />
-                    <Separator />
-                    <MenuItem Click="OnTrayExit" Header="Exit" />
-                </ContextMenu>
-            </tray:NotifyIcon.Menu>
-        </tray:NotifyIcon>
+            TooltipText="RigTune" />
     </Grid>
 </ui:FluentWindow>

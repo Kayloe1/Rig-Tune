@@ -110,6 +110,14 @@ public sealed class GameModeDocument
     public Dictionary<string, WhilePlayingRule> AppRules { get; set; } = new(StringComparer.OrdinalIgnoreCase);
     public List<string> CustomExeAllowlist { get; set; } = new();
     public List<string> ExclusionList { get; set; } = new();
+
+    /// <summary>Games found by the last library scan.</summary>
+    public List<DiscoveredGame> DiscoveredGames { get; set; } = new();
+
+    public DateTimeOffset? LastScanUtc { get; set; }
+
+    /// <summary>Active session overrides, persisted for crash recovery (SPEC §3.3.2).</summary>
+    public GameSession? ActiveSession { get; set; }
 }
 
 public sealed record AppDetection(AppProfile Profile, bool IsInstalled, string? Evidence);

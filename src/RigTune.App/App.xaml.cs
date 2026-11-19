@@ -2,6 +2,7 @@ using System.Windows;
 using System.Windows.Threading;
 using Microsoft.Extensions.DependencyInjection;
 using RigTune.App.Services;
+using RigTune.App.Tray;
 using RigTune.App.ViewModels;
 using RigTune.App.Views;
 using RigTune.Core.Hardware;
@@ -12,6 +13,7 @@ using RigTune.Core.Runners.Handlers;
 using RigTune.Core.Services;
 using RigTune.Core.Services.AppOptimizer;
 using RigTune.Core.Services.AppxWinget;
+using RigTune.Core.Services.GameMode;
 using RigTune.Core.Services.SystemCare;
 using RigTune.Core.Storage;
 
@@ -56,6 +58,12 @@ public partial class App : Application
         {
             await _services.GetRequiredService<AuditLogService>()
                 .LogAsync(AuditAction.Info, "RigTune started");
+
+            // Crash recovery first (restores priorities/EcoQoS/power plan of a stale session), then watchers.
+            await _services.GetRequiredService<GameModeService>().InitializeAsync();
+            RefreshRateWatchdogService watchdog = _services.GetRequiredService<RefreshRateWatchdogService>();
+            watchdog.Start();
+            await watchdog.CheckAsync("app startup");
         }
         catch (Exception ex) when (ex is System.IO.IOException or UnauthorizedAccessException)
         {
@@ -65,6 +73,12 @@ public partial class App : Application
 
     protected override void OnExit(ExitEventArgs e)
     {
+        if (_services?.GetService<GameModeService>() is { ActiveSession: not null } gameMode)
+        {
+            // Restore every priority / EcoQoS flag / power plan before the process goes away.
+            Task.Run(() => gameMode.StopAsync("RigTune exited")).Wait(TimeSpan.FromSeconds(10));
+        }
+
         _services?.Dispose();
         base.OnExit(e);
     }
@@ -149,9 +163,24 @@ public partial class App : Application
         services.AddSingleton<ITweakActionHandler, AppStartupActionHandler>();
         services.AddSingleton<ITweakActionHandler>(sp => new ChromiumFlagActionHandler(sp.GetRequiredService<ChromiumFlagStateRunner>()));
         services.AddSingleton<TweakEngine>();
+        // One shared store for gamemode.json (App Optimizer rules + Game Mode lists/session).
+        services.AddSingleton(sp => new JsonDocumentStore<GameModeDocument>(sp.GetRequiredService<RigTunePaths>().GameModeFile));
         services.AddSingleton<AppOptimizerService>(sp => new AppOptimizerService(
-            sp.GetRequiredService<TweakEngine>(), sp.GetRequiredService<IRegistryAccess>(),
-            sp.GetRequiredService<AuditLogService>(), sp.GetRequiredService<RigTunePaths>()));
+            sp.GetRequiredService<TweakEngine>(), sp.GetRequiredService<IRegistryAccess>(), sp.GetRequiredService<AuditLogService>(),
+            RigTunePaths.BundledAppsFile, sp.GetRequiredService<RigTunePaths>().CustomAppsFile,
+            sp.GetRequiredService<JsonDocumentStore<GameModeDocument>>()));
+
+        // Core: Game Mode & watchdogs (Phase 5)
+        services.AddSingleton<IDisplayAccess, DisplayRunner>();
+        services.AddSingleton<RefreshRateWatchdogService>();
+        services.AddSingleton<IGameModePlatform, WindowsGameModePlatform>();
+        services.AddSingleton<GameLibraryScanner>(sp => new GameLibraryScanner(sp.GetRequiredService<IRegistryAccess>()));
+        services.AddSingleton<StartWithWindowsService>();
+        services.AddSingleton<GameModeService>(sp => GameModeService.Create(
+            sp.GetRequiredService<IGameModePlatform>(), sp.GetRequiredService<JsonDocumentStore<GameModeDocument>>(),
+            sp.GetRequiredService<SettingsService>(), sp.GetRequiredService<AuditLogService>(),
+            sp.GetRequiredService<AppOptimizerService>(), sp.GetRequiredService<RefreshRateWatchdogService>()));
+        services.AddSingleton<SystemTrayManager>();
 
         // UI
         services.AddSingleton<MainWindow>();
@@ -165,6 +194,7 @@ public partial class App : Application
         services.AddSingleton<RepairTabViewModel>();
         services.AddSingleton<SystemCareViewModel>();
         services.AddSingleton<AppOptimizerViewModel>();
+        services.AddSingleton<GameModeViewModel>();
         services.AddSingleton<DialogService>();
         services.AddSingleton<DashboardView>();
         services.AddSingleton<TweaksView>();

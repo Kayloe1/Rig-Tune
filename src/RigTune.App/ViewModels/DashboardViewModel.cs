@@ -6,6 +6,7 @@ using RigTune.App.Converters;
 using RigTune.Core.Hardware;
 using RigTune.Core.Models;
 using RigTune.Core.Services;
+using RigTune.Core.Services.GameMode;
 using Wpf.Ui.Controls;
 
 namespace RigTune.App.ViewModels;
@@ -44,12 +45,20 @@ public sealed partial class DashboardViewModel : ObservableObject
     private readonly AuditLogService _audit;
     private readonly SnapshotService _snapshots;
     private readonly DispatcherTimer _liveTimer;
+    private readonly RefreshRateWatchdogService _watchdog;
+    private readonly GameModeService _gameMode;
     private bool _sampling;
     private bool _loaded;
 
     public DashboardViewModel(HostProfileDetector detector, RestorePointService restorePoints, AuditLogService audit,
-        SnapshotService snapshots)
+        SnapshotService snapshots, RefreshRateWatchdogService watchdog, GameModeService gameMode)
     {
+        _watchdog = watchdog;
+        _gameMode = gameMode;
+        _watchdog.StatusChanged += (_, status) => App.Current?.Dispatcher.InvokeAsync(() => UpdateWatchdog(status));
+        _gameMode.SessionChanged += (_, _) => App.Current?.Dispatcher.InvokeAsync(UpdateGameMode);
+        UpdateWatchdog(_watchdog.LastStatus);
+        UpdateGameMode();
         _detector = detector;
         _restorePoints = restorePoints;
         _audit = audit;
@@ -157,6 +166,41 @@ public sealed partial class DashboardViewModel : ObservableObject
     private int _activeSnapshotCount;
 
     public ObservableCollection<RestorePointInfo> RestorePoints { get; } = new();
+
+    // ---- Watchdog / Game Mode cards ----------------------------------------
+
+    [ObservableProperty]
+    private string _watchdogText = "Checking displays…";
+
+    [ObservableProperty]
+    private bool _isRefreshDrifted;
+
+    [ObservableProperty]
+    private string _gameModeText = "Idle";
+
+    [ObservableProperty]
+    private string _gameModeDetail = string.Empty;
+
+    private void UpdateWatchdog(IReadOnlyList<DisplayStatus> status)
+    {
+        IsRefreshDrifted = status.Any(s => s.IsDrifted);
+        WatchdogText = status.Count == 0
+            ? "No displays detected yet"
+            : string.Join("\n", status.Select(s =>
+                $"{s.Display.FriendlyName}: {s.Display.CurrentHz} Hz{(s.TargetHz is { } t ? $" (target {t} Hz{(s.IsDrifted ? " — BELOW TARGET" : " ✓")})" : " (not pinned)")}"));
+    }
+
+    private void UpdateGameMode()
+    {
+        GameSession? s = _gameMode.ActiveSession;
+        GameModeText = s is null ? "Idle" : $"Active — {s.GameName ?? "manual"}";
+        GameModeDetail = s is null
+            ? (_gameMode.IsWatching ? "Waiting for a game to launch." : "Auto-detect is off.")
+            : $"Since {s.StartedAtUtc.ToLocalTime():HH:mm} · {s.Throttled.Count} background process(es) on EcoQoS / lower priority";
+    }
+
+    [RelayCommand]
+    private Task RestoreRefreshAsync() => _watchdog.RestoreAllAsync();
 
     public ObservableCollection<AuditEntry> RecentHistory { get; } = new();
 

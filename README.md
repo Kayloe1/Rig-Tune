@@ -47,7 +47,14 @@ Registry round-trip tests that touch the real registry run only on Windows and o
   always unchecked, "(signs you out)"); reversible toggles run through the tweak engine (browser policies, services,
   Task Manager-compatible auto-start incl. packaged StartupTasks, chrome://flags parallel downloading via Local State);
   per-app "While You Play" rules in `gamemode.json`; custom apps in `custom_apps.json`.
-- Later phases: drift detector, Game Mode & watchdogs, Disk Analyzer.
+- **Phase 5 (done):** Game Mode & tray watchdogs — `SystemTrayManager` (dynamic tray menu, minimize-to-tray, clickable
+  balloon notifications), Start-with-Windows via an elevated `\RigTune\AutoStart` logon task (`--minimized`),
+  `RefreshRateWatchdogService` (per-monitor pinned targets, DisplaySettingsChanged/startup/Game Mode checks, 1-click or
+  auto restore), `GameLibraryScanner` (Steam VDF/ACF, Epic, Xbox, EA app, Battle.net + allow/exclusion lists) and
+  `GameModeService` (WMI process-start trace with 2 s polling fallback; High priority for the game; Below Normal + EcoQoS
+  + low I/O for While-You-Play apps; RAM trim only under memory pressure; optional power plan; crash-safe session state
+  in `gamemode.json` restored on exit, Stop or next start).
+- Later phases: drift detector, Disk Analyzer.
 
 The app catalog is generated too — edit `tools/generate_apps.py`, then run `python3 tools/generate_apps.py`.
 
