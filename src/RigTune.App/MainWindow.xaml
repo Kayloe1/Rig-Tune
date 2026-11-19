@@ -1,0 +1,96 @@
+<ui:FluentWindow
+    x:Class="RigTune.App.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:tray="http://schemas.lepo.co/wpfui/2022/xaml/tray"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    xmlns:views="clr-namespace:RigTune.App.Views"
+    Title="RigTune"
+    Width="1320"
+    Height="860"
+    MinWidth="960"
+    MinHeight="640"
+    ExtendsContentIntoTitleBar="True"
+    WindowBackdropType="Mica"
+    WindowCornerPreference="Round"
+    WindowStartupLocation="CenterScreen">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <ui:TitleBar
+            x:Name="TitleBar"
+            Grid.Row="0"
+            Title="RigTune"
+            CloseWindowByDoubleClickOnIcon="True">
+            <ui:TitleBar.Icon>
+                <ui:ImageIcon Source="pack://application:,,,/Assets/rigtune.ico" />
+            </ui:TitleBar.Icon>
+        </ui:TitleBar>
+
+        <ui:NavigationView
+            x:Name="RootNavigation"
+            Grid.Row="1"
+            IsBackButtonVisible="Collapsed"
+            IsPaneToggleVisible="True"
+            OpenPaneLength="250"
+            PaneDisplayMode="Left"
+            TitleBar="{Binding ElementName=TitleBar, Mode=OneWay}">
+            <ui:NavigationView.MenuItems>
+                <ui:NavigationViewItem Content="Dashboard" TargetPageType="{x:Type views:DashboardView}">
+                    <ui:NavigationViewItem.Icon>
+                        <ui:SymbolIcon Symbol="Home24" />
+                    </ui:NavigationViewItem.Icon>
+                </ui:NavigationViewItem>
+                <ui:NavigationViewItem Content="Tweaks" TargetPageType="{x:Type views:TweaksView}">
+                    <ui:NavigationViewItem.Icon>
+                        <ui:SymbolIcon Symbol="Options24" />
+                    </ui:NavigationViewItem.Icon>
+                </ui:NavigationViewItem>
+                <ui:NavigationViewItem Content="System Care" TargetPageType="{x:Type views:SystemCareView}">
+                    <ui:NavigationViewItem.Icon>
+                        <ui:SymbolIcon Symbol="Toolbox24" />
+                    </ui:NavigationViewItem.Icon>
+                </ui:NavigationViewItem>
+                <ui:NavigationViewItem Content="App Optimizer" TargetPageType="{x:Type views:AppOptimizerView}">
+                    <ui:NavigationViewItem.Icon>
+                        <ui:SymbolIcon Symbol="Apps24" />
+                    </ui:NavigationViewItem.Icon>
+                </ui:NavigationViewItem>
+                <ui:NavigationViewItem Content="Game Mode" TargetPageType="{x:Type views:GameModeView}">
+                    <ui:NavigationViewItem.Icon>
+                        <ui:SymbolIcon Symbol="Games24" />
+                    </ui:NavigationViewItem.Icon>
+                </ui:NavigationViewItem>
+                <ui:NavigationViewItem Content="Disk Analyzer" TargetPageType="{x:Type views:DiskAnalyzerView}">
+                    <ui:NavigationViewItem.Icon>
+                        <ui:SymbolIcon Symbol="HardDrive24" />
+                    </ui:NavigationViewItem.Icon>
+                </ui:NavigationViewItem>
+                <ui:NavigationViewItem Content="Backups, Drift &amp; History" TargetPageType="{x:Type views:HistoryView}">
+                    <ui:NavigationViewItem.Icon>
+                        <ui:SymbolIcon Symbol="History24" />
+                    </ui:NavigationViewItem.Icon>
+                </ui:NavigationViewItem>
+            </ui:NavigationView.MenuItems>
+        </ui:NavigationView>
+
+        <tray:NotifyIcon
+            Grid.Row="0"
+            FocusOnLeftClick="True"
+            Icon="pack://application:,,,/Assets/rigtune.ico"
+            LeftDoubleClick="OnTrayOpen"
+            MenuOnRightClick="True"
+            TooltipText="RigTune">
+            <tray:NotifyIcon.Menu>
+                <ContextMenu>
+                    <MenuItem Click="OnTrayOpen" Header="Open RigTune" />
+                    <Separator />
+                    <MenuItem Click="OnTrayExit" Header="Exit" />
+                </ContextMenu>
+            </tray:NotifyIcon.Menu>
+        </tray:NotifyIcon>
+    </Grid>
+</ui:FluentWindow>

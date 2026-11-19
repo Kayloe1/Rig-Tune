@@ -1,0 +1,19 @@
+<Page
+    x:Class="RigTune.App.Views.DiskAnalyzerView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:RigTune.App.Controls"
+    xmlns:sys="clr-namespace:System;assembly=System.Runtime"
+    Title="Disk Analyzer">
+    <controls:ComingSoonPanel
+        Title="Disk Analyzer"
+        Phase="Coming in a later build phase"
+        Subtitle="Multi-threaded NVMe scanner with a size-sorted tree, category breakdown and an offline Space Advisor.">
+        <controls:ComingSoonPanel.Features>
+                <sys:String>Parallel scan with cancellation and per-drive caching</sys:String>
+                <sys:String>Hard-protected system paths and user “Mark as Important” locks</sys:String>
+                <sys:String>Recycle-Bin-only deletion with confirmation</sys:String>
+                <sys:String>Space Advisor: Safe to Remove / Check First / Keep</sys:String>
+        </controls:ComingSoonPanel.Features>
+    </controls:ComingSoonPanel>
+</Page>

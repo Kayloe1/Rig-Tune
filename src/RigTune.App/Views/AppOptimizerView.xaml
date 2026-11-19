@@ -1,0 +1,19 @@
+<Page
+    x:Class="RigTune.App.Views.AppOptimizerView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:RigTune.App.Controls"
+    xmlns:sys="clr-namespace:System;assembly=System.Runtime"
+    Title="App Optimizer">
+    <controls:ComingSoonPanel
+        Title="App Optimizer"
+        Phase="Coming in a later build phase"
+        Subtitle="Per-app cache cleanup, reversible toggles and “While You Play” rules for 38 non-AMD app profiles.">
+        <controls:ComingSoonPanel.Features>
+                <sys:String>Auto-hides uninstalled apps (with “Show all 38 profiles”)</sys:String>
+                <sys:String>Cache scan with cookies/history unchecked by default</sys:String>
+                <sys:String>Reversible toggles (auto-start, background mode, telemetry…)</sys:String>
+                <sys:String>Add Custom App → custom_apps.json</sys:String>
+        </controls:ComingSoonPanel.Features>
+    </controls:ComingSoonPanel>
+</Page>

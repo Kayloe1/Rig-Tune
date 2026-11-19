@@ -1,0 +1,11 @@
+<Project>
+  <PropertyGroup>
+    <LangVersion>12.0</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <!-- Allows building the Windows-only projects on non-Windows CI/dev containers. -->
+    <EnableWindowsTargeting Condition="'$(OS)' != 'Windows_NT'">true</EnableWindowsTargeting>
+    <Authors>RigTune</Authors>
+    <Product>RigTune</Product>
+  </PropertyGroup>
+</Project>
