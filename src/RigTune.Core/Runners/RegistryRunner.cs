@@ -56,6 +56,13 @@ public sealed class RegistryRunner : IRegistryAccess
         return true;
     }
 
+    public IReadOnlyList<string> GetSubKeyNames(RegistryHiveName hive, RegistryViewName view, string keyPath)
+    {
+        using RegistryKey baseKey = OpenBase(hive, view);
+        using RegistryKey? key = baseKey.OpenSubKey(Normalize(keyPath), writable: false);
+        return key?.GetSubKeyNames() ?? Array.Empty<string>();
+    }
+
     public IReadOnlyList<string> GetValueNames(RegistryHiveName hive, RegistryViewName view, string keyPath)
     {
         using RegistryKey baseKey = OpenBase(hive, view);

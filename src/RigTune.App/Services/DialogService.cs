@@ -33,6 +33,21 @@ public sealed class DialogService
         };
     }
 
+    /// <summary>Shows arbitrary form content in a Fluent dialog; true when the primary button was pressed.</summary>
+    public async Task<bool> ShowFormAsync(string title, object content, string primaryText)
+    {
+        var box = new MessageBox
+        {
+            Title = title,
+            Content = content,
+            PrimaryButtonText = primaryText,
+            CloseButtonText = "Cancel",
+            PrimaryButtonAppearance = ControlAppearance.Primary,
+            MinWidth = 560,
+        };
+        return await box.ShowDialogAsync() == MessageBoxResult.Primary;
+    }
+
     public async Task<bool> ConfirmAsync(string title, string message, string confirmText, bool danger = false)
     {
         var box = new MessageBox

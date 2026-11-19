@@ -1,0 +1,47 @@
+<UserControl
+    x:Class="RigTune.App.Views.CustomAppForm"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    xmlns:vm="clr-namespace:RigTune.App.ViewModels"
+    MinWidth="500"
+    d:DataContext="{d:DesignInstance Type=vm:CustomAppFormModel}"
+    mc:Ignorable="d">
+    <StackPanel>
+        <TextBlock Style="{StaticResource CardTitle}" Text="NAME" />
+        <ui:TextBox PlaceholderText="e.g. OBS Studio" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />
+
+        <TextBlock Margin="0,10,0,0" Style="{StaticResource CardTitle}" Text="CATEGORY" />
+        <ComboBox ItemsSource="{Binding Categories}" SelectedItem="{Binding Category, Mode=TwoWay}" />
+
+        <TextBlock Margin="0,10,0,0" Style="{StaticResource CardTitle}" Text="EXECUTABLE (used to detect the app and as its process name)" />
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <ui:TextBox PlaceholderText="C:\Program Files\obs-studio\bin\64bit\obs64.exe" Text="{Binding ExecutablePath, UpdateSourceTrigger=PropertyChanged}" />
+            <ui:Button Grid.Column="1" Margin="6,0,0,0" Click="OnBrowse" Content="Browse…" />
+        </Grid>
+
+        <TextBlock Margin="0,10,0,0" Style="{StaticResource CardTitle}" Text="CACHE FOLDERS (one per line, optional — contents are cleaned, never the folder)" />
+        <TextBox
+            MinHeight="64"
+            AcceptsReturn="True"
+            FontFamily="Consolas"
+            Text="{Binding CachePaths, UpdateSourceTrigger=PropertyChanged}"
+            TextWrapping="NoWrap"
+            VerticalScrollBarVisibility="Auto" />
+
+        <TextBlock Margin="0,10,0,0" Style="{StaticResource CardTitle}" Text="AUTO-START ENTRY NAME (optional, '*' wildcards allowed)" />
+        <ui:TextBox PlaceholderText="e.g. OBS*" Text="{Binding StartupMatch, UpdateSourceTrigger=PropertyChanged}" />
+
+        <StackPanel Margin="0,12,0,0" Orientation="Horizontal">
+            <ui:ToggleSwitch Content="While You Play" IsChecked="{Binding WhilePlayingEnabled, Mode=TwoWay}" />
+            <ComboBox Width="170" Margin="12,0,0,0" ItemsSource="{Binding Modes}" SelectedItem="{Binding WhilePlayingMode, Mode=TwoWay}" />
+        </StackPanel>
+        <TextBlock Style="{StaticResource CardDetail}" Text="Paths under your profile, AppData, ProgramData or Program Files are stored with %VARIABLES% so the profile stays portable." />
+    </StackPanel>
+</UserControl>

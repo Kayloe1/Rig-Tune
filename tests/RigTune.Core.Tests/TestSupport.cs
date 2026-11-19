@@ -34,8 +34,11 @@ public sealed class SnapshotHarness : IDisposable
 {
     private readonly TempDir _dir = new();
 
-    public SnapshotHarness(IRegistryAccess? registry = null)
+    private readonly IReadOnlyList<IStateRunner> _stateRunners;
+
+    public SnapshotHarness(IRegistryAccess? registry = null, IEnumerable<IStateRunner>? stateRunners = null)
     {
+        _stateRunners = stateRunners?.ToList() ?? new List<IStateRunner>();
         Registry = registry ?? new InMemoryRegistry();
         Paths = new RigTunePaths(_dir.Path);
         Audit = new AuditLogService(Paths, Clock);
@@ -53,7 +56,7 @@ public sealed class SnapshotHarness : IDisposable
 
     /// <summary>Simulates an app restart: a brand-new service instance reading snapshots.json from disk.</summary>
     public SnapshotService CreateSnapshotService() =>
-        new(Paths, Registry, Services, Power, NvApi, new AuditLogService(Paths, Clock), Clock);
+        new(Paths, Registry, Services, Power, NvApi, new AuditLogService(Paths, Clock), Clock, _stateRunners);
 
     public void Dispose() => _dir.Dispose();
 }

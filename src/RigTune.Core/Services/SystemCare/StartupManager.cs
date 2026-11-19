@@ -54,14 +54,15 @@ public sealed class StartupManager
     }
 
     /// <summary>Writes the Task Manager-compatible StartupApproved flag for the entry (snapshotted first).</summary>
-    public async Task SetEnabledAsync(StartupEntry entry, bool enabled, CancellationToken cancellationToken = default)
+    public async Task SetEnabledAsync(StartupEntry entry, bool enabled, CancellationToken cancellationToken = default,
+        string tweakId = TweakId)
     {
         RegistryTarget target = ApprovedTarget(entry.Location, entry.Name);
         RegistryValueData value = RegistryValueData.FromBinary(StartupApprovedFlags.Encode(enabled, _time.GetUtcNow()));
-        await _snapshots.ApplyRegistryAsync(TweakId, target, value, $"Startup app {entry.Name}",
+        await _snapshots.ApplyRegistryAsync(tweakId, target, value, $"Startup app {entry.Name}",
             cancellationToken: cancellationToken).ConfigureAwait(false);
         await _audit.LogAsync(AuditAction.StartupChanged,
-            $"{(enabled ? "Enabled" : "Disabled")} startup app \"{entry.Name}\"", TweakId, target.Display,
+            $"{(enabled ? "Enabled" : "Disabled")} startup app \"{entry.Name}\"", tweakId, target.Display,
             $"{entry.LocationDisplay}: {entry.Command}", cancellationToken: cancellationToken).ConfigureAwait(false);
     }
 
