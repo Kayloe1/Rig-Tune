@@ -2,6 +2,7 @@
     x:Class="RigTune.App.Views.TweaksView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:markup="clr-namespace:RigTune.App.Markup"
     xmlns:core="clr-namespace:RigTune.Core.Models;assembly=RigTune.Core"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -215,7 +216,7 @@
                     </GroupStyle>
                 </ListView.GroupStyle>
                 <ListView.ItemContainerStyle>
-                    <Style BasedOn="{StaticResource {x:Type ListViewItem}}" TargetType="ListViewItem">
+                    <Style BasedOn="{markup:ImplicitStyle {x:Type ListViewItem}}" TargetType="ListViewItem">
                         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                         <Setter Property="Padding" Value="0" />
                     </Style>
