@@ -2,6 +2,7 @@
     x:Class="RigTune.App.Views.SystemCareView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:markup="clr-namespace:RigTune.App.Markup"
     xmlns:core="clr-namespace:RigTune.Core.Models;assembly=RigTune.Core"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -156,7 +157,7 @@
                     <ui:InfoBar Grid.Row="1" Margin="0,10,0,0" Title="{Binding StatusTitle}" IsClosable="True" IsOpen="{Binding IsStatusOpen, Mode=TwoWay}" Message="{Binding StatusMessage}" Severity="{Binding StatusSeverity}" />
                     <ListView Grid.Row="2" Margin="0,10,0,0" ItemsSource="{Binding Items}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                         <ListView.ItemContainerStyle>
-                            <Style BasedOn="{StaticResource {x:Type ListViewItem}}" TargetType="ListViewItem">
+                            <Style BasedOn="{markup:ImplicitStyle {x:Type ListViewItem}}" TargetType="ListViewItem">
                                 <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                             </Style>
                         </ListView.ItemContainerStyle>
