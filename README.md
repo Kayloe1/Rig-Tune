@@ -66,6 +66,13 @@ Registry round-trip tests that touch the real registry run only on Windows and o
   Drift & History (drift diff, per-tweak revert + Revert All, searchable/filterable audit log, profile export/import),
   Dashboard drift card + optional on-launch check, shutdown/session-end cleanup, warnings-as-errors everywhere.
   See [`docs/ACCEPTANCE.md`](docs/ACCEPTANCE.md) for the SPEC §8 checklist.
+- **Uninstaller (added after Phase 7):** lists programs from the 64-bit, 32-bit and per-user Uninstall keys
+  (search, sort by name/size/date/publisher); single or batch uninstall, one at a time, silent where reliable (MSI
+  `/qn`, Inno `/VERYSILENT`, vendor quiet strings) and the program's own window otherwise; waits for the whole
+  uninstaller process tree (job object); success = entry gone. Then an exact-name leftover scan (install folder,
+  Program Files/ProgramData/AppData/Start Menu folders, shortcuts, `Software\Name` and `Software\Publisher\Name` keys, orphaned
+  entries) that never touches anything shared with a still-installed program; folders go to the Recycle Bin and
+  registry keys are exported to `.reg` backups before deletion.
 
 The app catalog is generated too — edit `tools/generate_apps.py`, then run `python3 tools/generate_apps.py`.
 
