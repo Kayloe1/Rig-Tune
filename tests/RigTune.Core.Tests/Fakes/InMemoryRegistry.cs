@@ -74,6 +74,17 @@ public sealed class InMemoryRegistry : IRegistryAccess
         return _keys.Remove(k);
     }
 
+    /// <summary>Removes a key with all its subkeys (test helper for uninstall/leftover tests).</summary>
+    public void DeleteKeyTree(RegistryHiveName hive, RegistryViewName view, string keyPath)
+    {
+        string k = Key(hive, view, keyPath);
+        foreach (string key in _keys.Keys.Where(x => x.Equals(k, StringComparison.OrdinalIgnoreCase) ||
+                                                     x.StartsWith(k + "\\", StringComparison.OrdinalIgnoreCase)).ToList())
+        {
+            _keys.Remove(key);
+        }
+    }
+
     private static string Key(RegistryHiveName hive, RegistryViewName view, string path) =>
         $"{hive}|{view}|{path.Trim('\\')}";
 

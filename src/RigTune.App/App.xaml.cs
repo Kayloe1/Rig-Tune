@@ -16,6 +16,7 @@ using RigTune.Core.Services.AppxWinget;
 using RigTune.Core.Services.DiskAnalyzer;
 using RigTune.Core.Services.GameMode;
 using RigTune.Core.Services.SystemCare;
+using RigTune.Core.Services.Uninstaller;
 using RigTune.Core.Storage;
 
 namespace RigTune.App;
@@ -33,6 +34,7 @@ public partial class App : Application
     protected override async void OnStartup(StartupEventArgs e)
     {
         base.OnStartup(e);
+        RigTune.App.Services.MouseWheelScrolling.Register();
         DispatcherUnhandledException += OnDispatcherUnhandledException;
         StartMinimized = e.Args.Any(a => string.Equals(a, "--minimized", StringComparison.OrdinalIgnoreCase));
 
@@ -275,6 +277,18 @@ public partial class App : Application
         services.AddSingleton<AppOptimizerViewModel>();
         services.AddSingleton<GameModeViewModel>();
         services.AddSingleton<DiskAnalyzerViewModel>();
+        services.AddSingleton(_ => LeftoverRoots.ForThisMachine());
+        services.AddSingleton<InstalledProgramReader>();
+        services.AddSingleton<LeftoverScanner>();
+        services.AddSingleton<IUninstallProcessRunner, JobObjectUninstallRunner>();
+        services.AddSingleton<IRegistryKeyRemover, WindowsRegistryKeyRemover>();
+        services.AddSingleton<UninstallerService>(sp => new UninstallerService(
+            sp.GetRequiredService<InstalledProgramReader>(), sp.GetRequiredService<LeftoverScanner>(),
+            sp.GetRequiredService<IUninstallProcessRunner>(), sp.GetRequiredService<IRegistryKeyRemover>(),
+            sp.GetRequiredService<IRecycleBin>(), sp.GetRequiredService<PathGuard>(), sp.GetRequiredService<DiskLockService>(),
+            sp.GetRequiredService<AuditLogService>(), sp.GetRequiredService<RigTunePaths>()));
+        services.AddSingleton<UninstallerViewModel>();
+        services.AddSingleton<UninstallerView>();
         services.AddSingleton<DialogService>();
         services.AddSingleton<DashboardView>();
         services.AddSingleton<TweaksView>();

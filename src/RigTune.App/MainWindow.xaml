@@ -59,6 +59,11 @@
                         <ui:SymbolIcon Symbol="Apps24" />
                     </ui:NavigationViewItem.Icon>
                 </ui:NavigationViewItem>
+                <ui:NavigationViewItem Content="Uninstaller" TargetPageType="{x:Type views:UninstallerView}">
+                    <ui:NavigationViewItem.Icon>
+                        <ui:SymbolIcon Symbol="Delete24" />
+                    </ui:NavigationViewItem.Icon>
+                </ui:NavigationViewItem>
                 <ui:NavigationViewItem Content="Game Mode" TargetPageType="{x:Type views:GameModeView}">
                     <ui:NavigationViewItem.Icon>
                         <ui:SymbolIcon Symbol="Games24" />
@@ -66,7 +71,7 @@
                 </ui:NavigationViewItem>
                 <ui:NavigationViewItem Content="Disk Analyzer" TargetPageType="{x:Type views:DiskAnalyzerView}">
                     <ui:NavigationViewItem.Icon>
-                        <ui:SymbolIcon Symbol="HardDrive24" />
+                        <ui:SymbolIcon Symbol="Folder24" />
                     </ui:NavigationViewItem.Icon>
                 </ui:NavigationViewItem>
                 <ui:NavigationViewItem Content="Backups, Drift &amp; History" TargetPageType="{x:Type views:HistoryView}">
