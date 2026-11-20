@@ -74,7 +74,9 @@ public sealed class DiskCategoryClassifier
             return parent;
         }
 
-        if (_apps.Any(a => PathGuard.IsSameOrUnder(p, a)) || segments.Any(s => s.Equals("AppData", StringComparison.OrdinalIgnoreCase)))
+        // Only a profile's own AppData folder (Users\<name>\AppData) counts as Apps; an "AppData"
+        // segment elsewhere in the path (or a user's temp dir holding unrelated files) does not.
+        if (_apps.Any(a => PathGuard.IsSameOrUnder(p, a)) || IsProfileAppData(p))
         {
             return DiskCategory.Apps;
         }
@@ -109,6 +111,17 @@ public sealed class DiskCategoryClassifier
         }
 
         return folderCategory;
+    }
+
+    private bool IsProfileAppData(string p)
+    {
+        if (!PathGuard.IsSameOrUnder(p, _users))
+        {
+            return false;
+        }
+
+        string[] rel = p[_users.Length..].Split('\\', StringSplitOptions.RemoveEmptyEntries);
+        return rel.Length >= 2 && rel[1].Equals("AppData", StringComparison.OrdinalIgnoreCase);
     }
 
     private static bool IsGameSegmentPath(string p, string[] segments)

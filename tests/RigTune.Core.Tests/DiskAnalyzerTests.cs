@@ -201,7 +201,7 @@ public sealed class RecycleBinGuardrailTests : IDisposable
         string path = Path.Combine(_root.Path, relative);
         Directory.CreateDirectory(Path.GetDirectoryName(path)!);
         File.WriteAllBytes(path, new byte[size]);
-        return path;
+        return Path.GetFullPath(path);
     }
 
     [Fact]
@@ -319,7 +319,7 @@ public sealed class DiskScanAndAdvisorTests : IDisposable
         }
 
         File.SetLastWriteTimeUtc(path, _h.Clock.GetUtcNow().UtcDateTime.AddDays(-daysOld));
-        return path;
+        return Path.GetFullPath(path);
     }
 
     private DiskCategoryClassifier Classifier() => new(Path.Combine(_root.Path, "Windows"),
